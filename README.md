@@ -1,1 +1,1 @@
-REPLACE THIS WITH A DESCRIPTION OF YOUR GAME (in the README.md file).
+Picture a game where players dive into the exciting world of programming through interactive puzzles, focusing specifically on mastering boolean expressions, empowering learners with essential coding skills in a fun and engaging way!
