@@ -1,15 +1,22 @@
 import Phaser from "phaser";
-import PhaserLogo from "../objects/phaserLogo";
 import FpsText from "../objects/fpsText";
 
 export default class MainScene extends Phaser.Scene {
     fpsText: FpsText;
+<<<<<<< HEAD
     private boardSize: number = 8;
     private imageSize: number = 64;
     private tiles: Phaser.GameObjects.Sprite[] = [];
     private tilePositions: Phaser.GameObjects.Sprite[][] = [];
     private draggingTile: Phaser.GameObjects.Sprite | null = null;
 
+=======
+    private boardSize: number = 3;
+    private imageSize: number = 130;
+    private tiles: Phaser.GameObjects.Sprite[] = [];
+    private score: number = 0;
+    private tileTypes: string[];
+>>>>>>> 43c4843b4ae50f4b431e2ab3684d0aed7cf84de6
     constructor() {
         super({ key: "MainScene" });
     }
@@ -18,8 +25,7 @@ export default class MainScene extends Phaser.Scene {
         console.log("Hello");
         const screenWidth = this.game.scale.width;
         const screenHeight = this.game.scale.height;
-
-        this.generateTiledBoard(screenWidth, screenHeight);
+        this.tileTypes = ["tile1", "tile2", "tile3", "tile4"];
 
         this.tiles.forEach((tile) => {
             tile.setInteractive();
@@ -27,20 +33,9 @@ export default class MainScene extends Phaser.Scene {
             tile.on("pointerup", this.stopDragging.bind(this));
             tile.on("pointerover", this.updateDragging.bind(this));
         });
-
-        this.fpsText = new FpsText(this);
-        const message = `Phaser v${Phaser.VERSION}`;
-        this.add
-            .text(this.cameras.main.width - 15, 15, message, {
-                color: "#000000",
-                fontSize: "24px",
-            })
-            .setOrigin(1, 0);
     }
 
-    update() {
-        this.fpsText.update();
-    }
+    update() {}
     private generateTiledBoard(screenWidth: number, screenHeight: number) {
         const tileSize = this.imageSize;
         const boardWidth = this.boardSize * tileSize;
@@ -55,7 +50,9 @@ export default class MainScene extends Phaser.Scene {
                 const tileX = boardX + col * tileSize;
                 const tileY = boardY + row * tileSize;
 
-                const tile = this.add.sprite(tileX, tileY, "tileImage");
+                const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
+
+                const tile = this.add.sprite(tileX, tileY, tileTypeKey);
                 tile.setOrigin(0, 0);
                 tile.setScale(1);
 
