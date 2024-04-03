@@ -1,13 +1,13 @@
 import Phaser from "phaser";
-import PhaserLogo from "../objects/phaserLogo";
 import FpsText from "../objects/fpsText";
 
 export default class MainScene extends Phaser.Scene {
     fpsText: FpsText;
     private boardSize: number = 3;
-    private imageSize: number = 64;
+    private imageSize: number = 130;
     private tiles: Phaser.GameObjects.Sprite[] = [];
-
+    private score: number = 0;
+    private tileTypes: string[];
     constructor() {
         super({ key: "MainScene" });
     }
@@ -15,8 +15,7 @@ export default class MainScene extends Phaser.Scene {
     create() {
         const screenWidth = this.game.scale.width;
         const screenHeight = this.game.scale.height;
-
-        this.generateTiledBoard(screenWidth, screenHeight);
+        this.tileTypes = ["tile1", "tile2", "tile3", "tile4"];
 
         this.generateTiledBoard(screenWidth, screenHeight);
 
@@ -26,20 +25,9 @@ export default class MainScene extends Phaser.Scene {
                 console.log("Tile clicked!");
             });
         });
-
-        this.fpsText = new FpsText(this);
-        const message = `Phaser v${Phaser.VERSION}`;
-        this.add
-            .text(this.cameras.main.width - 15, 15, message, {
-                color: "#000000",
-                fontSize: "24px",
-            })
-            .setOrigin(1, 0);
     }
 
-    update() {
-        this.fpsText.update();
-    }
+    update() {}
     private generateTiledBoard(screenWidth: number, screenHeight: number) {
         const tileSize = this.imageSize;
         const boardWidth = this.boardSize * tileSize;
@@ -54,7 +42,9 @@ export default class MainScene extends Phaser.Scene {
                 const tileX = boardX + col * tileSize;
                 const tileY = boardY + row * tileSize;
 
-                const tile = this.add.sprite(tileX, tileY, "tileImage");
+                const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
+
+                const tile = this.add.sprite(tileX, tileY, tileTypeKey);
                 tile.setOrigin(0, 0);
                 tile.setScale(1);
 
