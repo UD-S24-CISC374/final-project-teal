@@ -4,11 +4,10 @@ import FpsText from "../objects/fpsText";
 
 export default class MainScene extends Phaser.Scene {
     fpsText: FpsText;
-    private boardSize: number = 3;
+    private boardSize: number = 8;
     private imageSize: number = 64;
     private tiles: Phaser.GameObjects.Sprite[] = [];
-    private boardPositions: { [key: string]: { row: number; col: number } } =
-        {};
+    private tilePositions: Phaser.GameObjects.Sprite[][] = [];
     private draggingTile: Phaser.GameObjects.Sprite | null = null;
 
     constructor() {
@@ -51,6 +50,7 @@ export default class MainScene extends Phaser.Scene {
         const boardY = (screenHeight - boardHeight) / 2;
 
         for (let row = 0; row < this.boardSize; row++) {
+            this.tilePositions[row] = [];
             for (let col = 0; col < this.boardSize; col++) {
                 const tileX = boardX + col * tileSize;
                 const tileY = boardY + row * tileSize;
@@ -60,7 +60,7 @@ export default class MainScene extends Phaser.Scene {
                 tile.setScale(1);
 
                 this.tiles.push(tile);
-                this.boardPositions[`${row},${col}`] = { row, col };
+                this.tilePositions[row][col] = tile;
             }
         }
     }
@@ -69,12 +69,13 @@ export default class MainScene extends Phaser.Scene {
         pointer: Phaser.Input.Pointer,
         gameObject: Phaser.GameObjects.Sprite
     ) {
-        console.log("test!");
+        console.log("Tile Clicked");
         this.draggingTile = gameObject;
         this.input.setTopOnly(true);
     }
 
     private stopDragging() {
+        console.log("Tile Released");
         this.input.setTopOnly(false);
         this.draggingTile = null;
     }
@@ -84,47 +85,38 @@ export default class MainScene extends Phaser.Scene {
         gameObject: Phaser.GameObjects.Sprite
     ) {
         if (!this.draggingTile) return;
+        console.log("Dragging");
+        const dragTileRow =
+            (this.tiles.indexOf(this.draggingTile) / this.boardSize) | 0;
+        const dragTileCol =
+            this.tiles.indexOf(this.draggingTile) % this.boardSize;
+        const targetRow = (this.tiles.indexOf(gameObject) / this.boardSize) | 0;
+        const targetCol = this.tiles.indexOf(gameObject) % this.boardSize;
 
-        const dragTileRow = this.draggingTile.data.get("row");
-        const dragTileCol = this.draggingTile.data.get("col");
-
-        if (dragTileRow === undefined || dragTileCol === undefined) return;
-
-        const dragTilePosition =
-            this.boardPositions[`${dragTileRow},${dragTileCol}`];
-        const targetPosition =
-            this.boardPositions[
-                `${gameObject.data.get("row")},${gameObject.data.get("col")}`
-            ];
-
-        if (this.isAdjacentTile(dragTilePosition, targetPosition)) {
-            this.swapTiles(this.draggingTile, gameObject);
+        if (
+            this.isAdjacentTile(dragTileRow, dragTileCol, targetRow, targetCol)
+        ) {
+            this.swapTiles(dragTileRow, dragTileCol, targetRow, targetCol);
         }
     }
 
     private isAdjacentTile(
-        pos1: { row: number; col: number },
-        pos2: { row: number; col: number }
+        row1: number,
+        col1: number,
+        row2: number,
+        col2: number
     ) {
         return (
-            (Math.abs(pos1.row - pos2.row) === 1 && pos1.col === pos2.col) ||
-            (Math.abs(pos1.col - pos2.col) === 1 && pos1.row === pos2.row)
+            (Math.abs(row1 - row2) === 1 && col1 === col2) ||
+            (Math.abs(col1 - col2) === 1 && row1 === row2)
         );
     }
 
-    private swapTiles(
-        tile1: Phaser.GameObjects.Sprite,
-        tile2: Phaser.GameObjects.Sprite
-    ) {
+    private swapTiles(row1: number, col1: number, row2: number, col2: number) {
+        console.log("swapping");
         const tileSize = this.imageSize;
-        const tile1Position =
-            this.boardPositions[
-                `${tile1.data.get("row")},${tile1.data.get("col")}`
-            ];
-        const tile2Position =
-            this.boardPositions[
-                `${tile2.data.get("row")},${tile2.data.get("col")}`
-            ];
+        const tile1 = this.tilePositions[row1][col1];
+        const tile2 = this.tilePositions[row2][col2];
 
         this.tweens.add({
             targets: [tile1, tile2],
@@ -148,16 +140,8 @@ export default class MainScene extends Phaser.Scene {
             },
             duration: 200,
             onComplete: () => {
-                this.boardPositions[
-                    `${tile1Position.row},${tile1Position.col}`
-                ] = tile2Position;
-                this.boardPositions[
-                    `${tile2Position.row},${tile2Position.col}`
-                ] = tile1Position;
-                tile1.data.set("row", tile2Position.row);
-                tile1.data.set("col", tile2Position.col);
-                tile2.data.set("row", tile1Position.row);
-                tile2.data.set("col", tile1Position.col);
+                this.tilePositions[row1][col1] = tile2;
+                this.tilePositions[row2][col2] = tile1;
             },
         });
     }
