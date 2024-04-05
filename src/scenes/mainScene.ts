@@ -17,6 +17,7 @@ export default class MainScene extends Phaser.Scene {
     private selectedTiles: Phaser.GameObjects.Sprite[] = [];
     private currentDirection: DirectionType = NONE;
     private currentDirectionIndex: -1;
+    private isSwapping: boolean = false;
 
     constructor() {
         super({ key: "MainScene" });
@@ -155,6 +156,10 @@ export default class MainScene extends Phaser.Scene {
         this.currentDirection = DirectionType.NONE;
     }
     private swapTiles(row1: number, col1: number, row2: number, col2: number) {
+        if (this.isSwapping) {
+            return;
+        }
+        this.isSwapping = true;
         this.unselectTiles();
         const tile1 = this.tileSprites[row1][col1];
         const tile2 = this.tileSprites[row2][col2];
@@ -167,6 +172,7 @@ export default class MainScene extends Phaser.Scene {
             y: tile2.y,
             duration: tweenDuration,
             onComplete: () => {
+                this.isSwapping = false;
                 this.tileSprites[row2][col2] = tile1;
                 this.selectedTile?.setTint(0xffffff);
                 this.selectedTile = null; // Deselect the tile after swapping
