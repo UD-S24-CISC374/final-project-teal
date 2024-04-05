@@ -1,14 +1,22 @@
-import Phaser from "phaser";
+import Phaser, { NONE } from "phaser";
 import FpsText from "../objects/fpsText";
 
+enum DirectionType {
+    ROW,
+    COL,
+    NONE,
+}
 export default class MainScene extends Phaser.Scene {
     fpsText: FpsText;
     private boardSize: number = 4;
     private imageSize: number = 130;
     private score: number = 0;
     private tileTypes: string[];
-    private tilePositions: Phaser.GameObjects.Sprite[][] = []; //tile sprites (edit name)
+    private tileSprites: Phaser.GameObjects.Sprite[][] = [];
     private selectedTile: Phaser.GameObjects.Sprite | null = null;
+    private selectedTiles: Phaser.GameObjects.Sprite[] = [];
+    private currentDirection: DirectionType = NONE;
+    private currentDirectionIndex: -1;
 
     constructor() {
         super({ key: "MainScene" });
@@ -37,7 +45,7 @@ export default class MainScene extends Phaser.Scene {
         const boardY = (screenHeight - boardHeight) / 2;
 
         for (let row = 0; row < this.boardSize; row++) {
-            this.tilePositions[row] = [];
+            this.tileSprites[row] = [];
             for (let col = 0; col < this.boardSize; col++) {
                 const tileX = boardX + col * tileSize;
                 const tileY = boardY + row * tileSize;
@@ -50,12 +58,13 @@ export default class MainScene extends Phaser.Scene {
                 tile.setOrigin(0, 0);
                 tile.setScale(1);
 
-                this.tilePositions[row][col] = tile;
+                this.tileSprites[row][col] = tile;
             }
         }
     }
 
     private selectTile(tile: Phaser.GameObjects.Sprite) {
+        this.unselectTiles();
         if (this.selectedTile) {
             this.selectedTile.setTint(0xffffff); // Reset tint of previously selected tile
         }
@@ -71,7 +80,7 @@ export default class MainScene extends Phaser.Scene {
 
         // Find the row and column of the selected tile
         for (let row = 0; row < this.boardSize; row++) {
-            const col = this.tilePositions[row].indexOf(this.selectedTile);
+            const col = this.tileSprites[row].indexOf(this.selectedTile);
             if (col !== -1) {
                 currentCol = col;
                 currentRow = row;
@@ -104,6 +113,15 @@ export default class MainScene extends Phaser.Scene {
             case "d":
                 newCol = Math.min(currentCol + 1, this.boardSize - 1);
                 break;
+            case "r":
+                this.selectTiles(currentRow, DirectionType.ROW);
+                break;
+            case "c":
+                this.selectTiles(currentCol, DirectionType.COL);
+                break;
+            case "Enter":
+                //HANDLE ROW/COL CHECK FUNCTIONALITY
+                break;
         }
 
         if (newRow !== currentRow || newCol !== currentCol) {
@@ -112,10 +130,36 @@ export default class MainScene extends Phaser.Scene {
             this.swapTiles(currentRow, currentCol, newRow, newCol);
         }
     }
-
+    private selectTiles(directionIndex: number, direction: DirectionType) {
+        this.unselectTiles();
+        if (direction == DirectionType.ROW) {
+            console.log("test");
+            for (let tileIndex = 0; tileIndex < this.boardSize; tileIndex++) {
+                const tile = this.tileSprites[directionIndex][tileIndex];
+                this.selectedTiles.push(tile);
+                tile.setTint(0x00ff00);
+            }
+        } else if (direction == DirectionType.COL) {
+            for (let tileIndex = 0; tileIndex < this.boardSize; tileIndex++) {
+                const tile = this.tileSprites[tileIndex][directionIndex];
+                this.selectedTiles.push(tile);
+                tile.setTint(0x00ff00);
+            }
+        }
+    }
+    private unselectTiles() {
+        if (!this.selectedTiles) {
+            return;
+        }
+        while (this.selectedTiles.length > 0) {
+            const tile = this.selectedTiles.shift();
+            tile?.setTint(0xffffff);
+        }
+        this.currentDirection = DirectionType.NONE;
+    }
     private swapTiles(row1: number, col1: number, row2: number, col2: number) {
-        const tile1 = this.tilePositions[row1][col1];
-        const tile2 = this.tilePositions[row2][col2];
+        const tile1 = this.tileSprites[row1][col1];
+        const tile2 = this.tileSprites[row2][col2];
         console.log(tile1, tile2);
         const tweenDuration = 300;
         //create tile1 tween
@@ -125,7 +169,7 @@ export default class MainScene extends Phaser.Scene {
             y: tile2.y,
             duration: tweenDuration,
             onComplete: () => {
-                this.tilePositions[row2][col2] = tile1;
+                this.tileSprites[row2][col2] = tile1;
                 this.selectedTile?.setTint(0xffffff);
                 this.selectedTile = null; // Deselect the tile after swapping
                 console.log("tween1 complete");
@@ -138,7 +182,7 @@ export default class MainScene extends Phaser.Scene {
             y: tile1.y,
             duration: tweenDuration,
             onComplete: () => {
-                this.tilePositions[row1][col1] = tile2;
+                this.tileSprites[row1][col1] = tile2;
                 console.log("tween2 complete");
             },
         });
