@@ -155,6 +155,7 @@ export default class MainScene extends Phaser.Scene {
         this.currentDirection = DirectionType.NONE;
     }
     private swapTiles(row1: number, col1: number, row2: number, col2: number) {
+        this.unselectTiles();
         const tile1 = this.tileSprites[row1][col1];
         const tile2 = this.tileSprites[row2][col2];
         console.log(tile1, tile2);
