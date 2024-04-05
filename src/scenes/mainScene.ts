@@ -148,9 +148,6 @@ export default class MainScene extends Phaser.Scene {
         }
     }
     private unselectTiles() {
-        if (!this.selectedTiles) {
-            return;
-        }
         while (this.selectedTiles.length > 0) {
             const tile = this.selectedTiles.shift();
             tile?.setTint(0xffffff);
