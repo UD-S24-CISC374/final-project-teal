@@ -116,12 +116,21 @@ export default class MainScene extends Phaser.Scene {
                 break;
             case "r":
                 this.selectTiles(currentRow, DirectionType.ROW);
+                this.currentDirection = DirectionType.ROW;
                 break;
             case "c":
                 this.selectTiles(currentCol, DirectionType.COL);
+                this.currentDirection = DirectionType.COL;
                 break;
             case "Enter":
                 //HANDLE ROW/COL CHECK FUNCTIONALITY
+                if (this.currentDirection == DirectionType.ROW) {
+                    this.removeTilesRow(currentRow);
+                } else if (this.currentDirection == DirectionType.COL) {
+                    this.removeTilesCol(currentCol);
+                }
+
+                this.currentDirection = DirectionType.NONE;
                 break;
         }
 
@@ -191,5 +200,19 @@ export default class MainScene extends Phaser.Scene {
             },
         });
         console.log("adding tween");
+    }
+
+    private removeTilesRow(currentRow: number) {
+        for (let col = 0; col < this.boardSize; col++) {
+            const tile = this.tileSprites[currentRow][col];
+            tile.destroy();
+        }
+    }
+
+    private removeTilesCol(currentCol: number) {
+        for (let row = 0; row < this.boardSize; row++) {
+            const tile = this.tileSprites[row][currentCol];
+            tile.destroy();
+        }
     }
 }
