@@ -203,9 +203,41 @@ export default class MainScene extends Phaser.Scene {
     }
 
     private removeTilesRow(currentRow: number) {
+        // remove all the tiles in the current row
         for (let col = 0; col < this.boardSize; col++) {
             const tile = this.tileSprites[currentRow][col];
             tile.destroy();
+        }
+
+        // move all the tiles above the current row down
+        for (let row = currentRow; row > 0; row--) {
+            for (let col = 0; col < this.boardSize; col++) {
+                const tile = this.tileSprites[row - 1][col];
+                tile.y += this.imageSize;
+                this.tileSprites[row][col] = tile;
+            }
+        }
+        this.addTilesRow();
+    }
+
+    private addTilesRow() {
+        for (let col = 0; col < this.boardSize; col++) {
+            const tileX = this.tileSprites[0][col].x;
+
+            let tileY;
+            if (this.tileSprites[0][col].y > this.imageSize) {
+                tileY = this.tileSprites[0][col].y - this.imageSize;
+            } else {
+                tileY = this.tileSprites[0][col].y;
+            }
+
+            const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
+            const tile = this.add.sprite(tileX, tileY, tileTypeKey);
+            tile.setInteractive();
+            tile.on("pointerdown", this.selectTile.bind(this, tile));
+            tile.setOrigin(0, 0);
+            tile.setScale(1);
+            this.tileSprites[0][col] = tile;
         }
     }
 
@@ -213,6 +245,21 @@ export default class MainScene extends Phaser.Scene {
         for (let row = 0; row < this.boardSize; row++) {
             const tile = this.tileSprites[row][currentCol];
             tile.destroy();
+        }
+        this.addTilesCol(currentCol);
+    }
+
+    private addTilesCol(currentCol: number) {
+        for (let row = 0; row < this.boardSize; row++) {
+            const tileX = this.tileSprites[row][currentCol].x;
+            const tileY = this.tileSprites[row][0].y;
+            const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
+            const tile = this.add.sprite(tileX, tileY, tileTypeKey);
+            tile.setInteractive();
+            tile.on("pointerdown", this.selectTile.bind(this, tile));
+            tile.setOrigin(0, 0);
+            tile.setScale(1);
+            this.tileSprites[row][currentCol] = tile;
         }
     }
 }
