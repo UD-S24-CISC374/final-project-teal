@@ -213,8 +213,12 @@ export default class MainScene extends Phaser.Scene {
         for (let row = currentRow; row > 0; row--) {
             for (let col = 0; col < this.boardSize; col++) {
                 const tile = this.tileSprites[row - 1][col];
-                tile.y += this.imageSize;
                 this.tileSprites[row][col] = tile;
+                this.tweens.add({
+                    targets: tile,
+                    y: tile.y + this.imageSize,
+                    duration: 300,
+                });
             }
         }
         this.addTilesRow();
@@ -223,21 +227,25 @@ export default class MainScene extends Phaser.Scene {
     private addTilesRow() {
         for (let col = 0; col < this.boardSize; col++) {
             const tileX = this.tileSprites[0][col].x;
-
-            let tileY;
-            if (this.tileSprites[0][col].y > this.imageSize) {
-                tileY = this.tileSprites[0][col].y - this.imageSize;
-            } else {
-                tileY = this.tileSprites[0][col].y;
-            }
-
+            const tileY = this.tileSprites[0][col].y;
             const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
-            const tile = this.add.sprite(tileX, tileY, tileTypeKey);
+            const tile = this.add.sprite(
+                tileX,
+                tileY - this.imageSize,
+                tileTypeKey
+            );
+
             tile.setInteractive();
             tile.on("pointerdown", this.selectTile.bind(this, tile));
             tile.setOrigin(0, 0);
             tile.setScale(1);
             this.tileSprites[0][col] = tile;
+
+            this.tweens.add({
+                targets: tile,
+                y: tile.y + this.imageSize,
+                duration: 300,
+            });
         }
     }
 
@@ -254,12 +262,22 @@ export default class MainScene extends Phaser.Scene {
             const tileX = this.tileSprites[row][currentCol].x;
             const tileY = this.tileSprites[row][0].y;
             const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
-            const tile = this.add.sprite(tileX, tileY, tileTypeKey);
+            const tile = this.add.sprite(
+                tileX,
+                tileY - this.boardSize * this.imageSize,
+                tileTypeKey
+            );
             tile.setInteractive();
             tile.on("pointerdown", this.selectTile.bind(this, tile));
             tile.setOrigin(0, 0);
             tile.setScale(1);
             this.tileSprites[row][currentCol] = tile;
+
+            this.tweens.add({
+                targets: tile,
+                y: tile.y + this.imageSize * this.boardSize,
+                duration: 300,
+            });
         }
     }
 }
