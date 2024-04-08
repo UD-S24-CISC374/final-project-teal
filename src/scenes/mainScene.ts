@@ -11,6 +11,7 @@ export default class MainScene extends Phaser.Scene {
     private boardSize: number = 4;
     private imageSize: number = 130;
     private score: number = 0;
+    private scoreText: Phaser.GameObjects.Text;
     private tileTypes: string[];
     private tileSprites: Phaser.GameObjects.Sprite[][] = [];
     private selectedTile: Phaser.GameObjects.Sprite | null = null;
@@ -33,6 +34,10 @@ export default class MainScene extends Phaser.Scene {
 
         // Add input event listeners
         this.input.keyboard?.on("keydown", this.handleKeydown, this);
+        this.scoreText = this.add.text(10, 10, "Score: 0", {
+            fontSize: "32px",
+            color: "#000",
+        });
     }
 
     update() {}
@@ -125,9 +130,9 @@ export default class MainScene extends Phaser.Scene {
             case "Enter":
                 //HANDLE ROW/COL CHECK FUNCTIONALITY
                 if (this.currentDirection == DirectionType.ROW) {
-                    this.removeTilesRow(currentRow);
+                    this.checkRow(currentRow);
                 } else if (this.currentDirection == DirectionType.COL) {
-                    this.removeTilesCol(currentCol);
+                    this.checkCol(currentCol);
                 }
 
                 this.currentDirection = DirectionType.NONE;
@@ -202,6 +207,18 @@ export default class MainScene extends Phaser.Scene {
         console.log("adding tween");
     }
 
+    private checkRow(currentRow: number) {
+        let firstTile = this.tileSprites[currentRow][0].texture.key;
+
+        for (let col = 1; col < this.boardSize; col++) {
+            const tile = this.tileSprites[currentRow][col];
+            if (tile.texture.key !== firstTile) {
+                return;
+            }
+        }
+        this.removeTilesRow(currentRow);
+    }
+
     private removeTilesRow(currentRow: number) {
         // remove all the tiles in the current row
         for (let col = 0; col < this.boardSize; col++) {
@@ -221,6 +238,8 @@ export default class MainScene extends Phaser.Scene {
                 });
             }
         }
+        this.score += 10;
+        this.scoreText.setText(`Score: ${this.score}`);
         this.addTilesRow();
     }
 
@@ -249,11 +268,25 @@ export default class MainScene extends Phaser.Scene {
         }
     }
 
+    private checkCol(currentCol: number) {
+        let firstTile = this.tileSprites[0][currentCol].texture.key;
+
+        for (let row = 1; row < this.boardSize; row++) {
+            const tile = this.tileSprites[row][currentCol];
+            if (tile.texture.key !== firstTile) {
+                return;
+            }
+        }
+        this.removeTilesCol(currentCol);
+    }
+
     private removeTilesCol(currentCol: number) {
         for (let row = 0; row < this.boardSize; row++) {
             const tile = this.tileSprites[row][currentCol];
             tile.destroy();
         }
+        this.score += 10;
+        this.scoreText.setText(`Score: ${this.score}`);
         this.addTilesCol(currentCol);
     }
 
