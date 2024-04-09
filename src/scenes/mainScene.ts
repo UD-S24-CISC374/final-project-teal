@@ -238,8 +238,7 @@ export default class MainScene extends Phaser.Scene {
                 });
             }
         }
-        this.score += 10;
-        this.scoreText.setText(`Score: ${this.score}`);
+        this.addScore(10);
         this.addTilesRow();
     }
 
@@ -285,8 +284,7 @@ export default class MainScene extends Phaser.Scene {
             const tile = this.tileSprites[row][currentCol];
             tile.destroy();
         }
-        this.score += 10;
-        this.scoreText.setText(`Score: ${this.score}`);
+        this.addScore(10);
         this.addTilesCol(currentCol);
     }
 
@@ -313,4 +311,9 @@ export default class MainScene extends Phaser.Scene {
             });
         }
     }
+    private addScore(score: number) {
+        this.score += score;
+        this.scoreText.setText(`Score: ${this.score}`);
+    }
+    private setScore(score: number) {}
 }
