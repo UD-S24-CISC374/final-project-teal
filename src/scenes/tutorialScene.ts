@@ -30,7 +30,8 @@ export default class TutorialScene extends Phaser.Scene {
             Arrow Keys or WASD: Move selected tile
             R: Select entire row
             C: Select entire column
-            Enter: Check selected row or column`,
+            Enter: Check selected row or column
+            Esc: Pause`,
             {
                 fontSize: "24px",
                 fontFamily: "Arial",

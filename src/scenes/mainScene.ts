@@ -1,5 +1,6 @@
 import Phaser, { NONE } from "phaser";
 import Board from "../objects/Board";
+import PauseMenu from "../objects/PauseMenu";
 
 enum DirectionType {
     ROW,
@@ -10,6 +11,7 @@ export default class MainScene extends Phaser.Scene {
     private gameBoard: Board;
     private scoreText: Phaser.GameObjects.Text;
     private score: number = 0;
+    private pauseMenu: PauseMenu | null = null;
 
     constructor() {
         super({ key: "MainGameScene" });
@@ -20,6 +22,9 @@ export default class MainScene extends Phaser.Scene {
         const tileTypes = ["tile1", "tile2", "tile3", "tile4"];
 
         this.gameBoard = new Board(this, 4, 130, tileTypes);
+
+        this.pauseMenu = new PauseMenu(this);
+        this.pauseMenu.setVisible(false);
 
         // Add input event listeners
         this.input.keyboard?.on("keydown", this.handleKeydown, this);
@@ -32,13 +37,18 @@ export default class MainScene extends Phaser.Scene {
     update() {}
 
     private handleKeydown(event: KeyboardEvent) {
+        switch (event.key) {
+            case "Escape":
+                if (this.pauseMenu) {
+                    this.pauseMenu.togglePauseMenu();
+                }
+        }
         if (!this.gameBoard.isTileSelected()) return;
 
         let [currentRow, currentCol] = this.gameBoard.findSelectedTile();
 
         if (currentRow === -1 || currentCol === -1) {
             // Selected tile not found in the board, handle this case if needed
-            return;
         }
 
         let newRow = currentRow;
