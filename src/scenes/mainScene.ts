@@ -1,5 +1,4 @@
 import Phaser, { NONE } from "phaser";
-import FpsText from "../objects/fpsText";
 
 enum DirectionType {
     ROW,
@@ -7,7 +6,6 @@ enum DirectionType {
     NONE,
 }
 export default class MainScene extends Phaser.Scene {
-    fpsText: FpsText;
     private boardSize: number = 4;
     private imageSize: number = 130;
     private score: number = 0;
@@ -17,7 +15,6 @@ export default class MainScene extends Phaser.Scene {
     private selectedTile: Phaser.GameObjects.Sprite | null = null;
     private selectedTiles: Phaser.GameObjects.Sprite[] = [];
     private currentDirection: DirectionType = NONE;
-    private currentDirectionIndex: -1;
     private isSwapping: boolean = false;
 
     constructor() {
@@ -213,10 +210,37 @@ export default class MainScene extends Phaser.Scene {
         for (let col = 1; col < this.boardSize; col++) {
             const tile = this.tileSprites[currentRow][col];
             if (tile.texture.key !== firstTile) {
+                this.shakeTiles();
                 return;
             }
         }
         this.removeTilesRow(currentRow);
+    }
+
+    private shakeTiles() {
+        this.selectedTiles.forEach((tile) => {
+            // Start position for the shake effect
+            const originalX = tile.x;
+            const originalY = tile.y;
+
+            // Define the shake tween for the sprite
+            this.tweens.add({
+                targets: tile,
+                duration: 100, // Duration of each shake segment
+                repeat: 2, // Number of shakes
+                yoyo: true, // Go back and forth
+                ease: "Sine.easeInOut", // Easing function to make it smooth
+                x: {
+                    getStart: () => originalX - 5, // Start 5 pixels to the left
+                    getEnd: () => originalX + 5, // End 5 pixels to the right
+                },
+                onComplete: () => {
+                    // Optional: Reset sprite position after shaking, in case of rounding errors
+                    tile.x = originalX;
+                    tile.y = originalY;
+                },
+            });
+        });
     }
 
     private removeTilesRow(currentRow: number) {
@@ -273,6 +297,7 @@ export default class MainScene extends Phaser.Scene {
         for (let row = 1; row < this.boardSize; row++) {
             const tile = this.tileSprites[row][currentCol];
             if (tile.texture.key !== firstTile) {
+                this.shakeTiles();
                 return;
             }
         }
