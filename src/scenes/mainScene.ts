@@ -315,5 +315,8 @@ export default class MainScene extends Phaser.Scene {
         this.score += score;
         this.scoreText.setText(`Score: ${this.score}`);
     }
-    private setScore(score: number) {}
+    private setScore(score: number) {
+        this.score += score;
+        this.scoreText.setText(`Score: ${this.score}`);
+    }
 }
