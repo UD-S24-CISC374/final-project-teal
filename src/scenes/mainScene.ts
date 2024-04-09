@@ -88,7 +88,9 @@ export default class MainScene extends Phaser.Scene {
                 break;
             case "Enter":
                 //console.log("enter pressed");
-                this.gameBoard.handleRowColCheck(currentRow, currentCol);
+                if (this.gameBoard.handleRowColCheck(currentRow, currentCol)) {
+                    this.addScore(10);
+                }
                 //console.log("enter pressed 2");
                 break;
         }

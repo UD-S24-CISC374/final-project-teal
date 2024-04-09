@@ -134,19 +134,18 @@ export default class Board {
         this.currentDirection = DirectionType.NONE;
     }
 
-    private checkRow(currentRow: number) {
+    private checkRow(currentRow: number): boolean {
         let firstTileType = this.tiles[currentRow][0].tileType;
-
-        console.log("hello");
 
         for (let col = 1; col < this.boardSize; col++) {
             const tile = this.tiles[currentRow][col];
             if (tile.tileType !== firstTileType) {
                 this.shakeTiles();
-                return;
+                return false;
             }
         }
         this.removeTilesRow(currentRow);
+        return true;
     }
     private removeTilesRow(currentRow: number) {
         // remove all the tiles in the current row
@@ -167,7 +166,6 @@ export default class Board {
                 });
             }
         }
-        //this.addScore(10);
         this.addTilesRow();
     }
 
@@ -192,17 +190,18 @@ export default class Board {
         }
     }
 
-    private checkCol(currentCol: number) {
-        let firstTile = this.tiles[0][currentCol].texture.key;
+    private checkCol(currentCol: number): boolean {
+        let firstTile = this.tiles[0][currentCol].tileType;
 
         for (let row = 1; row < this.boardSize; row++) {
             const tile = this.tiles[row][currentCol];
-            if (tile.texture.key !== firstTile) {
+            if (tile.tileType !== firstTile) {
                 this.shakeTiles();
-                return;
+                return false;
             }
         }
         this.removeTilesCol(currentCol);
+        return true;
     }
 
     private removeTilesCol(currentCol: number) {
@@ -288,13 +287,14 @@ export default class Board {
         return this.boardSize;
     }
 
-    public handleRowColCheck(currentRow: number, currentCol: number) {
+    public handleRowColCheck(currentRow: number, currentCol: number): boolean {
         if (this.currentDirection == DirectionType.ROW) {
-            this.checkRow(currentRow);
+            return this.checkRow(currentRow);
         } else if (this.currentDirection == DirectionType.COL) {
-            this.checkCol(currentCol);
+            return this.checkCol(currentCol);
         }
 
         this.currentDirection = DirectionType.NONE;
+        return false;
     }
 }
