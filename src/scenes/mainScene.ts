@@ -7,24 +7,12 @@ enum DirectionType {
     NONE,
 }
 export default class MainScene extends Phaser.Scene {
-    //*OLD CODE REFACTORING*/
-    // private boardSize: number = 4;
-    // private imageSize: number = 130;
-    // private score: number = 0;
-    // private scoreText: Phaser.GameObjects.Text;
-    // private tileTypes: string[];
-    // private tileSprites: Phaser.GameObjects.Sprite[][] = [];
-    // private selectedTile: Phaser.GameObjects.Sprite | null = null;
-    // private selectedTiles: Phaser.GameObjects.Sprite[] = [];
-    // private currentDirection: DirectionType = NONE;
-    // private isSwapping: boolean = false;
-
     private gameBoard: Board;
     private scoreText: Phaser.GameObjects.Text;
     private score: number = 0;
 
     constructor() {
-        super({ key: "MainScene" });
+        super({ key: "MainGameScene" });
     }
 
     create() {
@@ -112,16 +100,15 @@ export default class MainScene extends Phaser.Scene {
             `+${score}`
         );
 
-        // Animation: move up and fade out
         this.tweens.add({
             targets: scoreFeedback,
             y: this.scoreText.y - 50,
             alpha: 0, // Fade out
             ease: "Cubic.easeOut",
-            duration: 1000, // Duration of the animation in milliseconds
+            duration: 1000,
             onComplete: () => {
                 console.log("score added");
-                scoreFeedback.destroy(); // Clean up the temporary text object
+                scoreFeedback.destroy();
             },
         });
     }
