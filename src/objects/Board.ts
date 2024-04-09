@@ -174,7 +174,12 @@ export default class Board {
             const tileX = this.tiles[0][col].x;
             const tileY = this.tiles[0][col].y;
             const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
-            const tile = new Tile(this.scene, tileX, tileY, tileTypeKey);
+            const tile = new Tile(
+                this.scene,
+                tileX,
+                tileY - this.tileSize,
+                tileTypeKey
+            );
 
             tile.setInteractive();
             tile.on("pointerdown", this.selectTile.bind(this, tile));
@@ -218,7 +223,12 @@ export default class Board {
             const tileX = this.tiles[row][currentCol].x;
             const tileY = this.tiles[row][0].y;
             const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
-            const tile = new Tile(this.scene, tileX, tileY, tileTypeKey);
+            const tile = new Tile(
+                this.scene,
+                tileX,
+                tileY - this.boardSize * this.tileSize,
+                tileTypeKey
+            );
             tile.setInteractive();
             tile.on("pointerdown", this.selectTile.bind(this, tile));
             tile.setOrigin(0, 0);
