@@ -1,10 +1,11 @@
-import Phaser, { NONE } from "phaser";
+import Phaser from "phaser";
 import Board from "../objects/Board";
 import PauseMenu from "../objects/PauseMenu";
 
 enum DirectionType {
     ROW,
     COL,
+    NONE,
 }
 export default class MainScene extends Phaser.Scene {
     private gameBoard: Board;
