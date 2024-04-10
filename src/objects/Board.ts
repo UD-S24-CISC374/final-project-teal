@@ -238,7 +238,7 @@ export default class Board {
             this.scene.tweens.add({
                 targets: tile,
                 y: tile.y + this.tileSize * this.boardSize,
-                duration: 300,
+                duration: 450,
             });
         }
     }
