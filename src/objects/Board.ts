@@ -1,11 +1,6 @@
 import Phaser from "phaser";
 import Tile from "./Tile";
-
-enum DirectionType {
-    ROW,
-    COL,
-    NONE,
-}
+import { DirectionType } from "./enums";
 
 export default class Board {
     private scene: Phaser.Scene;
