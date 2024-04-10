@@ -93,10 +93,22 @@ export default class MainScene extends Phaser.Scene {
                 break;
         }
 
-        if (newRow !== currentRow || newCol !== currentCol) {
-            console.log(newRow);
-            console.log(newCol);
-            this.gameBoard.swapTiles(currentRow, currentCol, newRow, newCol);
+        if (
+            newRow >= 0 &&
+            newRow < this.gameBoard.getBoardSize() &&
+            newCol >= 0 &&
+            newCol < this.gameBoard.getBoardSize()
+        ) {
+            if (newRow !== currentRow || newCol !== currentCol) {
+                console.log(newRow);
+                console.log(newCol);
+                this.gameBoard.swapTiles(
+                    currentRow,
+                    currentCol,
+                    newRow,
+                    newCol
+                );
+            }
         }
     }
 
