@@ -39,7 +39,7 @@ export default class MenuScene extends Phaser.Scene {
         playButton.setInteractive();
         playButton.on("pointerdown", () => {
             // Start the game scene when Play button is clicked
-            this.scene.start("MainGameScene");
+            this.scene.start("ProgressionScene");
         });
 
         // Add Settings button
