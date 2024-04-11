@@ -144,35 +144,62 @@ export default class Board {
         return false;
     }
 
-    // function to check if a row or column equates to true. ONLY WORKS FOR 3x3
     private checkLine(line: Tile[]): boolean {
-        let firstTileType = line[0].tileType;
+        let stack: boolean[] = [];
+        let currentOperator: "andTile" | "orTile" | null = null;
 
-        if (firstTileType === "trueTile") {
-            if (line[1].tileType === "orTile") {
-                if (
-                    line[2].tileType === "trueTile" ||
-                    line[2].tileType === "falseTile"
-                ) {
-                    return true;
-                }
-            } else if (line[1].tileType === "andTile") {
-                if (line[2].tileType === "trueTile") {
-                    return true;
-                }
+        for (const tile of line) {
+            switch (tile.tileType) {
+                case "trueTile":
+                    stack.push(true);
+                    break;
+                case "falseTile":
+                    stack.push(false);
+                    break;
+                case "andTile":
+                    if (stack.length != 1) {
+                        console.log(
+                            "Invalid operation: Not enough operands for AND"
+                        );
+                        return false;
+                    }
+                    currentOperator = "andTile";
+                    break;
+                case "orTile":
+                    if (stack.length != 1) {
+                        console.log(
+                            "Invalid operation: Not enough operands for OR"
+                        );
+                        return false;
+                    }
+                    currentOperator = "orTile";
+                    break;
+                default:
+                    console.log("Invalid tile type");
+                    return false;
             }
-        } else if (firstTileType === "falseTile") {
-            if (line[1].tileType === "orTile") {
-                if (line[2].tileType === "trueTile") {
-                    return true;
-                }
-            } else if (line[1].tileType === "andTile") {
-                if (line[2].tileType === "falseTile") {
-                    return true;
-                }
+
+            if (stack.length === 2 && currentOperator !== null) {
+                const second = stack.pop() || false;
+                const first = stack.pop() || false;
+                const result =
+                    currentOperator === "andTile"
+                        ? first && second
+                        : first || second;
+                stack.push(result);
+                currentOperator = null;
             }
         }
-        return false;
+
+        if (stack.length === 1) {
+            console.log("Final result:", stack[0]);
+            return stack[0];
+        } else if (currentOperator !== null) {
+            console.log("Invalid expression");
+            return false;
+        } else {
+            return false;
+        }
     }
 
     private removeTilesRow(currentRow: number) {
