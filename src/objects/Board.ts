@@ -69,7 +69,7 @@ export default class Board {
             this.selectedTile.setTint(0xffffff); // Reset tint of previously selected tile
         }
         this.selectedTile = tile;
-        tile.setTint(0x000000); // Tint the selected tile red
+        tile.setTint(0x555555); // Tint the selected tile red
     }
     public swapTiles(row1: number, col1: number, row2: number, col2: number) {
         if (this.isAnimating) {
@@ -116,13 +116,13 @@ export default class Board {
             for (let tileIndex = 0; tileIndex < this.boardSize; tileIndex++) {
                 const tile = this.tiles[directionIndex][tileIndex];
                 this.selectedTiles.push(tile);
-                tile.setTint(0x000000);
+                tile.setTint(0x555555);
             }
         } else if (direction == DirectionType.COL) {
             for (let tileIndex = 0; tileIndex < this.boardSize; tileIndex++) {
                 const tile = this.tiles[tileIndex][directionIndex];
                 this.selectedTiles.push(tile);
-                tile.setTint(0x000000);
+                tile.setTint(0x555555);
             }
         }
     }
