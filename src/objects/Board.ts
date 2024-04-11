@@ -69,7 +69,7 @@ export default class Board {
             this.selectedTile.setTint(0xffffff); // Reset tint of previously selected tile
         }
         this.selectedTile = tile;
-        tile.setTint(0xff0000); // Tint the selected tile red
+        tile.setTint(0x000000); // Tint the selected tile red
     }
     public swapTiles(row1: number, col1: number, row2: number, col2: number) {
         if (this.isAnimating) {
@@ -90,8 +90,8 @@ export default class Board {
             onComplete: () => {
                 this.isAnimating = false;
                 this.tiles[row2][col2] = tile1;
-                this.selectedTile?.setTint(0xffffff);
-                this.selectedTile = null; // Deselect the tile after swapping
+                //this.selectedTile?.setTint(0xffffff);
+                //this.selectedTile = null; // Deselect the tile after swapping
                 console.log("tween1 complete");
             },
         });
@@ -116,13 +116,13 @@ export default class Board {
             for (let tileIndex = 0; tileIndex < this.boardSize; tileIndex++) {
                 const tile = this.tiles[directionIndex][tileIndex];
                 this.selectedTiles.push(tile);
-                tile.setTint(0x00ff00);
+                tile.setTint(0x000000);
             }
         } else if (direction == DirectionType.COL) {
             for (let tileIndex = 0; tileIndex < this.boardSize; tileIndex++) {
                 const tile = this.tiles[tileIndex][directionIndex];
                 this.selectedTiles.push(tile);
-                tile.setTint(0x00ff00);
+                tile.setTint(0x000000);
             }
         }
     }
@@ -149,6 +149,7 @@ export default class Board {
         let currentOperator: "andTile" | "orTile" | null = null;
 
         for (const tile of line) {
+            console.log(tile.tileType);
             switch (tile.tileType) {
                 case "trueTile":
                     stack.push(true);
@@ -157,7 +158,7 @@ export default class Board {
                     stack.push(false);
                     break;
                 case "andTile":
-                    if (stack.length != 1) {
+                    if (stack.length != 1 || currentOperator !== null) {
                         console.log(
                             "Invalid operation: Not enough operands for AND"
                         );
@@ -166,7 +167,7 @@ export default class Board {
                     currentOperator = "andTile";
                     break;
                 case "orTile":
-                    if (stack.length != 1) {
+                    if (stack.length != 1 || currentOperator !== null) {
                         console.log(
                             "Invalid operation: Not enough operands for OR"
                         );
@@ -298,7 +299,6 @@ export default class Board {
     }
 
     private shakeTiles() {
-        console.log("shaking tiles");
         this.selectedTiles.forEach((tile) => {
             const originalX = tile.x;
             const originalY = tile.y;

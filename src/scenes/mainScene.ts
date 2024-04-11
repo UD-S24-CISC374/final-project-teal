@@ -54,7 +54,7 @@ export default class MainScene extends Phaser.Scene {
         let newRow = currentRow;
         let newCol = currentCol;
 
-        console.log(event.key);
+        //console.log(event.key);
         switch (event.key) {
             case "ArrowUp":
             case "w":
@@ -85,11 +85,9 @@ export default class MainScene extends Phaser.Scene {
                 this.gameBoard.selectTiles(currentCol, DirectionType.COL);
                 break;
             case "Enter":
-                //console.log("enter pressed");
                 if (this.gameBoard.handleRowColCheck(currentRow, currentCol)) {
                     this.addScore(10);
                 }
-                //console.log("enter pressed 2");
                 break;
         }
 
