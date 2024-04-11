@@ -86,5 +86,22 @@ export default class MenuScene extends Phaser.Scene {
             // Add tutorial functionality here
             this.scene.start("TutorialScene");
         });
+        const creditsButton = this.add.text(
+            (this.game.config.width as number) * 0.5,
+            (this.game.config.height as number) * 0.8,
+            "Credits",
+            {
+                fontSize: "32px",
+                fontFamily: "Arial",
+                color: "#ffffff",
+                backgroundColor: "#4e342e",
+                padding: { x: 20, y: 10 },
+            }
+        );
+        creditsButton.setOrigin(0.5);
+        creditsButton.setInteractive();
+        creditsButton.on("pointerdown", () => {
+            this.scene.start("CreditsScene");
+        });
     }
 }
