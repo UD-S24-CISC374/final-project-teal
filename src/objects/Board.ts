@@ -188,6 +188,9 @@ export default class Board {
                         : first || second;
                 stack.push(result);
                 currentOperator = null;
+            } else if (stack.length > 2) {
+                console.log("Invalid expression");
+                return false;
             }
         }
 
