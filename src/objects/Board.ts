@@ -135,18 +135,46 @@ export default class Board {
     }
 
     private checkRow(currentRow: number): boolean {
-        let firstTileType = this.tiles[currentRow][0].tileType;
+        if (this.checkLine(this.tiles[currentRow])) {
+            this.removeTilesRow(currentRow);
+            return true;
+        }
 
-        for (let col = 1; col < this.boardSize; col++) {
-            const tile = this.tiles[currentRow][col];
-            if (tile.tileType !== firstTileType) {
-                this.shakeTiles();
-                return false;
+        this.shakeTiles();
+        return false;
+    }
+
+    // function to check if a row or column equates to true. ONLY WORKS FOR 3x3
+    private checkLine(line: Tile[]): boolean {
+        let firstTileType = line[0].tileType;
+
+        if (firstTileType === "trueTile") {
+            if (line[1].tileType === "orTile") {
+                if (
+                    line[2].tileType === "trueTile" ||
+                    line[2].tileType === "falseTile"
+                ) {
+                    return true;
+                }
+            } else if (line[1].tileType === "andTile") {
+                if (line[2].tileType === "trueTile") {
+                    return true;
+                }
+            }
+        } else if (firstTileType === "falseTile") {
+            if (line[1].tileType === "orTile") {
+                if (line[2].tileType === "trueTile") {
+                    return true;
+                }
+            } else if (line[1].tileType === "andTile") {
+                if (line[2].tileType === "falseTile") {
+                    return true;
+                }
             }
         }
-        this.removeTilesRow(currentRow);
-        return true;
+        return false;
     }
+
     private removeTilesRow(currentRow: number) {
         // remove all the tiles in the current row
         for (let col = 0; col < this.boardSize; col++) {
@@ -196,17 +224,13 @@ export default class Board {
     }
 
     private checkCol(currentCol: number): boolean {
-        let firstTile = this.tiles[0][currentCol].tileType;
-
-        for (let row = 1; row < this.boardSize; row++) {
-            const tile = this.tiles[row][currentCol];
-            if (tile.tileType !== firstTile) {
-                this.shakeTiles();
-                return false;
-            }
+        let column = this.tiles.map((row) => row[currentCol]);
+        if (this.checkLine(column)) {
+            this.removeTilesCol(currentCol);
+            return true;
         }
-        this.removeTilesCol(currentCol);
-        return true;
+        this.shakeTiles();
+        return false;
     }
 
     private removeTilesCol(currentCol: number) {

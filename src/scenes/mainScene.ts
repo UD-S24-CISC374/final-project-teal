@@ -19,9 +19,9 @@ export default class MainScene extends Phaser.Scene {
 
     create() {
         //console.log("Hello");
-        const tileTypes = ["tile1", "tile2", "tile3", "tile4"];
+        const tileTypes = ["trueTile", "falseTile", "andTile", "orTile"];
 
-        this.gameBoard = new Board(this, 4, 130, tileTypes);
+        this.gameBoard = new Board(this, 3, 130, tileTypes);
 
         this.pauseMenu = new PauseMenu(this);
         this.pauseMenu.setVisible(false);
