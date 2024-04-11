@@ -13,7 +13,7 @@ export default class CreditsScene extends Phaser.Scene {
         const creditsText = this.add.text(
             (this.game.config.width as number) * 0.5,
             (this.game.config.height as number) * 0.3,
-            "Credits\n\nDeveloped by: Patrick Tiamson & Angelo Ramos\nArtwork by: Angelo Ramos\nMusic & SFX by: Patrick Tiamson",
+            "Credits\n\nDeveloped by: Patrick Tiamson & Angelo Ramos\nArtwork by: Angelo Ramos\nMusic & SFX by: Patrick Tiamson\n\n\nBackground Image from iStock",
             {
                 fontSize: "32px",
                 fontFamily: "Arial",
