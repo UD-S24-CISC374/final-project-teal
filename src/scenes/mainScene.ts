@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Board from "../objects/Board";
 import PauseMenu from "../objects/PauseMenu";
+import Background from "../objects/Background";
 
 enum DirectionType {
     ROW,
@@ -18,6 +19,8 @@ export default class MainScene extends Phaser.Scene {
     }
 
     create() {
+        const backgroundImage = new Background(this, "background");
+        backgroundImage.create();
         //console.log("Hello");
         const tileTypes = ["trueTile", "falseTile", "andTile", "orTile"];
 

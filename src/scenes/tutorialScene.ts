@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import Background from "../objects/Background";
 
 export default class TutorialScene extends Phaser.Scene {
     constructor() {
@@ -6,6 +7,8 @@ export default class TutorialScene extends Phaser.Scene {
     }
 
     create() {
+        const backgroundImage = new Background(this, "background");
+        backgroundImage.create();
         const screenCenterX = (this.game.config.width as number) * 0.5;
         const screenCenterY = (this.game.config.height as number) * 0.5;
 

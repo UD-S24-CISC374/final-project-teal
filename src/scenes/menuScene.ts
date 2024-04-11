@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import Background from "../objects/Background";
 
 export default class MenuScene extends Phaser.Scene {
     constructor() {
@@ -6,6 +7,8 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     create() {
+        const backgroundImage = new Background(this, "background");
+        backgroundImage.create();
         // Add title text
         const titleText = this.add.text(
             (this.game.config.width as number) * 0.5,

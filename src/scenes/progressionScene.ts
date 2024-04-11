@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Game from "../objects/Game";
 import Stage from "../objects/Stages";
+import Background from "../objects/Background";
 
 export default class ProgressionScene extends Phaser.Scene {
     private currentStage: Stage | null = null;
@@ -11,6 +12,8 @@ export default class ProgressionScene extends Phaser.Scene {
     }
 
     create() {
+        const backgroundImage = new Background(this, "background");
+        backgroundImage.create();
         const screenWidth = this.game.config.width as number;
         const screenHeight = this.game.config.height as number;
 

@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import Background from "../objects/Background";
 
 export default class CreditsScene extends Phaser.Scene {
     constructor() {
@@ -6,6 +7,8 @@ export default class CreditsScene extends Phaser.Scene {
     }
 
     create() {
+        const backgroundImage = new Background(this, "background");
+        backgroundImage.create();
         // Add credits text or any other content you want to display in the CreditsScene
         const creditsText = this.add.text(
             (this.game.config.width as number) * 0.5,
