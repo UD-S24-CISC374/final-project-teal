@@ -1,15 +1,19 @@
 import Phaser from "phaser";
+import SFX from "./SFX";
 
 export default class PauseMenu extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene;
     private mainMenuButton: Phaser.GameObjects.Text;
     private restartButton: Phaser.GameObjects.Text;
     private resumeButton: Phaser.GameObjects.Text;
+    private sfx: SFX;
 
     constructor(scene: Phaser.Scene) {
         super(scene, 0, 0);
         this.scene = scene;
         this.scene.add.existing(this);
+
+        this.sfx = SFX.getInstance(scene);
 
         // Add pause menu background
         const pauseMenuBackground = this.scene.add.rectangle(
@@ -47,6 +51,7 @@ export default class PauseMenu extends Phaser.GameObjects.Container {
         this.resumeButton.setOrigin(0.5);
         this.resumeButton.setInteractive();
         this.resumeButton.on("pointerdown", () => {
+            this.sfx.play("pop-click-1");
             this.togglePauseMenu();
         });
         this.add(this.resumeButton);
@@ -66,6 +71,7 @@ export default class PauseMenu extends Phaser.GameObjects.Container {
         this.mainMenuButton.setOrigin(0.5);
         this.mainMenuButton.setInteractive();
         this.mainMenuButton.on("pointerdown", () => {
+            this.sfx.play("pop-click-1");
             this.scene.scene.start("MenuScene");
         });
         this.add(this.mainMenuButton);
@@ -85,6 +91,7 @@ export default class PauseMenu extends Phaser.GameObjects.Container {
         this.restartButton.setOrigin(0.5);
         this.restartButton.setInteractive();
         this.restartButton.on("pointerdown", () => {
+            this.sfx.play("crumple-paper-1");
             this.scene.scene.restart();
         });
         this.add(this.restartButton);
