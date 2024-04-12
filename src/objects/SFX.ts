@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 
 export default class SFX {
-    private static SFXInstance: SFX;
-    private backgroundMusic: Phaser.Sound.BaseSound;
+    private static SFXInstance: SFX | undefined;
+    private backgroundMusic: Phaser.Sound.BaseSound | undefined;
 
     private scene: Phaser.Scene;
     private sfxAudioKeys = [
