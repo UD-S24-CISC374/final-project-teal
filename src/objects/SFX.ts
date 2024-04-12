@@ -20,7 +20,6 @@ export default class SFX {
     private constructor(scene: Phaser.Scene) {
         this.scene = scene;
         this.sfxAudioMap = new Map();
-        //this.create();
     }
 
     preload() {
@@ -43,12 +42,8 @@ export default class SFX {
     }
 
     play(key: string) {
-        for (const key of this.sfxAudioMap.keys()) {
-            console.log(key);
-        }
         const sound = this.sfxAudioMap.get(key);
         if (sound) {
-            console.log(sound);
             sound.play();
         } else {
             console.warn(`Sound effect with key '${key}' not found.`);
