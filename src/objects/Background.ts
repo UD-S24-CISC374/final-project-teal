@@ -1,11 +1,12 @@
 import Phaser from "phaser";
 
 export default class Background {
+    private static backgroundInstance: Background;
     private scene: Phaser.Scene;
     private imageKey: string;
     private backgroundImage: Phaser.GameObjects.Image;
 
-    constructor(scene: Phaser.Scene, imageKey: string) {
+    private constructor(scene: Phaser.Scene, imageKey: string) {
         this.scene = scene;
         this.imageKey = imageKey;
     }
@@ -22,5 +23,12 @@ export default class Background {
             this.backgroundImage.height;
         const maxScale = Math.max(scaleX, scaleY);
         this.backgroundImage.setScale(maxScale);
+    }
+
+    public static getInstance(
+        scene: Phaser.Scene,
+        imageKey: string
+    ): Background {
+        return new Background(scene, imageKey);
     }
 }

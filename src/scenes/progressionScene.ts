@@ -2,17 +2,20 @@ import Phaser from "phaser";
 import Game from "../objects/Game";
 import Stage from "../objects/Stages";
 import Background from "../objects/Background";
+import SFX from "../objects/SFX";
 
 export default class ProgressionScene extends Phaser.Scene {
     private currentStage: Stage | null = null;
     private stageTitleText: Phaser.GameObjects.Text;
+    private sfx: SFX;
 
     constructor() {
         super({ key: "ProgressionScene" });
+        this.sfx = SFX.getInstance(this);
     }
 
     create() {
-        const backgroundImage = new Background(this, "background");
+        const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
         const screenWidth = this.game.config.width as number;
         const screenHeight = this.game.config.height as number;
@@ -116,6 +119,7 @@ export default class ProgressionScene extends Phaser.Scene {
             stageButton.setOrigin(0.5);
             stageButton.setInteractive();
             stageButton.on("pointerdown", () => {
+                this.sfx.play("pop-click-1");
                 this.currentStage = stage;
                 this.showGames(stage.games);
             });
@@ -130,6 +134,7 @@ export default class ProgressionScene extends Phaser.Scene {
         });
         backButton.setInteractive();
         backButton.on("pointerdown", () => {
+            this.sfx.play("pop-click-1");
             // Go back to the progression scene
             this.scene.start("MenuScene");
         });
@@ -164,6 +169,7 @@ export default class ProgressionScene extends Phaser.Scene {
             );
             gameButton.setInteractive();
             gameButton.on("pointerdown", () => {
+                this.sfx.play("crumple-paper-1");
                 // Start the selected game scene
                 game.startGame(this);
             });

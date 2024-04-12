@@ -1,14 +1,20 @@
 import Phaser from "phaser";
 import Background from "../objects/Background";
+import SFX from "../objects/SFX";
 
 export default class MenuScene extends Phaser.Scene {
+    private sfx: SFX;
+
     constructor() {
         super({ key: "MenuScene" });
+        this.sfx = SFX.getInstance(this);
     }
 
     create() {
-        const backgroundImage = new Background(this, "background");
+        const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
+        this.sfx.create();
+
         // Add title text
         const titleText = this.add.text(
             (this.game.config.width as number) * 0.5,
@@ -43,6 +49,7 @@ export default class MenuScene extends Phaser.Scene {
         playButton.on("pointerdown", () => {
             // Start the game scene when Play button is clicked
             this.scene.start("ProgressionScene");
+            this.sfx.play("pop-click-1");
         });
 
         // Add Settings button
@@ -86,6 +93,7 @@ export default class MenuScene extends Phaser.Scene {
         tutorialButton.setOrigin(0.5);
         tutorialButton.setInteractive();
         tutorialButton.on("pointerdown", () => {
+            this.sfx.play("pop-click-1");
             // Add tutorial functionality here
             this.scene.start("TutorialScene");
         });
@@ -104,6 +112,7 @@ export default class MenuScene extends Phaser.Scene {
         creditsButton.setOrigin(0.5);
         creditsButton.setInteractive();
         creditsButton.on("pointerdown", () => {
+            this.sfx.play("pop-click-1");
             this.scene.start("CreditsScene");
         });
     }

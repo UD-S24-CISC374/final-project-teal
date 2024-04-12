@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Tile from "./Tile";
+import SFX from "./SFX";
 
 enum DirectionType {
     ROW,
@@ -8,6 +9,8 @@ enum DirectionType {
 }
 
 export default class Board {
+    private sfx: SFX;
+
     private scene: Phaser.Scene;
     private tiles: Tile[][];
     private boardSize: number;
@@ -31,6 +34,7 @@ export default class Board {
         this.boardSize = boardSize;
         this.tileSize = tileSize;
         this.tileTypes = tileTypes;
+        this.sfx = SFX.getInstance(scene);
         this.tiles = this.generateBoard();
     }
 
@@ -64,6 +68,7 @@ export default class Board {
     }
 
     private selectTile(tile: Tile) {
+        this.sfx.play("click-1");
         this.unselectTiles();
         if (this.selectedTile) {
             this.selectedTile.setTint(0xffffff); // Reset tint of previously selected tile
@@ -75,6 +80,7 @@ export default class Board {
         if (this.isAnimating) {
             return;
         }
+        this.sfx.play("slide-1");
         this.isAnimating = true;
         this.unselectTiles();
         const tile1 = this.tiles[row1][col1];
@@ -110,6 +116,7 @@ export default class Board {
     }
 
     public selectTiles(directionIndex: number, direction: DirectionType) {
+        this.sfx.play("sweep-1");
         this.unselectTiles();
         this.currentDirection = direction;
         if (direction == DirectionType.ROW) {
@@ -137,6 +144,7 @@ export default class Board {
     private checkRow(currentRow: number): boolean {
         if (this.checkLine(this.tiles[currentRow])) {
             this.removeTilesRow(currentRow);
+            this.sfx.play("pop-1");
             return true;
         }
 
@@ -258,6 +266,7 @@ export default class Board {
         let column = this.tiles.map((row) => row[currentCol]);
         if (this.checkLine(column)) {
             this.removeTilesCol(currentCol);
+            this.sfx.play("pop-1");
             return true;
         }
         this.shakeTiles();
@@ -299,6 +308,7 @@ export default class Board {
     }
 
     private shakeTiles() {
+        this.sfx.play("incorrect-1");
         this.selectedTiles.forEach((tile) => {
             const originalX = tile.x;
             const originalY = tile.y;

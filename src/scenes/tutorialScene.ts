@@ -1,13 +1,17 @@
 import Phaser from "phaser";
 import Background from "../objects/Background";
+import SFX from "../objects/SFX";
 
 export default class TutorialScene extends Phaser.Scene {
+    private sfx: SFX;
+
     constructor() {
         super({ key: "TutorialScene" });
+        this.sfx = SFX.getInstance(this);
     }
 
     create() {
-        const backgroundImage = new Background(this, "background");
+        const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
         const screenCenterX = (this.game.config.width as number) * 0.5;
         const screenCenterY = (this.game.config.height as number) * 0.5;
@@ -63,6 +67,7 @@ export default class TutorialScene extends Phaser.Scene {
         backButton.setOrigin(0.5);
         backButton.setInteractive();
         backButton.on("pointerdown", () => {
+            this.sfx.play("pop-click-1");
             // Go back to the menu scene when the back button is clicked
             this.scene.start("MenuScene");
         });

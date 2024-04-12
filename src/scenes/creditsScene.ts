@@ -1,14 +1,20 @@
 import Phaser from "phaser";
 import Background from "../objects/Background";
+import SFX from "../objects/SFX";
 
 export default class CreditsScene extends Phaser.Scene {
+    private sfx: SFX;
+
     constructor() {
         super({ key: "CreditsScene" });
+        this.sfx = SFX.getInstance(this);
     }
 
     create() {
-        const backgroundImage = new Background(this, "background");
+        const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
+        //this.sfx.create();
+
         // Add credits text or any other content you want to display in the CreditsScene
         const creditsText = this.add.text(
             (this.game.config.width as number) * 0.5,
@@ -33,6 +39,7 @@ export default class CreditsScene extends Phaser.Scene {
         backButton.setInteractive();
         backButton.on("pointerdown", () => {
             // Go back to the progression scene
+            this.sfx.play("pop-click-1");
             this.scene.start("MenuScene");
         });
     }

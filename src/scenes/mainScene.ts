@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Board from "../objects/Board";
 import PauseMenu from "../objects/PauseMenu";
 import Background from "../objects/Background";
+import SFX from "../objects/SFX";
 
 enum DirectionType {
     ROW,
@@ -13,13 +14,15 @@ export default class MainScene extends Phaser.Scene {
     private scoreText: Phaser.GameObjects.Text;
     private score: number = 0;
     private pauseMenu: PauseMenu | null = null;
+    private sfx: SFX;
 
     constructor() {
         super({ key: "MainGameScene" });
+        this.sfx = SFX.getInstance(this);
     }
 
     create() {
-        const backgroundImage = new Background(this, "background");
+        const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
         //console.log("Hello");
         const tileTypes = ["trueTile", "falseTile", "andTile", "orTile"];
