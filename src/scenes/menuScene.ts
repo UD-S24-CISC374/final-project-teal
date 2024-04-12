@@ -16,17 +16,14 @@ export default class MenuScene extends Phaser.Scene {
         this.sfx.create();
 
         // Add title text
-        const titleText = this.add.text(
+
+        const titleImg = this.add.image(
             (this.game.config.width as number) * 0.5,
-            (this.game.config.height as number) * 0.3,
-            "Boolean Bonanza!",
-            {
-                fontSize: "80px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
+            (this.game.config.height as number) * 0.25,
+            "title"
         );
-        titleText.setOrigin(0.5);
+        titleImg.setOrigin(0.5);
+        titleImg.setScale(1.2);
 
         // Add Play button
         const playButton = this.add.text(
