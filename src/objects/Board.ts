@@ -138,76 +138,43 @@ export default class Board {
     }
 
     private checkRow(currentRow: number): boolean {
-        if (this.checkLine(this.tiles[currentRow])) {
-            this.removeTilesRow(currentRow);
-            this.sfx.play("pop-1");
-            return true;
+        let row = this.tileToString(this.tiles[currentRow]);
+        if (this.checkPattern(row)) {
+            if (eval(row)) {
+                this.removeTilesRow(currentRow);
+                this.sfx.play("pop-1");
+                return true;
+            }
         }
-
         this.shakeTiles();
         return false;
     }
 
-    private checkLine(line: Tile[]): boolean {
-        let stack: boolean[] = [];
-        let currentOperator: "andTile" | "orTile" | null = null;
+    // convert the tiles to string format ex: [true, and, true] => "true && true"
+    private tileToString(tiles: Tile[]): string {
+        return tiles
+            .map((tile) => {
+                switch (tile.tileType) {
+                    case "trueTile":
+                        return "true";
+                    case "falseTile":
+                        return "false";
+                    case "andTile":
+                        return " && ";
+                    case "orTile":
+                        return " || ";
+                    default:
+                        return "Invalid tile type";
+                }
+            })
+            .join("");
+    }
 
-        for (const tile of line) {
-            console.log(tile.tileType);
-            switch (tile.tileType) {
-                case "trueTile":
-                    stack.push(true);
-                    break;
-                case "falseTile":
-                    stack.push(false);
-                    break;
-                case "andTile":
-                    if (stack.length != 1 || currentOperator !== null) {
-                        console.log(
-                            "Invalid operation: Not enough operands for AND"
-                        );
-                        return false;
-                    }
-                    currentOperator = "andTile";
-                    break;
-                case "orTile":
-                    if (stack.length != 1 || currentOperator !== null) {
-                        console.log(
-                            "Invalid operation: Not enough operands for OR"
-                        );
-                        return false;
-                    }
-                    currentOperator = "orTile";
-                    break;
-                default:
-                    console.log("Invalid tile type");
-                    return false;
-            }
-
-            if (stack.length === 2 && currentOperator !== null) {
-                const second = stack.pop() || false;
-                const first = stack.pop() || false;
-                const result =
-                    currentOperator === "andTile"
-                        ? first && second
-                        : first || second;
-                stack.push(result);
-                currentOperator = null;
-            } else if (stack.length > 2) {
-                console.log("Invalid expression");
-                return false;
-            }
-        }
-
-        if (stack.length === 1) {
-            console.log("Final result:", stack[0]);
-            return stack[0];
-        } else if (currentOperator !== null) {
-            console.log("Invalid expression");
-            return false;
-        } else {
-            return false;
-        }
+    // check if the expression is valid: return true if it is, false otherwise
+    private checkPattern(expression: string): boolean {
+        const pattern =
+            /^(true|false)(((\s*\|\|\s*|\s*&&\s*|\s*\^\s*)(true|false)))*$/;
+        return pattern.test(expression);
     }
 
     private removeTilesRow(currentRow: number) {
@@ -260,10 +227,13 @@ export default class Board {
 
     private checkCol(currentCol: number): boolean {
         let column = this.tiles.map((row) => row[currentCol]);
-        if (this.checkLine(column)) {
-            this.removeTilesCol(currentCol);
-            this.sfx.play("pop-1");
-            return true;
+        let col = this.tileToString(column);
+        if (this.checkPattern(col)) {
+            if (eval(col)) {
+                this.removeTilesCol(currentCol);
+                this.sfx.play("pop-1");
+                return true;
+            }
         }
         this.shakeTiles();
         return false;
