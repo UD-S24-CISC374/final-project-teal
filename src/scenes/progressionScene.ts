@@ -36,8 +36,18 @@ export default class ProgressionScene extends Phaser.Scene {
         // Define stages and games
         const stages = [
             new Stage("Beginner", [
-                new Game("Game 1", ["trueTile", "falseTile"], 64, 5),
-                new Game("Game 2", ["trueTile", "falseTile", "andTile"], 64, 6),
+                new Game(
+                    "Game 1",
+                    ["trueTile", "falseTile", "orTile", "andTile"],
+                    130,
+                    3
+                ),
+                new Game(
+                    "Game 2",
+                    ["trueTile", "falseTile", "andTile", "orTile"],
+                    130,
+                    5
+                ),
                 new Game("Game 3", ["trueTile", "falseTile", "orTile"], 64, 7),
                 new Game(
                     "Game 4",

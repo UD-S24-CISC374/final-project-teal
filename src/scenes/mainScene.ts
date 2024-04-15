@@ -3,6 +3,7 @@ import Board from "../objects/Board";
 import PauseMenu from "../objects/PauseMenu";
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
+import Game from "../objects/Game";
 
 enum DirectionType {
     ROW,
@@ -15,19 +16,31 @@ export default class MainScene extends Phaser.Scene {
     private score: number = 0;
     private pauseMenu: PauseMenu | null = null;
     private sfx: SFX;
+    private gameData: Game;
 
     constructor() {
         super({ key: "MainGameScene" });
         this.sfx = SFX.getInstance(this);
     }
 
+    // receive data from the progressionscene and store it in the gameData property
+    init(data: Game) {
+        this.gameData = data;
+    }
+
     create() {
         const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
-        //console.log("Hello");
-        const tileTypes = ["trueTile", "falseTile", "andTile", "orTile"];
 
-        this.gameBoard = new Board(this, 5, 130, tileTypes);
+        this.gameBoard = new Board(
+            this,
+            this.gameData.boardSize,
+            this.gameData.tileSize,
+            this.gameData.tileTypes
+        );
+
+        this.score = 0;
+        //console.log("Hello");
 
         this.pauseMenu = new PauseMenu(this);
         this.pauseMenu.setVisible(false);

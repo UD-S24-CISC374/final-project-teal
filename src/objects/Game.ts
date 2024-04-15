@@ -25,7 +25,13 @@ export default class Game {
     }
 
     startGame(scene: Phaser.Scene) {
-        //Doesn't import game settings yet
-        scene.scene.start("MainGameScene");
+        scene.scene.start("MainGameScene", {
+            name: this.name,
+            tileTypes: this.tileTypes,
+            tileSize: this.tileSize,
+            boardSize: this.boardSize,
+            timeLimitSeconds: this.timeLimitSeconds,
+            numInitialSwaps: this.numInitialSwaps,
+        });
     }
 }
