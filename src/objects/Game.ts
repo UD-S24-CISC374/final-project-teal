@@ -34,4 +34,13 @@ export default class Game {
             numInitialSwaps: this.numInitialSwaps,
         });
     }
+
+    startTutorial(scene: Phaser.Scene) {
+        scene.scene.start("TutorialScene", {
+            name: this.name,
+            tileTypes: this.tileTypes,
+            tileSize: this.tileSize,
+            boardSize: this.boardSize,
+        });
+    }
 }

@@ -1,13 +1,20 @@
-import Phaser from "phaser";
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
+import Board from "../objects/Board";
+import Game from "../objects/Game";
+import baseScene from "./baseScene";
 
-export default class TutorialScene extends Phaser.Scene {
+export default class TutorialScene extends baseScene {
     private sfx: SFX;
+    private gameData: Game;
 
     constructor() {
         super({ key: "TutorialScene" });
         this.sfx = SFX.getInstance(this);
+    }
+
+    init(data: Game) {
+        this.gameData = data;
     }
 
     create() {
@@ -15,6 +22,17 @@ export default class TutorialScene extends Phaser.Scene {
         backgroundImage.create();
         const screenCenterX = (this.game.config.width as number) * 0.5;
         const screenCenterY = (this.game.config.height as number) * 0.5;
+
+        /* 
+        To be used for interactive tutorial
+
+        this.gameBoard = new Board(
+            this,
+            this.gameData.boardSize,
+            this.gameData.tileSize,
+            this.gameData.tileTypes
+        );
+        */
 
         // Add title text
         const titleText = this.add.text(
