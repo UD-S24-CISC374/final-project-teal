@@ -274,6 +274,10 @@ export default class Board {
     }
 
     private shakeTiles() {
+        if (this.isAnimating) {
+            return;
+        }
+        this.isAnimating = true;
         this.sfx.play("incorrect-1");
         this.selectedTiles.forEach((tile) => {
             const originalX = tile.x;
@@ -293,6 +297,7 @@ export default class Board {
                     // Optional: Reset sprite position after shaking, in case of rounding errors
                     tile.x = originalX;
                     tile.y = originalY;
+                    this.isAnimating = false;
                 },
             });
         });
