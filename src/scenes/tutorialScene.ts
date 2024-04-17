@@ -1,6 +1,6 @@
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
-import Board from "../objects/Board";
+//import Board from "../objects/Board";
 import Game from "../objects/Game";
 import baseScene from "./baseScene";
 
