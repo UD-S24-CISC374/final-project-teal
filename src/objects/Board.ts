@@ -59,7 +59,7 @@ export default class Board {
                 tile.setInteractive();
                 tile.on("pointerdown", this.selectTile.bind(this, tile));
                 tile.setOrigin(0, 0);
-                tile.setScale(1);
+                tile.setScale(this.tileSize / tile.width);
                 board[row][col] = tile;
             }
         }
@@ -214,7 +214,7 @@ export default class Board {
             tile.setInteractive();
             tile.on("pointerdown", this.selectTile.bind(this, tile));
             tile.setOrigin(0, 0);
-            tile.setScale(1);
+            tile.setScale(this.tileSize / tile.width);
             this.tiles[0][col] = tile;
 
             this.scene.tweens.add({
@@ -262,7 +262,7 @@ export default class Board {
             tile.setInteractive();
             tile.on("pointerdown", this.selectTile.bind(this, tile));
             tile.setOrigin(0, 0);
-            tile.setScale(1);
+            tile.setScale(this.tileSize / tile.width);
             this.tiles[row][currentCol] = tile;
 
             this.scene.tweens.add({
