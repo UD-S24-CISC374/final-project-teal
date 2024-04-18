@@ -51,7 +51,6 @@ export default class Board {
                 const tileX = boardX + col * this.tileSize;
                 const tileY = boardY + row * this.tileSize;
                 const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
-                console.log(this.tileSize);
                 const tile = new Tile(this.scene, tileX, tileY, tileTypeKey);
                 tile.setInteractive();
                 tile.on("pointerdown", this.selectTile.bind(this, tile));
