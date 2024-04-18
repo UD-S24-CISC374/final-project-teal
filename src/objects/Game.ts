@@ -11,14 +11,12 @@ export default class Game {
     constructor(
         name: string,
         tileTypes: string[],
-        tileSize: number,
         boardSize: number,
         timeLimitSeconds?: number,
         numInitialSwaps?: number
     ) {
         this.name = name;
         this.tileTypes = tileTypes;
-        this.tileSize = tileSize;
         this.boardSize = boardSize;
         this.timeLimitSeconds = timeLimitSeconds || 180;
         this.numInitialSwaps = numInitialSwaps || 10;

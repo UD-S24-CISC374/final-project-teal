@@ -26,7 +26,6 @@ export default class MainScene extends baseScene {
         this.gameBoard = new Board(
             this,
             this.gameData.boardSize,
-            this.gameData.tileSize,
             this.gameData.tileTypes
         );
         this.score = 0;

@@ -24,15 +24,9 @@ export default class Board {
 
     private isAnimating: boolean = false;
 
-    constructor(
-        scene: Phaser.Scene,
-        boardSize: number,
-        tileSize: number,
-        tileTypes: string[]
-    ) {
+    constructor(scene: Phaser.Scene, boardSize: number, tileTypes: string[]) {
         this.scene = scene;
         this.boardSize = boardSize;
-        this.tileSize = tileSize;
         this.tileTypes = tileTypes;
         this.sfx = SFX.getInstance(scene);
         this.tiles = this.generateBoard();
@@ -43,18 +37,21 @@ export default class Board {
 
         const screenWidth = this.scene.game.scale.width;
         const screenHeight = this.scene.game.scale.height;
-        const boardWidth = this.boardSize * this.tileSize;
-        const boardHeight = this.boardSize * this.tileSize;
+        //const boardWidth = this.boardSize * this.tileSize;
+        //const boardHeight = this.boardSize * this.tileSize;
+        const boardHeight = screenHeight * 0.8;
+        const boardWidth = boardHeight;
         const boardX = (screenWidth - boardWidth) / 2;
         const boardY = (screenHeight - boardHeight) / 2;
+        this.tileSize = boardHeight / this.boardSize;
 
         for (let row = 0; row < this.boardSize; row++) {
             board[row] = [];
             for (let col = 0; col < this.boardSize; col++) {
-                //console.log("tile created");
                 const tileX = boardX + col * this.tileSize;
                 const tileY = boardY + row * this.tileSize;
                 const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
+                console.log(this.tileSize);
                 const tile = new Tile(this.scene, tileX, tileY, tileTypeKey);
                 tile.setInteractive();
                 tile.on("pointerdown", this.selectTile.bind(this, tile));
