@@ -146,6 +146,6 @@ export default class baseScene extends Phaser.Scene {
     protected endGame() {
         console.log("game over:");
         //create game over screen
-        this.scene.start("MenuScene");
+        this.scene.start("GameOverScene");
     }
 }

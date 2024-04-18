@@ -5,6 +5,7 @@ import MenuScene from "./scenes/menuScene";
 import TutorialScene from "./scenes/tutorialScene";
 import ProgressionScene from "./scenes/progressionScene";
 import CreditsScene from "./scenes/creditsScene";
+import GameOverScene from "./scenes/gameOverScene";
 
 const DEFAULT_WIDTH = 1280;
 const DEFAULT_HEIGHT = 720;
@@ -28,6 +29,7 @@ export const CONFIG = {
         TutorialScene,
         ProgressionScene,
         CreditsScene,
+        GameOverScene,
     ],
     physics: {
         default: "arcade",

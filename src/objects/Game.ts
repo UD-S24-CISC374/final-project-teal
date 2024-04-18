@@ -22,8 +22,8 @@ export default class Game {
         this.tileTypes = tileTypes;
         this.boardSize = boardSize;
         this.timeLimitSeconds = timeLimitSeconds || 1000;
-        this.numLives = numLives || 100;
-        this.numInitialSwaps = numInitialSwaps || 100;
+        this.numLives = numLives || 3;
+        this.numInitialSwaps = numInitialSwaps || 3;
     }
 
     startGame(scene: Phaser.Scene) {
