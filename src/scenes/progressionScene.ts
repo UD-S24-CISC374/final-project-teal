@@ -8,6 +8,7 @@ export default class ProgressionScene extends Phaser.Scene {
     private currentStage: Stage | null = null;
     private stageTitleText: Phaser.GameObjects.Text;
     private sfx: SFX;
+    private gameButtonsShown: Phaser.GameObjects.Text[] = [];
 
     constructor() {
         super({ key: "ProgressionScene" });
@@ -89,12 +90,6 @@ export default class ProgressionScene extends Phaser.Scene {
                     32,
                     11
                 ),
-                new Game(
-                    "Game 5",
-                    ["trueTile", "falseTile", "andTile", "orTile"],
-                    32,
-                    12
-                ),
             ]),
         ];
 
@@ -151,7 +146,10 @@ export default class ProgressionScene extends Phaser.Scene {
     }
 
     showGames(games: Game[]) {
-        // need to clear out the buttons but its fine for now
+        for (const button of this.gameButtonsShown) {
+            button.destroy();
+        }
+        this.gameButtonsShown = [];
 
         const screenWidth = this.game.config.width as number;
         const screenHeight = this.game.config.height as number;
@@ -183,6 +181,7 @@ export default class ProgressionScene extends Phaser.Scene {
                 // Start the selected game scene
                 game.startGame(this);
             });
+            this.gameButtonsShown.push(gameButton);
         });
     }
 }
