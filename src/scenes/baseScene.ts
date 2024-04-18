@@ -6,8 +6,12 @@ import Board from "../objects/Board";
 export default class baseScene extends Phaser.Scene {
     protected score: number = 0;
     protected scoreText: Phaser.GameObjects.Text;
-    protected timerValue: number = 0;
+    protected timerValue: number = 1000;
     protected timerText: Phaser.GameObjects.Text;
+    protected livesValue: number = 3;
+    protected livesText: Phaser.GameObjects.Text;
+    protected swapsValue: number = 3;
+    protected swapsText: Phaser.GameObjects.Text;
     protected pauseMenu: PauseMenu | null = null;
     protected gameBoard: Board;
 
@@ -114,9 +118,18 @@ export default class baseScene extends Phaser.Scene {
         this.score += score;
         this.scoreText.setText(`Score: ${this.score}`);
     }
-    private subtractLife() {}
-    private addSwaps(swaps: number) {}
-    private subtractSwap() {}
+    private subtractLife() {
+        this.livesValue--;
+        this.livesText.setText(`Lives: ${this.livesValue}`);
+    }
+    private addSwaps(swaps: number) {
+        this.swapsValue += swaps;
+        this.swapsText.setText(`Swaps: ${this.swapsValue}`);
+    }
+    private subtractSwap() {
+        this.swapsValue--;
+        this.swapsText.setText(`Swaps: ${this.swapsValue}`);
+    }
 
     protected getGameBoard(): Board {
         return this.gameBoard;
@@ -129,5 +142,10 @@ export default class baseScene extends Phaser.Scene {
     }
     protected getScoreText(): Phaser.GameObjects.Text {
         return this.scoreText;
+    }
+    protected endGame() {
+        console.log("game over:");
+        //create game over screen
+        this.scene.start("MenuScene");
     }
 }

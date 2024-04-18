@@ -31,6 +31,8 @@ export default class MainScene extends baseScene {
         this.score = 0;
         console.log(this.gameData);
         this.timerValue = this.gameData.timeLimitSeconds;
+        this.livesValue = this.gameData.numLives;
+        this.swapsValue = this.gameData.numInitialSwaps;
         //console.log("Hello");
 
         this.pauseMenu = new PauseMenu(this);
@@ -58,6 +60,14 @@ export default class MainScene extends baseScene {
             callbackScope: this,
             loop: true,
         });
+        this.livesText = this.add.text(10, 50, `Lives: ${this.livesValue}`, {
+            fontSize: "32px",
+            color: "#000",
+        });
+        this.swapsText = this.add.text(10, 90, `Swaps: ${this.swapsValue}`, {
+            fontSize: "32px",
+            color: "#000",
+        });
     }
     private updateTimer() {
         if (this.pauseMenu?.visible) {
@@ -68,9 +78,13 @@ export default class MainScene extends baseScene {
 
         // Handle timer expiration (if needed)
         if (this.timerValue === 0) {
-            // Game over or other actions
+            this.endGame();
         }
     }
 
-    update() {}
+    update() {
+        if (this.livesValue == 0 || this.swapsValue == 0) {
+            this.endGame();
+        }
+    }
 }
