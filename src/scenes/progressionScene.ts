@@ -47,7 +47,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     ["trueTile", "falseTile", "andTile", "orTile"],
                     5
                 ),
-                new Game("Game 3", ["trueTile", "falseTile", "orTile"], 64, 7),
+                new Game("Game 3", ["trueTile", "falseTile", "orTile"], 7),
                 new Game(
                     "Game 4",
                     ["trueTile", "falseTile", "andTile", "orTile"],
@@ -278,7 +278,7 @@ export default class ProgressionScene extends Phaser.Scene {
             }
         );
         this.gameButtonsShown.push(timeLimitLabel);
-        let timeLimit = 60;
+        let timeLimit = 180;
         const timeLimitValue = this.add.text(
             settingsX + 200,
             settingsY + 2 * settingsSpacing,
@@ -304,7 +304,7 @@ export default class ProgressionScene extends Phaser.Scene {
         );
         timeLimitDecrement.setInteractive();
         timeLimitDecrement.on("pointerdown", () => {
-            timeLimit = Math.max(timeLimit - 15, 0);
+            timeLimit = Math.max(timeLimit - 10, 0);
             timeLimitValue.setText(`${timeLimit}`);
             this.sfx.play("pop-click-1");
         });
@@ -323,7 +323,7 @@ export default class ProgressionScene extends Phaser.Scene {
         );
         timeLimitIncrement.setInteractive();
         timeLimitIncrement.on("pointerdown", () => {
-            timeLimit += 15;
+            timeLimit += 10;
             timeLimitValue.setText(`${timeLimit}`);
             this.sfx.play("pop-click-1");
         });
@@ -476,7 +476,10 @@ export default class ProgressionScene extends Phaser.Scene {
                 this.tileButtonsShown
                     .filter((tile) => tile.tintTopLeft === 0xffffff)
                     .map((filteredTile) => filteredTile.texture.key),
-                boardSize
+                boardSize,
+                timeLimit,
+                lives,
+                initialSwaps
             );
             game.startGame(this);
         });

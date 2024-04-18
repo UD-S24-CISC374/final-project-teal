@@ -6,6 +6,8 @@ import Board from "../objects/Board";
 export default class baseScene extends Phaser.Scene {
     protected score: number = 0;
     protected scoreText: Phaser.GameObjects.Text;
+    protected timerValue: number = 0;
+    protected timerText: Phaser.GameObjects.Text;
     protected pauseMenu: PauseMenu | null = null;
     protected gameBoard: Board;
 
@@ -61,6 +63,9 @@ export default class baseScene extends Phaser.Scene {
             case "Enter":
                 if (this.gameBoard.handleRowColCheck(currentRow, currentCol)) {
                     this.addScore(10);
+                    this.addSwaps(this.getGameBoard().getBoardSize());
+                } else {
+                    this.subtractLife();
                 }
                 break;
         }
@@ -72,8 +77,7 @@ export default class baseScene extends Phaser.Scene {
             newCol < this.gameBoard.getBoardSize()
         ) {
             if (newRow !== currentRow || newCol !== currentCol) {
-                console.log(newRow);
-                console.log(newCol);
+                this.subtractSwap();
                 this.gameBoard.swapTiles(
                     currentRow,
                     currentCol,
@@ -110,6 +114,9 @@ export default class baseScene extends Phaser.Scene {
         this.score += score;
         this.scoreText.setText(`Score: ${this.score}`);
     }
+    private subtractLife() {}
+    private addSwaps(swaps: number) {}
+    private subtractSwap() {}
 
     protected getGameBoard(): Board {
         return this.gameBoard;
