@@ -101,13 +101,14 @@ export default class MainScene extends baseScene {
         if (objectives.length === 0) {
             return;
         }
-
-        const objectiveLabel = this.add.text(10, 180, "Objectives:", {
+        //objectives label
+        this.add.text(10, 180, "Objectives:", {
             fontSize: "32px",
             color: "#000",
         });
         const objectiveSpacing = 60;
-        const objectiveDesc = this.add.text(10, 220, "Make a statement with:", {
+        //objectives description
+        this.add.text(10, 220, "Make a statement with:", {
             fontSize: "25px",
             color: "#000",
         });
