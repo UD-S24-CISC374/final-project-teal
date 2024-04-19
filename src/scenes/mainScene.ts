@@ -4,7 +4,6 @@ import SFX from "../objects/SFX";
 import Game from "../objects/Game";
 import baseScene from "./baseScene";
 import Objective from "../objects/Objective";
-import Tile from "../objects/Tile";
 
 export default class MainScene extends baseScene {
     private sfx: SFX;
