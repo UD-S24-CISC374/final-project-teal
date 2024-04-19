@@ -3,7 +3,6 @@ import PauseMenu from "../objects/PauseMenu";
 import { DirectionType } from "../types/DirectionType";
 import Board from "../objects/Board";
 import Game from "../objects/Game";
-import Tile from "../objects/Tile";
 
 export default class baseScene extends Phaser.Scene {
     protected score: number = 0;
