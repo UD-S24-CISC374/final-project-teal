@@ -2,6 +2,8 @@ import Phaser from "phaser";
 import PauseMenu from "../objects/PauseMenu";
 import { DirectionType } from "../types/DirectionType";
 import Board from "../objects/Board";
+import Game from "../objects/Game";
+import Tile from "../objects/Tile";
 
 export default class baseScene extends Phaser.Scene {
     protected score: number = 0;
@@ -14,6 +16,7 @@ export default class baseScene extends Phaser.Scene {
     protected swapsText: Phaser.GameObjects.Text;
     protected pauseMenu: PauseMenu | null = null;
     protected gameBoard: Board;
+    protected gameData: Game;
 
     handleKeydown(event: KeyboardEvent) {
         switch (event.key) {
@@ -68,6 +71,7 @@ export default class baseScene extends Phaser.Scene {
                 if (this.gameBoard.handleRowColCheck(currentRow, currentCol)) {
                     this.addScore(10);
                     this.addSwaps(this.getGameBoard().getBoardSize());
+                    this.checkObjectives(this.gameBoard.lastRemovedTileTypes);
                 } else {
                     this.subtractLife();
                 }
@@ -90,6 +94,12 @@ export default class baseScene extends Phaser.Scene {
                 );
             }
         }
+    }
+
+    private checkObjectives(tileTypes: string[]) {
+        this.gameData.objectives.forEach((objective) => {
+            objective.checkObjective(tileTypes);
+        });
     }
 
     private addScore(score: number) {
@@ -147,5 +157,10 @@ export default class baseScene extends Phaser.Scene {
         console.log("game over:");
         //create game over screen
         this.scene.start("GameOverScene");
+    }
+    protected completeGame() {
+        console.log("game won:");
+        //create game over screen
+        this.scene.start("GameOverScene"); //replace this
     }
 }

@@ -1,13 +1,13 @@
-import Board from "../objects/Board";
 import PauseMenu from "../objects/PauseMenu";
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
 import Game from "../objects/Game";
 import baseScene from "./baseScene";
+import Objective from "../objects/Objective";
+import Tile from "../objects/Tile";
 
 export default class MainScene extends baseScene {
     private sfx: SFX;
-    private gameData: Game;
 
     constructor() {
         super({ key: "MainGameScene" });
@@ -23,16 +23,25 @@ export default class MainScene extends baseScene {
         const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
 
-        this.gameBoard = new Board(
-            this,
-            this.gameData.boardSize,
-            this.gameData.tileTypes
-        );
+        this.gameBoard = this.gameData.createBoard(this);
+        //SAMPLE OBJECTIVE
+        // this.gameData.addObjective(
+        //     new Objective("One AND tile", 4, (tileTypes: string[]) => {
+        //         const andTiles = tileTypes.filter(
+        //             (tileType) => tileType === "andTile"
+        //         );
+        //         return andTiles.length >= 1;
+        //     })
+        // );
+
+        this.handleObjectives(this.gameData.objectives);
+
         this.score = 0;
         console.log(this.gameData);
         this.timerValue = this.gameData.timeLimitSeconds;
         this.livesValue = this.gameData.numLives;
         this.swapsValue = this.gameData.numInitialSwaps;
+
         //console.log("Hello");
 
         this.pauseMenu = new PauseMenu(this);
@@ -86,5 +95,31 @@ export default class MainScene extends baseScene {
         if (this.livesValue == 0 || this.swapsValue == 0) {
             this.endGame();
         }
+    }
+    handleObjectives(objectives: Objective[]) {
+        console.log(objectives.length);
+        if (objectives.length === 0) {
+            return;
+        }
+
+        const objectiveLabel = this.add.text(10, 180, "Objectives:", {
+            fontSize: "32px",
+            color: "#000",
+        });
+        const objectiveSpacing = 60;
+        const objectiveDesc = this.add.text(10, 220, "Make a statement with:", {
+            fontSize: "25px",
+            color: "#000",
+        });
+        let index = 0;
+        objectives.forEach((objective) => {
+            console.log(objective);
+            objective.createObjectiveText(
+                this,
+                10,
+                260 + objectiveSpacing * index
+            );
+            index++;
+        });
     }
 }

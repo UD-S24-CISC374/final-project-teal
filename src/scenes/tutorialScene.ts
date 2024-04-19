@@ -6,7 +6,6 @@ import baseScene from "./baseScene";
 
 export default class TutorialScene extends baseScene {
     private sfx: SFX;
-    private gameData: Game;
 
     constructor() {
         super({ key: "TutorialScene" });

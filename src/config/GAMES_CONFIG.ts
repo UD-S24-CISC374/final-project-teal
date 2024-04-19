@@ -1,0 +1,1 @@
+//implement default game configurations

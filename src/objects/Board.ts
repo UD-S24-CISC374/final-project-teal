@@ -19,6 +19,7 @@ export default class Board {
 
     private selectedTile: Tile | null = null;
     private selectedTiles: Tile[] = [];
+    public lastRemovedTileTypes: string[] = [];
 
     private currentDirection: DirectionType = DirectionType.NONE;
 
@@ -174,9 +175,11 @@ export default class Board {
     }
 
     private removeTilesRow(currentRow: number) {
+        this.lastRemovedTileTypes = [];
         // remove all the tiles in the current row
         for (let col = 0; col < this.boardSize; col++) {
             const tile = this.tiles[currentRow][col];
+            this.lastRemovedTileTypes.push(tile.tileType);
             tile.destroy();
         }
 
