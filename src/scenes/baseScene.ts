@@ -71,7 +71,13 @@ export default class baseScene extends Phaser.Scene {
                 if (this.gameBoard.handleRowColCheck(currentRow, currentCol)) {
                     this.addScore(10);
                     this.addSwaps(this.getGameBoard().getBoardSize());
-                    this.checkObjectives(this.gameBoard.lastRemovedTileTypes);
+                    if (
+                        this.checkObjectives(
+                            this.gameBoard.lastRemovedTileTypes
+                        )
+                    ) {
+                        this.completeGame();
+                    }
                 } else {
                     this.subtractLife();
                 }
@@ -96,10 +102,19 @@ export default class baseScene extends Phaser.Scene {
         }
     }
 
-    private checkObjectives(tileTypes: string[]) {
+    private checkObjectives(tileTypes: string[]): boolean {
+        if (this.gameData.objectives.length == 0) {
+            return false;
+        }
+        let allTrue = true;
         this.gameData.objectives.forEach((objective) => {
             objective.checkObjective(tileTypes);
+            if (!objective.isCompleted()) {
+                allTrue = false;
+            }
         });
+
+        return allTrue;
     }
 
     private addScore(score: number) {
@@ -160,7 +175,7 @@ export default class baseScene extends Phaser.Scene {
     }
     protected completeGame() {
         console.log("game won:");
-        //create game over screen
-        this.scene.start("GameOverScene"); //replace this
+        //create game victory screen
+        this.scene.start("GameOverScene"); //replace this with victory
     }
 }

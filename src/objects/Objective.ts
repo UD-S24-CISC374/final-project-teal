@@ -33,10 +33,13 @@ export default class Objective {
         );
     }
 
-    checkObjective(tileTypes: string[], increment: number = 1) {
+    checkObjective(tileTypes: string[], increment: number = 1): boolean {
         if (this.checkCondition(tileTypes)) {
             this.currentProgress += increment;
             this.updateObjectiveText();
+            return true;
+        } else {
+            return false;
         }
     }
 

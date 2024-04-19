@@ -48,6 +48,30 @@ export default class Game {
     addObjective(objective: Objective) {
         this.objectives.push(objective);
     }
+    addRandomSimpleObjectives(n: number) {
+        for (let i = 0; i < n; i++) {
+            const targetTile =
+                this.tileTypes[
+                    Math.floor(Math.random() * this.tileTypes.length)
+                ];
+            const formattedTileType = targetTile
+                .replace("Tile", "")
+                .toUpperCase();
+            const maxNumTiles = (this.boardSize - (this.boardSize % 2)) / 2;
+            const numTiles = Math.floor(Math.random() * maxNumTiles) + 1;
+            const objective = new Objective(
+                `${numTiles} ${formattedTileType} tile(s)`,
+                4,
+                (tileTypes: string[]) => {
+                    const tiles = tileTypes.filter(
+                        (tileType) => tileType === targetTile
+                    );
+                    return tiles.length >= numTiles;
+                }
+            );
+            this.addObjective(objective);
+        }
+    }
     isCompleted() {
         if (this.objectives.length === 0) {
             return false;

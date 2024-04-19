@@ -169,7 +169,7 @@ export default class ProgressionScene extends Phaser.Scene {
         const screenHeight = this.game.config.height as number;
 
         const settingsX = screenWidth * 0.7;
-        const settingsY = screenHeight * 0.3;
+        const settingsY = screenHeight * 0.2;
         const settingsSpacing = 75;
 
         // Board size
@@ -184,7 +184,7 @@ export default class ProgressionScene extends Phaser.Scene {
             }
         );
         this.gameButtonsShown.push(boardSizeLabel);
-        let boardSize = 3;
+        let boardSize = 5;
         const boardSizeValue = this.add.text(
             settingsX + 200,
             settingsY,
@@ -229,7 +229,7 @@ export default class ProgressionScene extends Phaser.Scene {
         );
         boardSizeIncrement.setInteractive();
         boardSizeIncrement.on("pointerdown", () => {
-            boardSize++;
+            boardSize = Math.min(boardSize + 1, 15);
             boardSizeValue.setText(`${boardSize}`);
             this.sfx.play("pop-click-1");
         });
@@ -404,7 +404,7 @@ export default class ProgressionScene extends Phaser.Scene {
             }
         );
         this.gameButtonsShown.push(swapsLabel);
-        let initialSwaps = 5;
+        let initialSwaps = 7;
         const swapsValue = this.add.text(
             settingsX + 200,
             settingsY + 4 * settingsSpacing,
@@ -455,9 +455,72 @@ export default class ProgressionScene extends Phaser.Scene {
         });
         this.gameButtonsShown.push(swapsIncrement);
 
-        const startGameButton = this.add.text(
+        // Number of objectives swaps
+        const objectivesLabel = this.add.text(
+            settingsX,
+            settingsY + 5 * settingsSpacing,
+            "# Objectives:",
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                color: "#000000",
+            }
+        );
+        this.gameButtonsShown.push(objectivesLabel);
+        let valueObjectives = 3;
+        const objetivesValue = this.add.text(
             settingsX + 200,
             settingsY + 5 * settingsSpacing,
+            `${valueObjectives}`,
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                color: "#000000",
+            }
+        );
+        this.gameButtonsShown.push(objetivesValue);
+        const objectivesDecrement = this.add.text(
+            settingsX + 250,
+            settingsY + 5 * settingsSpacing,
+            "-",
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                color: "#ffffff",
+                backgroundColor: "#4e342e",
+                padding: { x: 10, y: 5 },
+            }
+        );
+        objectivesDecrement.setInteractive();
+        objectivesDecrement.on("pointerdown", () => {
+            valueObjectives = Math.max(valueObjectives - 1, 0);
+            objetivesValue.setText(`${valueObjectives}`);
+            this.sfx.play("pop-click-1");
+        });
+        this.gameButtonsShown.push(objectivesDecrement);
+        const objectivesIncrement = this.add.text(
+            settingsX + 275,
+            settingsY + 5 * settingsSpacing,
+            "+",
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                color: "#ffffff",
+                backgroundColor: "#4e342e",
+                padding: { x: 10, y: 5 },
+            }
+        );
+        objectivesIncrement.setInteractive();
+        objectivesIncrement.on("pointerdown", () => {
+            valueObjectives = Math.max(valueObjectives + 1, 0);
+            objetivesValue.setText(`${valueObjectives}`);
+            this.sfx.play("pop-click-1");
+        });
+        this.gameButtonsShown.push(objectivesIncrement);
+
+        const startGameButton = this.add.text(
+            settingsX + 200,
+            settingsY + 6 * settingsSpacing,
             "Start Game",
             {
                 fontSize: "24px",
@@ -481,6 +544,7 @@ export default class ProgressionScene extends Phaser.Scene {
                 lives,
                 initialSwaps
             );
+            game.addRandomSimpleObjectives(valueObjectives);
             game.startGame(this);
         });
         this.gameButtonsShown.push(startGameButton);
