@@ -73,7 +73,6 @@ export default class Game {
         }
     }
     addRandomComplexObjectives(n: number) {
-        //pretty sure this works as intended but there is not enough space to fit this on the screen at larger boardsizes
         for (let i = 0; i < n; i++) {
             const targetTileTypes: string[] = [];
             const numTiles: number[] = [];
@@ -85,12 +84,21 @@ export default class Game {
                     this.tileTypes[
                         Math.floor(Math.random() * this.tileTypes.length)
                     ];
+                const formattedTileType = targetTile
+                    .replace("Tile", "")
+                    .toUpperCase();
                 const remainingTiles = maxNumTiles - totalNumTiles;
                 const currNumTiles =
                     Math.floor(Math.random() * remainingTiles) + 1;
 
-                targetTileTypes.push(targetTile);
-                numTiles.push(currNumTiles);
+                const existingIndex = targetTileTypes.indexOf(targetTile);
+                if (existingIndex !== -1) {
+                    numTiles[existingIndex] += currNumTiles;
+                } else {
+                    targetTileTypes.push(targetTile);
+                    numTiles.push(currNumTiles);
+                }
+
                 totalNumTiles += currNumTiles;
             }
 
