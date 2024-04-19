@@ -544,7 +544,7 @@ export default class ProgressionScene extends Phaser.Scene {
                 lives,
                 initialSwaps
             );
-            game.addRandomSimpleObjectives(valueObjectives);
+            game.addRandomComplexObjectives(valueObjectives);
             game.startGame(this);
         });
         this.gameButtonsShown.push(startGameButton);

@@ -72,6 +72,53 @@ export default class Game {
             this.addObjective(objective);
         }
     }
+    addRandomComplexObjectives(n: number) {
+        //pretty sure this works as intended but there is not enough space to fit this on the screen at larger boardsizes
+        for (let i = 0; i < n; i++) {
+            const targetTileTypes: string[] = [];
+            const numTiles: number[] = [];
+            const maxNumTiles = (this.boardSize - (this.boardSize % 2)) / 2;
+            let totalNumTiles = 0;
+
+            while (totalNumTiles < maxNumTiles) {
+                const targetTile =
+                    this.tileTypes[
+                        Math.floor(Math.random() * this.tileTypes.length)
+                    ];
+                const remainingTiles = maxNumTiles - totalNumTiles;
+                const currNumTiles =
+                    Math.floor(Math.random() * remainingTiles) + 1;
+
+                targetTileTypes.push(targetTile);
+                numTiles.push(currNumTiles);
+                totalNumTiles += currNumTiles;
+            }
+
+            const objectiveDescription = `${numTiles
+                .map(
+                    (num, index) =>
+                        `${num} ${targetTileTypes[index]
+                            .replace("Tile", "")
+                            .toUpperCase()}`
+                )
+                .join(", ")} tile(s)`;
+
+            const objective = new Objective(
+                objectiveDescription,
+                4,
+                (tileTypes: string[]) => {
+                    return targetTileTypes.every((targetTile, index) => {
+                        const tiles = tileTypes.filter(
+                            (tileType) => tileType === targetTile
+                        );
+                        return tiles.length >= numTiles[index];
+                    });
+                }
+            );
+
+            this.addObjective(objective);
+        }
+    }
     isCompleted() {
         if (this.objectives.length === 0) {
             return false;
