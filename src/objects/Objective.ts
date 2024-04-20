@@ -59,4 +59,9 @@ export default class Objective {
             console.log("Objective complete:", this.objectiveString); //play sound here
         }
     }
+
+    reset() {
+        this.currentProgress = 0;
+        this.updateObjectiveText();
+    }
 }

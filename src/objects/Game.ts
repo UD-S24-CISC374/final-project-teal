@@ -138,4 +138,10 @@ export default class Game {
         }
         return this.objectives.every((objective) => objective.isCompleted());
     }
+
+    resetObjectives() {
+        this.objectives.forEach((objective) => {
+            objective.reset();
+        });
+    }
 }

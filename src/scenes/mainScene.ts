@@ -36,6 +36,8 @@ export default class MainScene extends baseScene {
         this.handleObjectives(this.gameData.objectives);
 
         this.score = 0;
+        this.gameData.resetObjectives();
+
         console.log(this.gameData);
         this.timerValue = this.gameData.timeLimitSeconds;
         this.livesValue = this.gameData.numLives;
