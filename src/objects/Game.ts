@@ -133,8 +133,40 @@ export default class Game {
     }
 
     resetObjectives() {
+        if (this.objectives.length === 0) {
+            return;
+        }
         this.objectives.forEach((objective) => {
             objective.reset();
+        });
+    }
+
+    handleObjectives(scene: Phaser.Scene, objectives: Objective[]) {
+        if (objectives.length === 0) {
+            return;
+        }
+
+        // Display objectives
+        scene.add.text(10, 180, "Objectives", {
+            fontSize: "32px",
+            color: "#000",
+        });
+
+        const objectiveSpacing = 60;
+
+        scene.add.text(10, 220, "Make a statement with:", {
+            fontSize: "25px",
+            color: "#000",
+        });
+
+        let index = 0;
+        objectives.forEach((objective) => {
+            objective.createObjectiveText(
+                scene,
+                10,
+                260 + objectiveSpacing * index
+            );
+            index++;
         });
     }
 }

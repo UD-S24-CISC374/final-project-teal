@@ -3,7 +3,6 @@ import Background from "../objects/Background";
 import SFX from "../objects/SFX";
 import Game from "../objects/Game";
 import baseScene from "./baseScene";
-import Objective from "../objects/Objective";
 
 export default class MainScene extends baseScene {
     private sfx: SFX;
@@ -33,9 +32,10 @@ export default class MainScene extends baseScene {
         //     })
         // );
 
-        this.handleObjectives(this.gameData.objectives);
-
         this.score = 0;
+
+        this.gameData.handleObjectives(this, this.gameData.objectives);
+
         this.gameData.resetObjectives();
 
         console.log(this.gameData);
@@ -96,32 +96,5 @@ export default class MainScene extends baseScene {
         if (this.livesValue == 0 || this.swapsValue == 0) {
             this.endGame();
         }
-    }
-    handleObjectives(objectives: Objective[]) {
-        console.log(objectives.length);
-        if (objectives.length === 0) {
-            return;
-        }
-        //objectives label
-        this.add.text(10, 180, "Objectives:", {
-            fontSize: "32px",
-            color: "#000",
-        });
-        const objectiveSpacing = 60;
-        //objectives description
-        this.add.text(10, 220, "Make a statement with:", {
-            fontSize: "25px",
-            color: "#000",
-        });
-        let index = 0;
-        objectives.forEach((objective) => {
-            console.log(objective);
-            objective.createObjectiveText(
-                this,
-                10,
-                260 + objectiveSpacing * index
-            );
-            index++;
-        });
     }
 }
