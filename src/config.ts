@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import MainScene from "./scenes/mainScene";
 import PreloadScene from "./scenes/preloadScene";
 import MenuScene from "./scenes/menuScene";
-import TutorialScene from "./scenes/tutorialScene";
+import ControlScene from "./scenes/controlScene";
 import ProgressionScene from "./scenes/progressionScene";
 import CreditsScene from "./scenes/creditsScene";
 import GameOverScene from "./scenes/gameOverScene";
@@ -26,7 +26,7 @@ export const CONFIG = {
         PreloadScene,
         MainScene,
         MenuScene,
-        TutorialScene,
+        ControlScene,
         ProgressionScene,
         CreditsScene,
         GameOverScene,

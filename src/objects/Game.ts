@@ -38,13 +38,6 @@ export default class Game {
         return new Board(scene, this.boardSize, this.tileTypes);
     }
 
-    startTutorial(scene: Phaser.Scene) {
-        scene.scene.start("TutorialScene", {
-            name: this.name,
-            tileTypes: this.tileTypes,
-            boardSize: this.boardSize,
-        });
-    }
     addObjective(objective: Objective) {
         this.objectives.push(objective);
     }

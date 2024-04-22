@@ -1,6 +1,5 @@
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
-//import Board from "../objects/Board";
 import Game from "../objects/Game";
 import baseScene from "./baseScene";
 
@@ -8,7 +7,7 @@ export default class TutorialScene extends baseScene {
     private sfx: SFX;
 
     constructor() {
-        super({ key: "TutorialScene" });
+        super({ key: "ControlScene" });
         this.sfx = SFX.getInstance(this);
     }
 
@@ -21,17 +20,6 @@ export default class TutorialScene extends baseScene {
         backgroundImage.create();
         const screenCenterX = (this.game.config.width as number) * 0.5;
         const screenCenterY = (this.game.config.height as number) * 0.5;
-
-        /* 
-        To be used for interactive tutorial
-
-        this.gameBoard = new Board(
-            this,
-            this.gameData.boardSize,
-            this.gameData.tileSize,
-            this.gameData.tileTypes
-        );
-        */
 
         // Add title text
         const titleText = this.add.text(

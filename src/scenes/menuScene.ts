@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
-import Game from "../objects/Game";
 
 export default class MenuScene extends Phaser.Scene {
     private sfx: SFX;
@@ -93,12 +92,7 @@ export default class MenuScene extends Phaser.Scene {
         tutorialButton.on("pointerdown", () => {
             this.sfx.play("pop-click-1");
             // Add tutorial functionality here
-            new Game(
-                "tutorial",
-                ["trueTile", "falseTile"],
-                130,
-                3
-            ).startTutorial(this);
+            this.scene.start("ControlScene");
         });
         const creditsButton = this.add.text(
             (this.game.config.width as number) * 0.5,
