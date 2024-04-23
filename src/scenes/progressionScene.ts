@@ -196,17 +196,12 @@ export default class ProgressionScene extends Phaser.Scene {
             }
         );
         this.gameButtonsShown.push(boardSizeValue);
-        const boardSizeDecrement = this.add.text(
-            settingsX + 250,
+
+        const boardSizeDecrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY,
-            "-",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            250,
+            "-"
         );
         boardSizeDecrement.setInteractive();
         boardSizeDecrement.on("pointerdown", () => {
@@ -215,18 +210,13 @@ export default class ProgressionScene extends Phaser.Scene {
             this.sfx.play("pop-click-1");
         });
         this.gameButtonsShown.push(boardSizeDecrement);
-        const boardSizeIncrement = this.add.text(
-            settingsX + 275,
+        const boardSizeIncrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY,
-            "+",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            275,
+            "+"
         );
+
         boardSizeIncrement.setInteractive();
         boardSizeIncrement.on("pointerdown", () => {
             boardSize = Math.min(boardSize + 1, 15);
@@ -290,17 +280,12 @@ export default class ProgressionScene extends Phaser.Scene {
             }
         );
         this.gameButtonsShown.push(timeLimitValue);
-        const timeLimitDecrement = this.add.text(
-            settingsX + 250,
+
+        const timeLimitDecrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY + 2 * settingsSpacing,
-            "-",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            250,
+            "-"
         );
         timeLimitDecrement.setInteractive();
         timeLimitDecrement.on("pointerdown", () => {
@@ -309,17 +294,12 @@ export default class ProgressionScene extends Phaser.Scene {
             this.sfx.play("pop-click-1");
         });
         this.gameButtonsShown.push(timeLimitDecrement);
-        const timeLimitIncrement = this.add.text(
-            settingsX + 275,
+
+        const timeLimitIncrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY + 2 * settingsSpacing,
-            "+",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            275,
+            "+"
         );
         timeLimitIncrement.setInteractive();
         timeLimitIncrement.on("pointerdown", () => {
@@ -353,17 +333,12 @@ export default class ProgressionScene extends Phaser.Scene {
             }
         );
         this.gameButtonsShown.push(livesValue);
-        const livesDecrement = this.add.text(
-            settingsX + 250,
+
+        const livesDecrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY + 3 * settingsSpacing,
-            "-",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            250,
+            "-"
         );
         livesDecrement.setInteractive();
         livesDecrement.on("pointerdown", () => {
@@ -372,17 +347,12 @@ export default class ProgressionScene extends Phaser.Scene {
             this.sfx.play("pop-click-1");
         });
         this.gameButtonsShown.push(livesDecrement);
-        const livesIncrement = this.add.text(
-            settingsX + 275,
+
+        const livesIncrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY + 3 * settingsSpacing,
-            "+",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            275,
+            "+"
         );
         livesIncrement.setInteractive();
         livesIncrement.on("pointerdown", () => {
@@ -416,17 +386,12 @@ export default class ProgressionScene extends Phaser.Scene {
             }
         );
         this.gameButtonsShown.push(swapsValue);
-        const swapsDecrement = this.add.text(
-            settingsX + 250,
+
+        const swapsDecrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY + 4 * settingsSpacing,
-            "-",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            250,
+            "-"
         );
         swapsDecrement.setInteractive();
         swapsDecrement.on("pointerdown", () => {
@@ -435,18 +400,14 @@ export default class ProgressionScene extends Phaser.Scene {
             this.sfx.play("pop-click-1");
         });
         this.gameButtonsShown.push(swapsDecrement);
-        const swapsIncrement = this.add.text(
-            settingsX + 275,
+
+        const swapsIncrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY + 4 * settingsSpacing,
-            "+",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            275,
+            "+"
         );
+
         swapsIncrement.setInteractive();
         swapsIncrement.on("pointerdown", () => {
             initialSwaps = Math.max(initialSwaps + 1, 0);
@@ -479,17 +440,12 @@ export default class ProgressionScene extends Phaser.Scene {
             }
         );
         this.gameButtonsShown.push(objetivesValue);
-        const objectivesDecrement = this.add.text(
-            settingsX + 250,
+
+        const objectivesDecrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY + 5 * settingsSpacing,
-            "-",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            250,
+            "-"
         );
         objectivesDecrement.setInteractive();
         objectivesDecrement.on("pointerdown", () => {
@@ -498,17 +454,12 @@ export default class ProgressionScene extends Phaser.Scene {
             this.sfx.play("pop-click-1");
         });
         this.gameButtonsShown.push(objectivesDecrement);
-        const objectivesIncrement = this.add.text(
-            settingsX + 275,
+
+        const objectivesIncrement = this.createIncrementDecrementButton(
+            settingsX,
             settingsY + 5 * settingsSpacing,
-            "+",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
+            275,
+            "+"
         );
         objectivesIncrement.setInteractive();
         objectivesIncrement.on("pointerdown", () => {
@@ -548,6 +499,28 @@ export default class ProgressionScene extends Phaser.Scene {
             game.startGame(this);
         });
         this.gameButtonsShown.push(startGameButton);
+    }
+
+    createIncrementDecrementButton(
+        settingsX: number,
+        settingsY: number,
+        positionX: number,
+        symbol: string
+    ) {
+        const incrementButton = this.add.text(
+            settingsX + positionX,
+            settingsY,
+            symbol,
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                color: "#ffffff",
+                backgroundColor: "#4e342e",
+                padding: { x: 10, y: 5 },
+            }
+        );
+
+        return incrementButton;
     }
 
     hideGames() {
