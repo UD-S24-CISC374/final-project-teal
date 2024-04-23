@@ -239,8 +239,10 @@ export default class Board {
     }
 
     private removeTilesCol(currentCol: number) {
+        this.lastRemovedTileTypes = [];
         for (let row = 0; row < this.boardSize; row++) {
             const tile = this.tiles[row][currentCol];
+            this.lastRemovedTileTypes.push(tile.tileType);
             tile.destroy();
         }
         //this.addScore(10);
