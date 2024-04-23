@@ -173,16 +173,12 @@ export default class ProgressionScene extends Phaser.Scene {
         const settingsSpacing = 75;
 
         // Board size
-        const boardSizeLabel = this.add.text(
+        const boardSizeLabel = this.createFreeplayTextSettings(
             settingsX,
             settingsY,
-            "Board Size:",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
+            "Board Size:"
         );
+
         this.gameButtonsShown.push(boardSizeLabel);
         let boardSize = 5;
         const boardSizeValue = this.add.text(
@@ -226,16 +222,12 @@ export default class ProgressionScene extends Phaser.Scene {
         this.gameButtonsShown.push(boardSizeIncrement);
 
         // Tiles
-        const tileLabel = this.add.text(
+        const tileLabel = this.createFreeplayTextSettings(
             settingsX,
             settingsY + settingsSpacing,
-            "Tiles:",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
+            "Tiles:"
         );
+
         this.gameButtonsShown.push(tileLabel);
 
         const tileSprites = ["trueTile", "falseTile", "andTile", "orTile"];
@@ -257,16 +249,12 @@ export default class ProgressionScene extends Phaser.Scene {
         });
 
         // Time limit
-        const timeLimitLabel = this.add.text(
+        const timeLimitLabel = this.createFreeplayTextSettings(
             settingsX,
             settingsY + 2 * settingsSpacing,
-            "Time Limit (s):",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
+            "Time Limit (s):"
         );
+
         this.gameButtonsShown.push(timeLimitLabel);
         let timeLimit = 180;
         const timeLimitValue = this.add.text(
@@ -308,17 +296,14 @@ export default class ProgressionScene extends Phaser.Scene {
             this.sfx.play("pop-click-1");
         });
         this.gameButtonsShown.push(timeLimitIncrement);
+
         // Number of lives
-        const livesLabel = this.add.text(
+        const livesLabel = this.createFreeplayTextSettings(
             settingsX,
             settingsY + 3 * settingsSpacing,
-            "Number of Lives:",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
+            "Number of Lives:"
         );
+
         this.gameButtonsShown.push(livesLabel);
 
         let lives = 3;
@@ -363,15 +348,10 @@ export default class ProgressionScene extends Phaser.Scene {
         this.gameButtonsShown.push(livesIncrement);
 
         // Number of initial swaps
-        const swapsLabel = this.add.text(
+        const swapsLabel = this.createFreeplayTextSettings(
             settingsX,
             settingsY + 4 * settingsSpacing,
-            "Initial Swaps:",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
+            "Initial Swaps:"
         );
         this.gameButtonsShown.push(swapsLabel);
         let initialSwaps = 7;
@@ -417,15 +397,10 @@ export default class ProgressionScene extends Phaser.Scene {
         this.gameButtonsShown.push(swapsIncrement);
 
         // Number of objectives swaps
-        const objectivesLabel = this.add.text(
+        const objectivesLabel = this.createFreeplayTextSettings(
             settingsX,
             settingsY + 5 * settingsSpacing,
-            "# Objectives:",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
+            "# Objectives:"
         );
         this.gameButtonsShown.push(objectivesLabel);
         let valueObjectives = 3;
@@ -521,6 +496,19 @@ export default class ProgressionScene extends Phaser.Scene {
         );
 
         return incrementButton;
+    }
+
+    createFreeplayTextSettings(
+        settingsX: number,
+        settingsY: number,
+        text: string
+    ) {
+        const freeplayText = this.add.text(settingsX, settingsY, text, {
+            fontSize: "24px",
+            fontFamily: "Arial",
+            color: "#000000",
+        });
+        return freeplayText;
     }
 
     hideGames() {
