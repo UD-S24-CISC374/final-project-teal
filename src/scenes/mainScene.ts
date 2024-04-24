@@ -20,8 +20,12 @@ export default class MainScene extends baseScene {
     create() {
         const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
+        this.gameData.resetObjectives();
 
         this.gameBoard = this.gameData.createBoard(this);
+
+        this.gameData.addRandomComplexObjectives(this.gameData.objectivesNum);
+
         //SAMPLE OBJECTIVE
         // this.gameData.addObjective(
         //     new Objective("One AND tile", 4, (tileTypes: string[]) => {
@@ -35,8 +39,6 @@ export default class MainScene extends baseScene {
         this.score = 0;
 
         this.gameData.handleObjectives(this, this.gameData.objectives);
-
-        this.gameData.resetObjectives();
 
         console.log(this.gameData);
         this.timerValue = this.gameData.timeLimitSeconds;

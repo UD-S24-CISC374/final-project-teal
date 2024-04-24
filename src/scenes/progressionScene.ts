@@ -39,8 +39,12 @@ export default class ProgressionScene extends Phaser.Scene {
             new Stage("Beginner", [
                 new Game(
                     "Game 1",
-                    ["trueTile", "falseTile", "orTile", "andTile"],
-                    3
+                    ["trueTile", "falseTile", "orTile"],
+                    3,
+                    180,
+                    3,
+                    10,
+                    1
                 ),
                 new Game(
                     "Game 2",
@@ -468,9 +472,9 @@ export default class ProgressionScene extends Phaser.Scene {
                 boardSize,
                 timeLimit,
                 lives,
-                initialSwaps
+                initialSwaps,
+                valueObjectives
             );
-            game.addRandomComplexObjectives(valueObjectives);
             game.startGame(this);
         });
         this.gameButtonsShown.push(startGameButton);

@@ -11,6 +11,7 @@ export default class Game {
     numInitialSwaps: number;
     numLives: number;
     objectives: Objective[] = [];
+    objectivesNum: number;
 
     constructor(
         name: string,
@@ -18,7 +19,8 @@ export default class Game {
         boardSize: number,
         timeLimitSeconds?: number,
         numLives?: number,
-        numInitialSwaps?: number
+        numInitialSwaps?: number,
+        objectivesNum?: number
     ) {
         console.log(timeLimitSeconds);
         this.name = name;
@@ -28,6 +30,7 @@ export default class Game {
         this.numLives = numLives || 3;
         this.numInitialSwaps = numInitialSwaps || 3;
         this.objectives = [];
+        this.objectivesNum = objectivesNum || 3;
     }
 
     startGame(scene: Phaser.Scene) {
@@ -133,12 +136,7 @@ export default class Game {
     }
 
     resetObjectives() {
-        if (this.objectives.length === 0) {
-            return;
-        }
-        this.objectives.forEach((objective) => {
-            objective.reset();
-        });
+        this.objectives = [];
     }
 
     handleObjectives(scene: Phaser.Scene, objectives: Objective[]) {

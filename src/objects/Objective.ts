@@ -25,7 +25,7 @@ export default class Objective {
         this.objectiveText = scene.add.text(
             x,
             y,
-            `• ${this.objectiveString}: \n(${progress})`,
+            `• ${this.objectiveString}: \n (${progress})`,
             {
                 fontSize: "25px",
                 color: "#000",
