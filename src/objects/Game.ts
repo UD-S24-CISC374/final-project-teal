@@ -36,6 +36,9 @@ export default class Game {
     startGame(scene: Phaser.Scene) {
         scene.scene.start("MainGameScene", this);
     }
+    startTutorial(scene: Phaser.Scene) {
+        scene.scene.start("TutorialScene", this);
+    }
 
     createBoard(scene: Phaser.Scene) {
         return new Board(scene, this.boardSize, this.tileTypes);

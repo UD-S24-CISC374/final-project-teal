@@ -1,7 +1,13 @@
 import Phaser from "phaser";
 export default class GameOverScene extends Phaser.Scene {
+    private lastScene: string;
+
     constructor() {
         super({ key: "GameOverScene" });
+    }
+
+    init(data: { lastScene: string }) {
+        this.lastScene = data.lastScene;
     }
 
     create() {
@@ -28,7 +34,11 @@ export default class GameOverScene extends Phaser.Scene {
             .setInteractive()
             .setOrigin(0.5);
         retryButton.on("pointerdown", () => {
-            this.scene.start("MainGameScene");
+            if (this.lastScene === "MainGameScene") {
+                this.scene.start("MainGameScene");
+            } else {
+                this.scene.start("TutorialScene");
+            }
         });
 
         const menuButton = this.add

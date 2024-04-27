@@ -557,7 +557,11 @@ export default class ProgressionScene extends Phaser.Scene {
             gameButton.on("pointerdown", () => {
                 this.sfx.play("crumple-paper-1");
                 // Start the selected game scene
-                game.startGame(this);
+                if (this.stageTitleText.text === "Beginner") {
+                    game.startTutorial(this);
+                } else {
+                    game.startGame(this);
+                }
             });
             this.gameButtonsShown.push(gameButton);
         });
