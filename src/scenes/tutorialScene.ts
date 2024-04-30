@@ -264,13 +264,16 @@ export default class TutorialScene extends baseScene {
 
         // Handle timer expiration (if needed)
         if (this.timerValue === 0) {
-            this.endGame();
+            this.endGame("You ran out of time!");
         }
     }
 
     update() {
-        if (this.livesValue == 0 || this.swapsValue == 0) {
-            this.endGame();
+        if (this.livesValue == 0) {
+            this.endGame("You lost all of your lives!");
+        }
+        if (this.swapsValue == 0) {
+            this.endGame("You ran out of swaps!");
         }
     }
 

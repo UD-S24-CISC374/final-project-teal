@@ -2,19 +2,21 @@ import Phaser from "phaser";
 export default class GameOverScene extends Phaser.Scene {
     private lastScene: string;
 
+    private message: string;
     constructor() {
         super({ key: "GameOverScene" });
     }
 
-    init(data: { lastScene: string }) {
+    init(data: { lastScene: string; message: string }) {
         this.lastScene = data.lastScene;
+        this.message = data.message;
     }
 
     create() {
         const width: number = this.game.config.width as number;
         const height: number = this.game.config.height as number;
         this.add
-            .text(width * 0.5, height * 0.3, "Game Over", {
+            .text(width * 0.5, height * 0.3, `Game Over!\n${this.message}`, {
                 fontSize: "40px",
                 fontFamily: "Arial",
                 color: "#000000",

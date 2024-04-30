@@ -167,14 +167,17 @@ export default class baseScene extends Phaser.Scene {
     protected getScoreText(): Phaser.GameObjects.Text {
         return this.scoreText;
     }
-    protected endGame() {
+    protected endGame(message: string) {
         console.log("game over:");
         //create game over screen
-        this.scene.start("GameOverScene", { lastScene: this.scene.key });
+        this.scene.start("GameOverScene", {
+            lastScene: this.scene.key,
+            message: message,
+        });
     }
     protected completeGame() {
         console.log("game won:");
         //create game victory screen
-        this.scene.start("GameOverScene"); //replace this with victory
+        this.scene.start("GameVictoryScene"); //replace this with victory
     }
 }
