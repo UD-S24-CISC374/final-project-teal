@@ -3,7 +3,7 @@ import SFX from "../objects/SFX";
 import Game from "../objects/Game";
 import baseScene from "./baseScene";
 
-export default class TutorialScene extends baseScene {
+export default class ControlScene extends baseScene {
     private sfx: SFX;
 
     constructor() {
@@ -25,7 +25,7 @@ export default class TutorialScene extends baseScene {
         const titleText = this.add.text(
             screenCenterX,
             screenCenterY * 0.3,
-            "Boolean Bonanza! Tutorial",
+            "Boolean Bonanza! Controls",
             {
                 fontSize: "36px",
                 fontFamily: "Arial",

@@ -38,7 +38,7 @@ export default class ProgressionScene extends Phaser.Scene {
         const stages = [
             new Stage("Beginner", [
                 new Game(
-                    "Game 1",
+                    "Tutorial",
                     ["trueTile", "falseTile", "orTile"],
                     3,
                     180,
@@ -47,18 +47,18 @@ export default class ProgressionScene extends Phaser.Scene {
                     1
                 ),
                 new Game(
-                    "Game 2",
+                    "Game 1",
                     ["trueTile", "falseTile", "andTile", "orTile"],
                     5
                 ),
                 new Game("Game 3", ["trueTile", "falseTile", "orTile"], 7),
                 new Game(
-                    "Game 4",
+                    "Game 2",
                     ["trueTile", "falseTile", "andTile", "orTile"],
                     8
                 ),
                 new Game(
-                    "Game 5",
+                    "Game 3",
                     ["trueTile", "falseTile", "andTile", "orTile"],
                     9
                 ),
@@ -557,7 +557,10 @@ export default class ProgressionScene extends Phaser.Scene {
             gameButton.on("pointerdown", () => {
                 this.sfx.play("crumple-paper-1");
                 // Start the selected game scene
-                if (this.stageTitleText.text === "Beginner") {
+                if (
+                    this.stageTitleText.text === "Beginner" &&
+                    game.name === "Tutorial"
+                ) {
                     game.startTutorial(this);
                 } else {
                     game.startGame(this);

@@ -24,16 +24,27 @@ export default class Board {
     private currentDirection: DirectionType = DirectionType.NONE;
 
     private isAnimating: boolean = false;
+    private name: string;
 
-    constructor(scene: Phaser.Scene, boardSize: number, tileTypes: string[]) {
+    constructor(
+        scene: Phaser.Scene,
+        boardSize: number,
+        tileTypes: string[],
+        name: string
+    ) {
         this.scene = scene;
         this.boardSize = boardSize;
         this.tileTypes = tileTypes;
+        this.name = name;
         this.sfx = SFX.getInstance(scene);
         this.tiles = this.generateBoard();
     }
 
     private generateBoard(): Tile[][] {
+        console.log("game name: " + this.name);
+        if (this.name === "Tutorial") {
+            return this.generateLvlOneBoard();
+        }
         const board: Tile[][] = [];
 
         const screenWidth = this.scene.game.scale.width;
@@ -342,5 +353,38 @@ export default class Board {
 
         this.currentDirection = DirectionType.NONE;
         return false;
+    }
+
+    public generateLvlOneBoard(): Tile[][] {
+        const tileKeys = [
+            ["trueTile", "orTile", "falseTile"],
+            ["trueTile", "orTile", "falseTile"],
+            ["trueTile", "orTile", "falseTile"],
+        ];
+
+        const screenHeight = this.scene.game.scale.height;
+        const screenWidth = this.scene.game.scale.width;
+        const boardHeight = screenHeight * 0.8;
+        const boardWidth = boardHeight;
+        const boardX = (screenWidth - boardWidth) / 2;
+        const boardY = (screenHeight - boardHeight) / 2;
+        this.tileSize = boardHeight / this.boardSize;
+
+        const board: Tile[][] = [];
+        for (let row = 0; row < this.boardSize; row++) {
+            board[row] = [];
+            for (let col = 0; col < this.boardSize; col++) {
+                const tileX = boardX + col * this.tileSize;
+                const tileY = boardY + row * this.tileSize;
+                const tileTypeKey = tileKeys[row][col];
+                const tile = new Tile(this.scene, tileX, tileY, tileTypeKey);
+                tile.setInteractive();
+                tile.on("pointerdown", this.selectTile.bind(this, tile));
+                tile.setOrigin(0, 0);
+                tile.setScale(this.tileSize / tile.width);
+                board[row][col] = tile;
+            }
+        }
+        return board;
     }
 }

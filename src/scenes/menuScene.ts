@@ -71,11 +71,11 @@ export default class MenuScene extends Phaser.Scene {
             // Add settings functionality here
         });
 
-        // Add Tutorial button
+        // Add Controls button
         const tutorialButton = this.add.text(
             (this.game.config.width as number) * 0.5,
             (this.game.config.height as number) * 0.7,
-            "Tutorial",
+            "Controls",
             {
                 fontSize: "32px",
                 fontFamily: "Arial",

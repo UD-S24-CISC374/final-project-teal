@@ -41,7 +41,7 @@ export default class Game {
     }
 
     createBoard(scene: Phaser.Scene) {
-        return new Board(scene, this.boardSize, this.tileTypes);
+        return new Board(scene, this.boardSize, this.tileTypes, this.name);
     }
 
     addObjective(objective: Objective) {
