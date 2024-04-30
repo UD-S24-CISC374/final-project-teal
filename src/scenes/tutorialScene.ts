@@ -30,7 +30,10 @@ export default class TutorialScene extends baseScene {
 
         this.gameBoard = this.gameData.createBoard(this);
 
-        this.gameData.addRandomComplexObjectives(this.gameData.objectivesNum);
+        this.gameData.addRandomComplexObjectives(
+            this.gameData.objectivesNum,
+            1
+        );
 
         this.score = 0;
 

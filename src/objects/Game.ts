@@ -79,8 +79,11 @@ export default class Game {
             this.addObjective(objective);
         }
     }
-    addRandomComplexObjectives(n: number) {
-        for (let i = 0; i < n; i++) {
+    addRandomComplexObjectives(
+        numObjectives: number,
+        numCompletions: number = 3
+    ) {
+        for (let i = 0; i < numObjectives; i++) {
             const targetTileTypes: string[] = [];
             const numTiles: number[] = [];
             const maxNumTiles = (this.boardSize - (this.boardSize % 2)) / 2;
@@ -117,7 +120,7 @@ export default class Game {
 
             const objective = new Objective(
                 objectiveDescription,
-                4,
+                numCompletions,
                 (tileTypes: string[]) => {
                     return targetTileTypes.every((targetTile, index) => {
                         const tiles = tileTypes.filter(
