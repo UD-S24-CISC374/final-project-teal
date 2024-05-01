@@ -83,6 +83,9 @@ export default class TutorialScene extends baseScene {
             100,
             "",
             {
+                lineSpacing: -15,
+                fontFamily: "Architects Daughter",
+                fontStyle: "bold",
                 fontSize: "50px",
                 color: "#ff0000",
                 wordWrap: {
