@@ -67,7 +67,13 @@ export default class baseScene extends Phaser.Scene {
                 this.gameBoard.selectTiles(currentCol, DirectionType.COL);
                 break;
             case "Enter":
-                if (this.gameBoard.handleRowColCheck(currentRow, currentCol)) {
+                if (
+                    this.gameBoard.handleRowColCheck(
+                        currentRow,
+                        currentCol,
+                        () => {}
+                    )
+                ) {
                     this.addScore(10);
                     this.addSwaps(this.getGameBoard().getBoardSize());
                     if (
@@ -78,7 +84,13 @@ export default class baseScene extends Phaser.Scene {
                         this.completeGame();
                     }
                 } else {
-                    this.subtractLife();
+                    this.gameBoard.handleRowColCheck(
+                        currentRow,
+                        currentCol,
+                        () => {
+                            this.subtractLife();
+                        }
+                    );
                 }
                 break;
         }
@@ -90,12 +102,14 @@ export default class baseScene extends Phaser.Scene {
             newCol < this.gameBoard.getBoardSize()
         ) {
             if (newRow !== currentRow || newCol !== currentCol) {
-                this.subtractSwap();
                 this.gameBoard.swapTiles(
                     currentRow,
                     currentCol,
                     newRow,
-                    newCol
+                    newCol,
+                    () => {
+                        this.subtractSwap(); // will be called after the swap animation is done
+                    }
                 );
             }
         }

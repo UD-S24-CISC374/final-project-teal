@@ -98,7 +98,7 @@ export default class MainScene extends baseScene {
         if (this.livesValue == 0) {
             this.endGame("You lost all of your lives!");
         }
-        if (this.swapsValue == 0) {
+        if (this.swapsValue < 0) {
             this.endGame("You ran out of swaps!");
         }
     }

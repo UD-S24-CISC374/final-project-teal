@@ -84,7 +84,15 @@ export default class Board {
         this.selectedTile = tile;
         tile.setTint(0x555555); // Tint the selected tile red
     }
-    public swapTiles(row1: number, col1: number, row2: number, col2: number) {
+
+    // callback : function to call after the swap is done
+    public swapTiles(
+        row1: number,
+        col1: number,
+        row2: number,
+        col2: number,
+        callback: () => void
+    ) {
         if (this.isAnimating) {
             return;
         }
@@ -117,6 +125,7 @@ export default class Board {
                 this.tiles[row1][col1] = tile2;
             },
         });
+        callback();
     }
 
     public selectTiles(directionIndex: number, direction: DirectionType) {
@@ -351,13 +360,18 @@ export default class Board {
         return this.boardSize;
     }
 
-    public handleRowColCheck(currentRow: number, currentCol: number): boolean {
+    public handleRowColCheck(
+        currentRow: number,
+        currentCol: number,
+        callback: () => void
+    ): boolean {
         if (this.currentDirection == DirectionType.ROW) {
+            callback();
             return this.checkRow(currentRow);
         } else if (this.currentDirection == DirectionType.COL) {
+            callback();
             return this.checkCol(currentCol);
         }
-
         this.currentDirection = DirectionType.NONE;
         return false;
     }
