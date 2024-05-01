@@ -180,6 +180,8 @@ export default class Board {
                         return ")";
                     case "xorTile":
                         return " ^ ";
+                    case "notTile":
+                        return "!";
                     default:
                         return "Invalid tile type";
                 }

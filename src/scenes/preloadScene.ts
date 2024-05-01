@@ -18,6 +18,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("leftParenTile", "assets/tiles/leftParenTile.png");
         this.load.image("rightParenTile", "assets/tiles/rightParenTile.png");
         this.load.image("xorTile", "assets/tiles/xorTile.png");
+        this.load.image("notTile", "assets/tiles/notTile.png");
 
         this.load.image("background", "assets/img/looseleaf.jpeg");
         this.load.image("title", "assets/img/title-screen-boolean-bonanza.png");
