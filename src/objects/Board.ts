@@ -147,13 +147,16 @@ export default class Board {
 
     private checkRow(currentRow: number): boolean {
         let row = this.tileToString(this.tiles[currentRow]);
-        if (this.checkPattern(row)) {
+        try {
             if (eval(row)) {
                 this.removeTilesRow(currentRow);
                 this.sfx.play("pop-1");
                 return true;
             }
+        } catch (e) {
+            console.log(e);
         }
+
         this.shakeTiles();
         return false;
     }
@@ -171,18 +174,17 @@ export default class Board {
                         return " && ";
                     case "orTile":
                         return " || ";
+                    case "leftParenTile":
+                        return "(";
+                    case "rightParenTile":
+                        return ")";
+                    case "xorTile":
+                        return " ^ ";
                     default:
                         return "Invalid tile type";
                 }
             })
             .join("");
-    }
-
-    // check if the expression is valid: return true if it is, false otherwise
-    private checkPattern(expression: string): boolean {
-        const pattern =
-            /^(true|false)(((\s*\|\|\s*|\s*&&\s*|\s*\^\s*)(true|false)))*$/;
-        return pattern.test(expression);
     }
 
     private removeTilesRow(currentRow: number) {
@@ -238,13 +240,16 @@ export default class Board {
     private checkCol(currentCol: number): boolean {
         let column = this.tiles.map((row) => row[currentCol]);
         let col = this.tileToString(column);
-        if (this.checkPattern(col)) {
+        try {
             if (eval(col)) {
                 this.removeTilesCol(currentCol);
                 this.sfx.play("pop-1");
                 return true;
             }
+        } catch (e) {
+            console.log(e);
         }
+
         this.shakeTiles();
         return false;
     }

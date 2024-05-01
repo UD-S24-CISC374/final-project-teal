@@ -48,8 +48,12 @@ export default class ProgressionScene extends Phaser.Scene {
                 ),
                 new Game(
                     "Game 1",
-                    ["trueTile", "falseTile", "andTile", "orTile"],
-                    5
+                    ["trueTile", "falseTile", "andTile", "orTile", "xorTile"],
+                    5,
+                    180,
+                    20,
+                    100,
+                    3
                 ),
                 new Game("Game 3", ["trueTile", "falseTile", "orTile"], 7),
                 new Game(
