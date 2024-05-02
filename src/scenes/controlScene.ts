@@ -55,10 +55,11 @@ export default class ControlScene extends baseScene {
         // Add a back button
         /*const backButton = */ new Button(
             this,
-            screenCenterX,
-            screenCenterY * 1.7,
+            70,
+            70,
             "Back",
-            () => this.scene.start("MenuScene")
+            () => this.scene.start("MenuScene"),
+            "24px"
         );
     }
 }

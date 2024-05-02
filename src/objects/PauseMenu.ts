@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import SFX from "./SFX";
+import Button from "./Button";
 
 export default class PauseMenu extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene;
@@ -26,74 +27,52 @@ export default class PauseMenu extends Phaser.GameObjects.Container {
         );
         this.add(pauseMenuBackground);
 
+        const centerWidth = (this.scene.game.config.width as number) * 0.5;
+        const centerHeight = (this.scene.game.config.height as number) * 0.5;
+        const spacing = (this.scene.game.config.height as number) * 0.1;
+        let index = -1;
         // Add pause menu text
         const pauseMenuText = this.scene.add.text(
-            (this.scene.game.config.width as number) * 0.5,
-            (this.scene.game.config.height as number) * 0.4,
+            centerWidth,
+            centerHeight + spacing * index,
             "Paused",
             { fontSize: "48px", color: "#ffffff" }
         );
         pauseMenuText.setOrigin(0.5);
         this.add(pauseMenuText);
 
-        // Add Resume button
-        this.resumeButton = this.scene.add.text(
-            (this.scene.game.config.width as number) * 0.5,
-            (this.scene.game.config.height as number) * 0.5,
+        index++;
+        this.resumeButton = new Button(
+            this.scene,
+            centerWidth,
+            centerHeight + spacing * index,
             "Resume",
-            {
-                fontSize: "32px",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 20, y: 10 },
-            }
+            () => this.togglePauseMenu()
         );
-        this.resumeButton.setOrigin(0.5);
-        this.resumeButton.setInteractive();
-        this.resumeButton.on("pointerdown", () => {
-            this.sfx.play("pop-click-1");
-            this.togglePauseMenu();
-        });
         this.add(this.resumeButton);
 
         // Add Main Menu button
-        this.mainMenuButton = this.scene.add.text(
-            (this.scene.game.config.width as number) * 0.5,
-            (this.scene.game.config.height as number) * 0.6,
+        index++;
+        this.mainMenuButton = new Button(
+            this.scene,
+            centerWidth,
+            centerHeight + spacing * index,
             "Main Menu",
-            {
-                fontSize: "32px",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 20, y: 10 },
-            }
+            () => this.scene.scene.start("MenuScene")
         );
-        this.mainMenuButton.setOrigin(0.5);
-        this.mainMenuButton.setInteractive();
-        this.mainMenuButton.on("pointerdown", () => {
-            this.sfx.play("pop-click-1");
-            this.scene.scene.start("MenuScene");
-        });
         this.add(this.mainMenuButton);
 
-        // Add Restart button
-        this.restartButton = this.scene.add.text(
-            (this.scene.game.config.width as number) * 0.5,
-            (this.scene.game.config.height as number) * 0.7,
+        index++;
+        this.restartButton = new Button(
+            this.scene,
+            centerWidth,
+            centerHeight + spacing * index,
             "Restart",
-            {
-                fontSize: "32px",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 20, y: 10 },
+            () => {
+                this.sfx.play("crumple-paper-1");
+                this.scene.scene.restart();
             }
         );
-        this.restartButton.setOrigin(0.5);
-        this.restartButton.setInteractive();
-        this.restartButton.on("pointerdown", () => {
-            this.sfx.play("crumple-paper-1");
-            this.scene.scene.restart();
-        });
         this.add(this.restartButton);
 
         this.setDepth(1000); // Ensure the pause menu is on top
