@@ -6,8 +6,8 @@ export default class Sketch extends Phaser.GameObjects.Sprite {
         size: number,
         minScale = 0.8,
         maxScale = 1.2,
-        minTilt = -30,
-        maxTilt = 30
+        minTilt = -45,
+        maxTilt = 45
     ) {
         // Generate a random sketch number between 1 and 12
         const sketchNum = Phaser.Math.Between(1, 12);

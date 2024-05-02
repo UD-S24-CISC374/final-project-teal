@@ -3,6 +3,7 @@ import SFX from "../objects/SFX";
 import Game from "../objects/Game";
 import baseScene from "./baseScene";
 import Button from "../objects/Button";
+import Sketch from "../objects/Sketch";
 
 export default class ControlScene extends baseScene {
     constructor() {
@@ -63,5 +64,13 @@ export default class ControlScene extends baseScene {
             },
             "24px"
         );
+
+        const maxWidth = this.game.config.width as number;
+        const maxHeight = this.game.config.height as number;
+
+        new Sketch(this, 150, 150, 120);
+        new Sketch(this, maxWidth - 150, 200, 120);
+        new Sketch(this, maxWidth - 150, maxHeight - 150, 120);
+        new Sketch(this, 100, maxHeight - 150, 120);
     }
 }
