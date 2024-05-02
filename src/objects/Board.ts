@@ -441,18 +441,29 @@ export default class Board {
             }
         }
 
-        //does not take into account NOT tiles..
-
         const getCount = (key: string): number => tileTypeCount[key] || 0;
+
+        //pattern for calculating "usable NOTs"
+        tileTypeCount["notTile"] = Math.floor(size / 3) + (size % 3) - 1;
+        //POSSIBLE EDGE CASE: IF THERE ARE PARENTHESES, THEN THAT WOULD ADJUST THE POTENTIAL "SIZE"
+        //I THINK THE ONLY FIX IS TO HAVE DIFFERENT USABLE NOTS DEPENDING ON PARENTHESES
+
         const sizeReduction =
-            2 * Math.min(getCount("leftParenTile"), getCount("rightParenTile"));
+            2 *
+                Math.min(
+                    getCount("leftParenTile"),
+                    getCount("rightParenTile")
+                ) +
+            getCount("notTile");
         let maxReduction = false;
         if (sizeReduction >= size - 1) {
             maxReduction = true;
         }
         size -= sizeReduction;
 
-        //need to account for NOTs
+        size -= 1 - (size % 2);
+
+        //need to account for NOTs?
         size = Math.max(size, 3);
 
         const operatorCount =
@@ -461,6 +472,7 @@ export default class Board {
         const requiredOperatorCount = (size - 1) / 2;
         const requiredLiteralCount = (size + 1) / 2;
 
+        //adjusts literal count based off of usable Nots
         const temp = getCount("falseTile");
         tileTypeCount["falseTile"] =
             getCount("falseTile") +
@@ -468,7 +480,6 @@ export default class Board {
         tileTypeCount["trueTile"] =
             getCount("trueTile") + Math.min(getCount("notTile"), temp);
         console.log(tileTypeCount);
-        //ADJUST literal count to based off of NOTs
 
         //Solution 1: 1 or and 1 true, and enough literals and operators can always make a true
         const solution1 = getCount("orTile") >= 1 && getCount("trueTile") >= 1;
