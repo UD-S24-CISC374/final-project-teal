@@ -1,7 +1,7 @@
-import { GameObjects } from "phaser";
+import Phaser from "phaser";
 import SFX from "./SFX";
 
-export default class Button extends GameObjects.Text {
+export default class Button extends Phaser.GameObjects.Text {
     private defaultBackgroundColor: string;
     private hoverBackgroundColor: string;
     private hoverScale: number;
