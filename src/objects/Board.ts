@@ -102,6 +102,10 @@ export default class Board {
         const tile1 = this.tiles[row1][col1];
         const tile2 = this.tiles[row2][col2];
         const tweenDuration = 300;
+
+        this.tiles[row2][col2] = tile1;
+        this.tiles[row1][col1] = tile2;
+
         //create tile1 tween
         this.scene.tweens.add({
             targets: tile1,
@@ -110,7 +114,7 @@ export default class Board {
             duration: tweenDuration,
             onComplete: () => {
                 this.isAnimating = false;
-                this.tiles[row2][col2] = tile1;
+
                 //this.selectedTile?.setTint(0xffffff);
                 //this.selectedTile = null; // Deselect the tile after swapping
             },
@@ -121,9 +125,6 @@ export default class Board {
             x: tile1.x,
             y: tile1.y,
             duration: tweenDuration,
-            onComplete: () => {
-                this.tiles[row1][col1] = tile2;
-            },
         });
         callback();
     }
