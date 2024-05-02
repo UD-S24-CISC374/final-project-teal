@@ -231,17 +231,26 @@ export default class ProgressionScene extends Phaser.Scene {
         // Tiles
         const tileLabel = this.createFreeplayTextSettings(
             settingsX,
-            settingsY + settingsSpacing,
+            settingsY + settingsSpacing - 15,
             "Tiles:"
         );
 
         this.gameButtonsShown.push(tileLabel);
 
-        const tileSprites = ["trueTile", "falseTile", "andTile", "orTile"];
+        const tileSprites = [
+            "trueTile",
+            "falseTile",
+            "andTile",
+            "orTile",
+            "leftParenTile",
+            "notTile",
+            "xorTile",
+            "rightParenTile",
+        ];
         tileSprites.forEach((sprite, index) => {
             const tileButton = this.add.sprite(
-                settingsX + 200 + index * 50,
-                settingsY + settingsSpacing + 15,
+                settingsX + index * 50,
+                settingsY + settingsSpacing + 40,
                 sprite
             );
             tileButton.setInteractive();
@@ -258,7 +267,7 @@ export default class ProgressionScene extends Phaser.Scene {
         // Time limit
         const timeLimitLabel = this.createFreeplayTextSettings(
             settingsX,
-            settingsY + 2 * settingsSpacing,
+            settingsY + 2 * settingsSpacing + 15,
             "Time Limit (s):"
         );
 
@@ -266,7 +275,7 @@ export default class ProgressionScene extends Phaser.Scene {
         let timeLimit = 180;
         const timeLimitValue = this.add.text(
             settingsX + 200,
-            settingsY + 2 * settingsSpacing,
+            settingsY + 2 * settingsSpacing + 15,
             `${timeLimit}`,
             {
                 fontSize: "24px",
@@ -278,7 +287,7 @@ export default class ProgressionScene extends Phaser.Scene {
 
         const timeLimitDecrement = this.createIncrementDecrementButton(
             settingsX,
-            settingsY + 2 * settingsSpacing,
+            settingsY + 2 * settingsSpacing + 15,
             250,
             "-"
         );
@@ -292,7 +301,7 @@ export default class ProgressionScene extends Phaser.Scene {
 
         const timeLimitIncrement = this.createIncrementDecrementButton(
             settingsX,
-            settingsY + 2 * settingsSpacing,
+            settingsY + 2 * settingsSpacing + 15,
             275,
             "+"
         );
@@ -307,7 +316,7 @@ export default class ProgressionScene extends Phaser.Scene {
         // Number of lives
         const livesLabel = this.createFreeplayTextSettings(
             settingsX,
-            settingsY + 3 * settingsSpacing,
+            settingsY + 3 * settingsSpacing + 15,
             "Number of Lives:"
         );
 
@@ -316,7 +325,7 @@ export default class ProgressionScene extends Phaser.Scene {
         let lives = 3;
         const livesValue = this.add.text(
             settingsX + 200,
-            settingsY + 3 * settingsSpacing,
+            settingsY + 3 * settingsSpacing + 15,
             `${lives}`,
             {
                 fontSize: "24px",
@@ -328,7 +337,7 @@ export default class ProgressionScene extends Phaser.Scene {
 
         const livesDecrement = this.createIncrementDecrementButton(
             settingsX,
-            settingsY + 3 * settingsSpacing,
+            settingsY + 3 * settingsSpacing + 15,
             250,
             "-"
         );
@@ -342,7 +351,7 @@ export default class ProgressionScene extends Phaser.Scene {
 
         const livesIncrement = this.createIncrementDecrementButton(
             settingsX,
-            settingsY + 3 * settingsSpacing,
+            settingsY + 3 * settingsSpacing + 15,
             275,
             "+"
         );
@@ -357,14 +366,14 @@ export default class ProgressionScene extends Phaser.Scene {
         // Number of initial swaps
         const swapsLabel = this.createFreeplayTextSettings(
             settingsX,
-            settingsY + 4 * settingsSpacing,
+            settingsY + 4 * settingsSpacing + 15,
             "Initial Swaps:"
         );
         this.gameButtonsShown.push(swapsLabel);
         let initialSwaps = 7;
         const swapsValue = this.add.text(
             settingsX + 200,
-            settingsY + 4 * settingsSpacing,
+            settingsY + 4 * settingsSpacing + 15,
             `${initialSwaps}`,
             {
                 fontSize: "24px",
@@ -376,7 +385,7 @@ export default class ProgressionScene extends Phaser.Scene {
 
         const swapsDecrement = this.createIncrementDecrementButton(
             settingsX,
-            settingsY + 4 * settingsSpacing,
+            settingsY + 4 * settingsSpacing + 15,
             250,
             "-"
         );
@@ -390,7 +399,7 @@ export default class ProgressionScene extends Phaser.Scene {
 
         const swapsIncrement = this.createIncrementDecrementButton(
             settingsX,
-            settingsY + 4 * settingsSpacing,
+            settingsY + 4 * settingsSpacing + 15,
             275,
             "+"
         );
@@ -406,14 +415,14 @@ export default class ProgressionScene extends Phaser.Scene {
         // Number of objectives swaps
         const objectivesLabel = this.createFreeplayTextSettings(
             settingsX,
-            settingsY + 5 * settingsSpacing,
+            settingsY + 5 * settingsSpacing + 15,
             "# Objectives:"
         );
         this.gameButtonsShown.push(objectivesLabel);
         let valueObjectives = 3;
         const objetivesValue = this.add.text(
             settingsX + 200,
-            settingsY + 5 * settingsSpacing,
+            settingsY + 5 * settingsSpacing + 15,
             `${valueObjectives}`,
             {
                 fontSize: "24px",
