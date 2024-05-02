@@ -505,12 +505,16 @@ export default class Board {
             !(problem1 || problem2 || problem3 || problem4);
         console.log(`Any valid solution: ${anyValidSolution}`);
         console.log(
-            `Solution chain: ${
-                solution1 || solution2 || solution3 || solution4 || solution5
-            }`
+            `Solution chain: ${[
+                solution1,
+                solution2,
+                solution3,
+                solution4,
+                solution5,
+            ]}`
         );
         console.log(
-            `Problem chain: ${problem1 || problem2 || problem3 || problem4}`
+            `Problem chain: ${[problem1, problem2, problem3, problem4]}`
         );
 
         return anyValidSolution;

@@ -22,7 +22,6 @@ export default class Game {
         numInitialSwaps?: number,
         objectivesNum?: number
     ) {
-        console.log(timeLimitSeconds);
         this.name = name;
         this.tileTypes = tileTypes;
         this.boardSize = boardSize;
