@@ -420,11 +420,7 @@ export default class Board {
         }
         return board;
     }
-    public isPossibleSolution(): boolean | undefined {
-        if (!this.tiles) {
-            return undefined;
-        }
-
+    public isPossibleSolution(): boolean {
         let size = this.boardSize;
         let tileTypeCount: { [key: string]: number } = {};
 
