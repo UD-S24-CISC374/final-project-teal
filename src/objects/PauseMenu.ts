@@ -47,7 +47,9 @@ export default class PauseMenu extends Phaser.GameObjects.Container {
             centerWidth,
             centerHeight + spacing * index,
             "Resume",
-            () => this.togglePauseMenu()
+            () => {
+                this.togglePauseMenu();
+            }
         );
         this.add(this.resumeButton);
 
@@ -58,7 +60,9 @@ export default class PauseMenu extends Phaser.GameObjects.Container {
             centerWidth,
             centerHeight + spacing * index,
             "Main Menu",
-            () => this.scene.scene.start("MenuScene")
+            () => {
+                this.scene.scene.start("MenuScene");
+            }
         );
         this.add(this.mainMenuButton);
 

@@ -45,7 +45,9 @@ export default class MenuScene extends Phaser.Scene {
             middleWidth,
             middleHeight + buttonSpacing * index,
             "Play",
-            () => this.scene.start("ProgressionScene")
+            () => {
+                this.scene.start("ProgressionScene");
+            }
         );
         index++;
         /*const settingsButton = */ new Button(
@@ -53,7 +55,9 @@ export default class MenuScene extends Phaser.Scene {
             middleWidth,
             middleHeight + buttonSpacing * index,
             "Settings",
-            () => console.log("implement settings page here")
+            () => {
+                console.log("implement settings page here");
+            }
         );
 
         index++;
@@ -62,7 +66,9 @@ export default class MenuScene extends Phaser.Scene {
             middleWidth,
             middleHeight + buttonSpacing * index,
             "Controls",
-            () => this.scene.start("ControlScene")
+            () => {
+                this.scene.start("ControlScene");
+            }
         );
 
         index++;
@@ -71,7 +77,9 @@ export default class MenuScene extends Phaser.Scene {
             middleWidth,
             middleHeight + buttonSpacing * index,
             "Credits",
-            () => this.scene.start("CreditsScene")
+            () => {
+                this.scene.start("CreditsScene");
+            }
         );
     }
 }

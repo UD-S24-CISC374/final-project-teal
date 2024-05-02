@@ -218,7 +218,9 @@ export default class ProgressionScene extends Phaser.Scene {
             70,
             70,
             "Back",
-            () => this.scene.start("MenuScene"),
+            () => {
+                this.scene.start("MenuScene");
+            },
             "24px"
         );
 
@@ -227,7 +229,9 @@ export default class ProgressionScene extends Phaser.Scene {
             screenWidth * 0.5,
             stageY + 3 * stageSpacing,
             "Freeplay",
-            () => this.openFreeplaySettings()
+            () => {
+                this.openFreeplaySettings();
+            }
         );
     }
 

@@ -35,7 +35,9 @@ export default class CreditsScene extends Phaser.Scene {
             70,
             70,
             "Back",
-            () => this.scene.start("MenuScene"),
+            () => {
+                this.scene.start("MenuScene");
+            },
             "24px"
         );
     }

@@ -58,7 +58,9 @@ export default class ControlScene extends baseScene {
             70,
             70,
             "Back",
-            () => this.scene.start("MenuScene"),
+            () => {
+                this.scene.start("MenuScene");
+            },
             "24px"
         );
     }
