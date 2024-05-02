@@ -25,6 +25,15 @@ export default class MenuScene extends Phaser.Scene {
         titleImg.setOrigin(0.5);
         titleImg.setScale(1.2);
 
+        this.tweens.add({
+            targets: titleImg,
+            scale: 1.4,
+            duration: 1200, // Duration of the tween in milliseconds
+            yoyo: true, // Reverse the tween on completion
+            repeat: -1, // Repeat indefinitely
+            ease: "Sine.easeInOut", // Easing function for smooth animation
+        });
+
         // Add Play button
         const playButton = this.add.text(
             (this.game.config.width as number) * 0.5,
