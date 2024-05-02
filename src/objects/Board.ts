@@ -106,6 +106,8 @@ export default class Board {
         this.tiles[row2][col2] = tile1;
         this.tiles[row1][col1] = tile2;
 
+        this.selectTile(tile1);
+
         //create tile1 tween
         this.scene.tweens.add({
             targets: tile1,
