@@ -68,7 +68,7 @@ export default class Game {
             const numTiles = Math.floor(Math.random() * maxNumTiles) + 1;
             const objective = new Objective(
                 `${numTiles} ${formattedTileType} tile(s)`,
-                4,
+                3,
                 (tileTypes: string[]) => {
                     const tiles = tileTypes.filter(
                         (tileType) => tileType === targetTile

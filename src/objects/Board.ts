@@ -408,4 +408,99 @@ export default class Board {
         }
         return board;
     }
+    public isPossibleSolution(): boolean | undefined {
+        if (!this.tiles) {
+            return undefined;
+        }
+
+        let size = this.boardSize;
+        let tileTypeCount: { [key: string]: number } = {};
+
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                let tileType = this.tiles[i][j].tileType;
+                if (tileType) {
+                    if (tileTypeCount[tileType]) {
+                        tileTypeCount[tileType]++;
+                    } else {
+                        tileTypeCount[tileType] = 1;
+                    }
+                }
+            }
+        }
+
+        //does not take into account NOT tiles..
+
+        const getCount = (key: string): number => tileTypeCount[key] || 0;
+        const sizeReduction =
+            2 * Math.min(getCount("leftParenTile"), getCount("rightParenTile"));
+        let maxReduction = false;
+        if (sizeReduction >= size - 1) {
+            maxReduction = true;
+        }
+        size -= sizeReduction;
+
+        //need to account for NOTs
+        size = Math.max(size, 3);
+
+        const operatorCount =
+            getCount("orTile") + getCount("andTile") + getCount("xorTile");
+        const literalCount = getCount("falseTile") + getCount("trueTile");
+        const requiredOperatorCount = (size - 1) / 2;
+        const requiredLiteralCount = (size + 1) / 2;
+
+        const temp = getCount("falseTile");
+        tileTypeCount["falseTile"] =
+            getCount("falseTile") +
+            Math.min(getCount("notTile"), getCount("trueTile"));
+        tileTypeCount["trueTile"] =
+            getCount("trueTile") + Math.min(getCount("notTile"), temp);
+        console.log(tileTypeCount);
+        //ADJUST literal count to based off of NOTs
+
+        //Solution 1: 1 or and 1 true, and enough literals and operators can always make a true
+        const solution1 = getCount("orTile") >= 1 && getCount("trueTile") >= 1;
+        //solution 2: if no ors, then solution is possible with enough ands and enough trues
+        const solution2 =
+            getCount("andTile") >= requiredOperatorCount &&
+            getCount("trueTile") >= requiredLiteralCount;
+
+        //solution 3: with enough parentheses, only the true tile is needed
+        const solution3 = getCount("trueTile") >= 1 && maxReduction;
+
+        //solution 4: with 1 xor, you just need one of each literal (problem 3 already checks for at least 1 true tile)
+        const solution4 =
+            getCount("xorTile") == 1 && getCount("falseTile") >= 1;
+
+        //solution5: with 2 or more xor, you just need enough operators (no false tile is needed)
+        const solution5 = getCount("xorTile") >= 2;
+
+        //problem1: with an even board size, a NOT is needed to make a valid expression
+        const problem1 = size % 2 == 0 && getCount("notTile") == 0;
+        //problem2: you need a certain number of operators and literals to make a valid expression
+        const problem2 =
+            operatorCount < requiredOperatorCount ||
+            literalCount < requiredLiteralCount;
+        //problem3: you always need a TRUE to get an expression that evaluates to true
+        const problem3 = getCount("trueTile") == 0;
+
+        //problem4: if you only have xor tiles, you need an additional literal tile to create an exprssion that evaluates to true
+        const problem4 =
+            getCount("xorTiles") == operatorCount &&
+            literalCount < requiredLiteralCount + 1;
+
+        console.log(
+            `Solution chain: ${
+                solution1 || solution2 || solution3 || solution4 || solution5
+            }`
+        );
+        console.log(
+            `Problem chain: ${problem1 || problem2 || problem3 || problem4}`
+        );
+
+        return (
+            (solution1 || solution2 || solution3 || solution4 || solution5) &&
+            !(problem1 || problem2 || problem3 || problem4)
+        );
+    }
 }

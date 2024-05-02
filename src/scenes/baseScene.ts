@@ -83,6 +83,9 @@ export default class baseScene extends Phaser.Scene {
                     ) {
                         this.completeGame();
                     }
+                    console.log(
+                        `Solution: ${this.gameBoard.isPossibleSolution()}`
+                    );
                 } else {
                     this.gameBoard.handleRowColCheck(
                         currentRow,

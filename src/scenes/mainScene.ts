@@ -24,6 +24,8 @@ export default class MainScene extends baseScene {
 
         this.gameBoard = this.gameData.createBoard(this);
 
+        console.log(`Solution: ${this.gameBoard.isPossibleSolution()}`);
+
         this.gameData.addRandomComplexObjectives(this.gameData.objectivesNum);
 
         //SAMPLE OBJECTIVE
