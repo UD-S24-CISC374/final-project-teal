@@ -92,14 +92,22 @@ export default class Game {
         for (let i = 0; i < numObjectives; i++) {
             const targetTileTypes: string[] = [];
             const numTiles: number[] = [];
-            const maxNumTiles = (this.boardSize - (this.boardSize % 2)) / 2;
+            let maxNumTiles = (this.boardSize - 2 + (this.boardSize % 2)) / 2;
             let totalNumTiles = 0;
 
             while (totalNumTiles < maxNumTiles) {
+                maxNumTiles = (this.boardSize - 2 + (this.boardSize % 2)) / 2;
                 const targetTile =
                     this.tileTypes[
                         Math.floor(Math.random() * this.tileTypes.length)
                     ];
+                if (
+                    targetTile == "notTile" ||
+                    targetTile == "leftParenTile" ||
+                    targetTile == "rightParenTile"
+                ) {
+                    maxNumTiles = (maxNumTiles - (maxNumTiles % 2)) / 2;
+                }
                 const remainingTiles = maxNumTiles - totalNumTiles;
                 const currNumTiles =
                     Math.floor(Math.random() * remainingTiles) + 1;
