@@ -6,7 +6,6 @@ import baseScene from "./baseScene";
 import Phaser from "phaser";
 
 export default class TutorialScene extends baseScene {
-    private sfx: SFX;
     private instructionText: Phaser.GameObjects.Text;
     private instructionString: string;
     private counter = 0;

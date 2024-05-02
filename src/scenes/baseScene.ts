@@ -3,6 +3,7 @@ import PauseMenu from "../objects/PauseMenu";
 import { DirectionType } from "../types/DirectionType";
 import Board from "../objects/Board";
 import Game from "../objects/Game";
+import SFX from "../objects/SFX";
 
 export default class baseScene extends Phaser.Scene {
     protected score: number = 0;
@@ -11,11 +12,14 @@ export default class baseScene extends Phaser.Scene {
     protected timerText: Phaser.GameObjects.Text;
     protected livesValue: number = 3;
     protected livesText: Phaser.GameObjects.Text;
+    protected restartText: Phaser.GameObjects.Text;
     protected swapsValue: number = 3;
     protected swapsText: Phaser.GameObjects.Text;
     protected pauseMenu: PauseMenu | null = null;
     protected gameBoard: Board;
     protected gameData: Game;
+    protected anyValidSolutions: boolean | undefined = false;
+    protected sfx: SFX;
 
     handleKeydown(event: KeyboardEvent) {
         switch (event.key) {
@@ -23,6 +27,16 @@ export default class baseScene extends Phaser.Scene {
                 if (this.pauseMenu) {
                     this.pauseMenu.togglePauseMenu();
                 }
+                break;
+            case "Enter":
+                if (!this.anyValidSolutions) {
+                    this.gameBoard.regenerateBoard();
+                    this.anyValidSolutions =
+                        this.gameBoard.isPossibleSolution();
+                    this.restartText.visible = !this.anyValidSolutions;
+                    this.sfx.play("crumple-paper-1");
+                }
+                break;
         }
 
         if (!this.gameBoard.isTileSelected()) return;
@@ -83,9 +97,9 @@ export default class baseScene extends Phaser.Scene {
                     ) {
                         this.completeGame();
                     }
-                    console.log(
-                        `Solution: ${this.gameBoard.isPossibleSolution()}`
-                    );
+                    this.anyValidSolutions =
+                        this.gameBoard.isPossibleSolution();
+                    this.restartText.visible = !this.anyValidSolutions;
                 } else {
                     this.gameBoard.handleRowColCheck(
                         currentRow,

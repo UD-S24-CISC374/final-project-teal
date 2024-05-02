@@ -5,8 +5,6 @@ import Game from "../objects/Game";
 import baseScene from "./baseScene";
 
 export default class MainScene extends baseScene {
-    private sfx: SFX;
-
     constructor() {
         super({ key: "MainGameScene" });
         this.sfx = SFX.getInstance(this);
@@ -24,7 +22,7 @@ export default class MainScene extends baseScene {
 
         this.gameBoard = this.gameData.createBoard(this);
 
-        console.log(`Solution: ${this.gameBoard.isPossibleSolution()}`);
+        this.anyValidSolutions = this.gameBoard.isPossibleSolution();
 
         this.gameData.addRandomComplexObjectives(this.gameData.objectivesNum);
 
@@ -46,6 +44,18 @@ export default class MainScene extends baseScene {
         this.timerValue = this.gameData.timeLimitSeconds;
         this.livesValue = this.gameData.numLives;
         this.swapsValue = this.gameData.numInitialSwaps;
+
+        this.restartText = this.add.text(
+            950,
+            400,
+            `No more possible solutions,\npress Enter to restart.`,
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                color: "#000000",
+            }
+        );
+        this.restartText.visible = !this.anyValidSolutions;
 
         //console.log("Hello");
 

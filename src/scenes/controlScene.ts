@@ -4,8 +4,6 @@ import Game from "../objects/Game";
 import baseScene from "./baseScene";
 
 export default class ControlScene extends baseScene {
-    private sfx: SFX;
-
     constructor() {
         super({ key: "ControlScene" });
         this.sfx = SFX.getInstance(this);

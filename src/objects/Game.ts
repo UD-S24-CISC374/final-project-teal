@@ -64,7 +64,14 @@ export default class Game {
             const formattedTileType = targetTile
                 .replace("Tile", "")
                 .toUpperCase();
-            const maxNumTiles = (this.boardSize - 2 + (this.boardSize % 2)) / 2;
+            let maxNumTiles = (this.boardSize - 2 + (this.boardSize % 2)) / 2;
+            if (
+                targetTile == "notTile" ||
+                targetTile == "leftParenTile" ||
+                targetTile == "rightParenTile"
+            ) {
+                maxNumTiles = (maxNumTiles - (maxNumTiles % 2)) / 2;
+            }
             const numTiles = Math.floor(Math.random() * maxNumTiles) + 1;
             const objective = new Objective(
                 `${numTiles} ${formattedTileType} tile(s)`,

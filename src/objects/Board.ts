@@ -75,6 +75,15 @@ export default class Board {
         return board;
     }
 
+    public regenerateBoard() {
+        for (let i = 0; i < this.boardSize; i++) {
+            for (let j = 0; j < this.boardSize; j++) {
+                this.tiles[i][j].destroy();
+            }
+        }
+        this.tiles = this.generateBoard();
+    }
+
     private selectTile(tile: Tile) {
         this.sfx.play("click-1");
         this.unselectTiles();
@@ -491,7 +500,10 @@ export default class Board {
         const problem4 =
             getCount("xorTiles") == operatorCount &&
             literalCount < requiredLiteralCount + 1;
-
+        const anyValidSolution =
+            (solution1 || solution2 || solution3 || solution4 || solution5) &&
+            !(problem1 || problem2 || problem3 || problem4);
+        console.log(`Any valid solution: ${anyValidSolution}`);
         console.log(
             `Solution chain: ${
                 solution1 || solution2 || solution3 || solution4 || solution5
@@ -501,9 +513,6 @@ export default class Board {
             `Problem chain: ${problem1 || problem2 || problem3 || problem4}`
         );
 
-        return (
-            (solution1 || solution2 || solution3 || solution4 || solution5) &&
-            !(problem1 || problem2 || problem3 || problem4)
-        );
+        return anyValidSolution;
     }
 }
