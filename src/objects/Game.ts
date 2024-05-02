@@ -27,8 +27,8 @@ export default class Game {
         this.tileTypes = tileTypes;
         this.boardSize = boardSize;
         this.timeLimitSeconds = timeLimitSeconds || 1000;
-        this.numLives = numLives || 3;
-        this.numInitialSwaps = numInitialSwaps || 3;
+        this.numLives = numLives || 99;
+        this.numInitialSwaps = numInitialSwaps || 99;
         this.objectives = [];
         this.objectivesNum = objectivesNum || 3;
     }

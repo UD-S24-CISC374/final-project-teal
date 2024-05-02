@@ -46,14 +46,14 @@ export default class ProgressionScene extends Phaser.Scene {
                     99,
                     1
                 ),
-                new Game("Game 1", ["trueTile", "andTile"], 3, 100, 3, 5, 1),
+                new Game("Game 1", ["trueTile", "andTile"], 3, 100, 3, 99, 1),
                 new Game(
                     "Game 2",
                     ["trueTile", "falseTile", "orTile", "andTile"],
-                    5,
+                    3,
                     100,
-                    5,
-                    7,
+                    3,
+                    99,
                     2
                 ),
                 new Game(
@@ -62,36 +62,124 @@ export default class ProgressionScene extends Phaser.Scene {
                     4,
                     100,
                     3,
-                    7,
+                    99,
                     2
                 ),
             ]),
             new Stage("Intermediate", [
-                new Game("Game 1", ["trueTile", "falseTile"], 6),
-                new Game("Game 2", ["trueTile", "falseTile", "andTile"], 7),
-                new Game("Game 3", ["trueTile", "falseTile", "orTile"], 8),
+                new Game(
+                    "Game 1",
+                    ["trueTile", "falseTile", "andTile", "orTile"],
+                    5,
+                    120,
+                    2,
+                    20,
+                    3
+                ),
+                new Game(
+                    "Game 2",
+                    ["trueTile", "falseTile", "andTile", "orTile"],
+                    7,
+                    120,
+                    2,
+                    20,
+                    3
+                ),
+                new Game(
+                    "Game 3",
+                    ["trueTile", "falseTile", "orTile", "andTile", "notTile"],
+                    8,
+                    120,
+                    2,
+                    20,
+                    3
+                ),
                 new Game(
                     "Game 4",
-                    ["trueTile", "falseTile", "andTile", "orTile"],
-
-                    9
+                    ["trueTile", "falseTile", "andTile", "orTile", "xorTile"],
+                    7,
+                    120,
+                    2,
+                    20,
+                    3
                 ),
                 new Game(
                     "Game 5",
-                    ["trueTile", "falseTile", "andTile", "orTile"],
-
-                    10
+                    [
+                        "trueTile",
+                        "falseTile",
+                        "andTile",
+                        "orTile",
+                        "xorTile",
+                        "notTile",
+                    ],
+                    8,
+                    120,
+                    2,
+                    20,
+                    3
                 ),
             ]),
             new Stage("Advanced", [
-                new Game("Game 1", ["trueTile", "falseTile"], 8),
-                new Game("Game 2", ["trueTile", "falseTile", "andTile"], 9),
-                new Game("Game 3", ["trueTile", "falseTile", "orTile"], 10),
+                new Game(
+                    "Game 1",
+                    ["trueTile", "falseTile", "orTile", "andTile", "xorTile"],
+                    9,
+                    120,
+                    1,
+                    30,
+                    3
+                ),
+                new Game(
+                    "Game 2",
+                    [
+                        "trueTile",
+                        "falseTile",
+                        "orTile",
+                        "andTile",
+                        "xorTile",
+                        "notTile",
+                    ],
+                    10,
+                    120,
+                    1,
+                    30,
+                    3
+                ),
+                new Game(
+                    "Game 3",
+                    [
+                        "trueTile",
+                        "falseTile",
+                        "orTile",
+                        "andTile",
+                        "notTile",
+                        "leftParenTile",
+                        "rightParenTile",
+                    ],
+                    11,
+                    120,
+                    1,
+                    30,
+                    3
+                ),
                 new Game(
                     "Game 4",
-                    ["trueTile", "falseTile", "andTile", "orTile"],
-
-                    11
+                    [
+                        "trueTile",
+                        "falseTile",
+                        "orTile",
+                        "andTile",
+                        "xorTile",
+                        "notTile",
+                        "leftParenTile",
+                        "rightParenTile",
+                    ],
+                    12,
+                    120,
+                    1,
+                    30,
+                    3
                 ),
             ]),
         ];
