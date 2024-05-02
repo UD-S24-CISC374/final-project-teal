@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 export default class Sketch extends Phaser.GameObjects.Sprite {
     constructor(
         scene: Phaser.Scene,
