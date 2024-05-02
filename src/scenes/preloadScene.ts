@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import SFX from "../objects/SFX";
+import Sketch from "../objects/Sketch";
 
 export default class PreloadScene extends Phaser.Scene {
     private sfx: SFX;
@@ -26,6 +27,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.audio("backgroundMusic", "assets/music/bg-music-1.wav");
 
         this.sfx.preload();
+        Sketch.preload(this);
     }
 
     create() {
