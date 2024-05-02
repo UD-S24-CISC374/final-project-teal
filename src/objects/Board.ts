@@ -501,9 +501,12 @@ export default class Board {
         //problem1: with an even board size, a NOT is needed to make a valid expression
         const problem1 = size % 2 == 0 && getCount("notTile") == 0;
         //problem2: you need a certain number of operators and literals to make a valid expression
+        //but if you have enough parentheses/NOTs then you only need 1 operator for even boards and 0 operators for odd boards
         const problem2 =
-            operatorCount < requiredOperatorCount ||
-            literalCount < requiredLiteralCount;
+            (operatorCount < requiredOperatorCount ||
+                literalCount < requiredLiteralCount) &&
+            !solution3 &&
+            operatorCount > 1 - (this.boardSize % 1);
         //problem3: you always need a TRUE to get an expression that evaluates to true
         const problem3 = getCount("trueTile") == 0;
 
