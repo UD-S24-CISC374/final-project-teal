@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
+import Button from "../objects/Button";
 
 export default class CreditsScene extends Phaser.Scene {
     private sfx: SFX;
@@ -29,18 +30,13 @@ export default class CreditsScene extends Phaser.Scene {
         );
         creditsText.setOrigin(0.5);
 
-        const backButton = this.add.text(50, 50, "Back", {
-            fontSize: "24px",
-            fontFamily: "Arial",
-            color: "#ffffff",
-            backgroundColor: "#4e342e",
-            padding: { x: 20, y: 10 },
-        });
-        backButton.setInteractive();
-        backButton.on("pointerdown", () => {
-            // Go back to the progression scene
-            this.sfx.play("pop-click-1");
-            this.scene.start("MenuScene");
-        });
+        /*const backButton = */ new Button(
+            this,
+            70,
+            70,
+            "Back",
+            () => this.scene.start("MenuScene"),
+            "24px"
+        );
     }
 }

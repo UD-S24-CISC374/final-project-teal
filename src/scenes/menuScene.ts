@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
+import Button from "../objects/Button";
 
 export default class MenuScene extends Phaser.Scene {
     private sfx: SFX;
@@ -35,91 +36,42 @@ export default class MenuScene extends Phaser.Scene {
         });
 
         // Add Play button
-        const playButton = this.add.text(
-            (this.game.config.width as number) * 0.5,
-            (this.game.config.height as number) * 0.5,
+        const middleWidth = (this.game.config.width as number) * 0.5;
+        const middleHeight = (this.game.config.height as number) * 0.5;
+        const buttonSpacing = (this.game.config.height as number) * 0.1;
+        let index = 0;
+        /*const playButton = */ new Button(
+            this,
+            middleWidth,
+            middleHeight + buttonSpacing * index,
             "Play",
-            {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: {
-                    x: 20,
-                    y: 10,
-                },
-            }
+            () => this.scene.start("ProgressionScene")
         );
-        playButton.setOrigin(0.5);
-        playButton.setInteractive();
-        playButton.on("pointerdown", () => {
-            // Start the game scene when Play button is clicked
-            this.scene.start("ProgressionScene");
-            this.sfx.play("pop-click-1");
-        });
-
-        // Add Settings button
-        const settingsButton = this.add.text(
-            (this.game.config.width as number) * 0.5,
-            (this.game.config.height as number) * 0.6,
+        index++;
+        /*const settingsButton = */ new Button(
+            this,
+            middleWidth,
+            middleHeight + buttonSpacing * index,
             "Settings",
-            {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: {
-                    x: 20,
-                    y: 10,
-                },
-            }
+            () => console.log("implement settings page here")
         );
-        settingsButton.setOrigin(0.5);
-        settingsButton.setInteractive();
-        settingsButton.on("pointerdown", () => {
-            // Add settings functionality here
-        });
 
-        // Add Controls button
-        const tutorialButton = this.add.text(
-            (this.game.config.width as number) * 0.5,
-            (this.game.config.height as number) * 0.7,
+        index++;
+        /*const controlsButton = */ new Button(
+            this,
+            middleWidth,
+            middleHeight + buttonSpacing * index,
             "Controls",
-            {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: {
-                    x: 20,
-                    y: 10,
-                },
-            }
+            () => this.scene.start("ControlScene")
         );
-        tutorialButton.setOrigin(0.5);
-        tutorialButton.setInteractive();
-        tutorialButton.on("pointerdown", () => {
-            this.sfx.play("pop-click-1");
-            // Add tutorial functionality here
-            this.scene.start("ControlScene");
-        });
-        const creditsButton = this.add.text(
-            (this.game.config.width as number) * 0.5,
-            (this.game.config.height as number) * 0.8,
+
+        index++;
+        /*const creditsButton = */ new Button(
+            this,
+            middleWidth,
+            middleHeight + buttonSpacing * index,
             "Credits",
-            {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 20, y: 10 },
-            }
+            () => this.scene.start("CreditsScene")
         );
-        creditsButton.setOrigin(0.5);
-        creditsButton.setInteractive();
-        creditsButton.on("pointerdown", () => {
-            this.sfx.play("pop-click-1");
-            this.scene.start("CreditsScene");
-        });
     }
 }

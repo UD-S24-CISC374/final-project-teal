@@ -3,6 +3,7 @@ import Game from "../objects/Game";
 import Stage from "../objects/Stages";
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
+import Button from "../objects/Button";
 
 export default class ProgressionScene extends Phaser.Scene {
     private currentStage: Stage | null = null;
@@ -200,59 +201,34 @@ export default class ProgressionScene extends Phaser.Scene {
         const stageY = screenHeight * 0.4;
         const stageSpacing = 100;
         stages.forEach((stage, index) => {
-            const stageButton = this.add.text(
+            new Button(
+                this,
                 screenWidth * 0.5,
                 stageY + index * stageSpacing,
                 stage.name,
-                {
-                    fontSize: "32px",
-                    fontFamily: "Arial",
-                    color: "#ffffff",
-                    backgroundColor: "#4e342e",
-                    padding: { x: 20, y: 10 },
+                () => {
+                    this.currentStage = stage;
+                    this.showGames(stage.games);
                 }
             );
-            stageButton.setOrigin(0.5);
-            stageButton.setInteractive();
-            stageButton.on("pointerdown", () => {
-                this.sfx.play("pop-click-1");
-                this.currentStage = stage;
-                this.showGames(stage.games);
-            });
         });
 
-        const backButton = this.add.text(50, 50, "Back", {
-            fontSize: "24px",
-            fontFamily: "Arial",
-            color: "#ffffff",
-            backgroundColor: "#4e342e",
-            padding: { x: 20, y: 10 },
-        });
-        backButton.setInteractive();
-        backButton.on("pointerdown", () => {
-            this.sfx.play("pop-click-1");
-            // Go back to the progression scene
-            this.scene.start("MenuScene");
-        });
+        /*const backButton = */ new Button(
+            this,
+            70,
+            70,
+            "Back",
+            () => this.scene.start("MenuScene"),
+            "24px"
+        );
 
-        const freeplayButton = this.add.text(
+        /*const freeplayButton = */ new Button(
+            this,
             screenWidth * 0.5,
             stageY + 3 * stageSpacing,
             "Freeplay",
-            {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 20, y: 10 },
-            }
+            () => this.openFreeplaySettings()
         );
-        freeplayButton.setOrigin(0.5);
-        freeplayButton.setInteractive();
-        freeplayButton.on("pointerdown", () => {
-            this.sfx.play("pop-click-1");
-            this.openFreeplaySettings();
-        });
     }
 
     openFreeplaySettings() {

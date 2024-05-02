@@ -2,6 +2,7 @@ import Background from "../objects/Background";
 import SFX from "../objects/SFX";
 import Game from "../objects/Game";
 import baseScene from "./baseScene";
+import Button from "../objects/Button";
 
 export default class ControlScene extends baseScene {
     constructor() {
@@ -52,27 +53,12 @@ export default class ControlScene extends baseScene {
         controlsText.setOrigin(0.5, 0.5);
 
         // Add a back button
-        const backButton = this.add.text(
+        /*const backButton = */ new Button(
+            this,
             screenCenterX,
             screenCenterY * 1.7,
             "Back",
-            {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: {
-                    x: 20,
-                    y: 10,
-                },
-            }
+            () => this.scene.start("MenuScene")
         );
-        backButton.setOrigin(0.5);
-        backButton.setInteractive();
-        backButton.on("pointerdown", () => {
-            this.sfx.play("pop-click-1");
-            // Go back to the menu scene when the back button is clicked
-            this.scene.start("MenuScene");
-        });
     }
 }
