@@ -444,7 +444,7 @@ export default class Board {
         const getCount = (key: string): number => tileTypeCount[key] || 0;
 
         //pattern for calculating "usable NOTs"
-        tileTypeCount["notTile"] = Math.floor(size / 3) + (size % 3) - 1;
+        //tileTypeCount["notTile"] = Math.floor(size / 3) + (size % 3) - 1;
         //POSSIBLE EDGE CASE: IF THERE ARE PARENTHESES, THEN THAT WOULD ADJUST THE POTENTIAL "SIZE"
         //I THINK THE ONLY FIX IS TO HAVE DIFFERENT USABLE NOTS DEPENDING ON PARENTHESES
 
