@@ -315,6 +315,7 @@ export default class ProgressionScene extends Phaser.Scene {
             "xorTile",
             "rightParenTile",
         ];
+
         tileSprites.forEach((sprite, index) => {
             const tileButton = this.add.sprite(
                 settingsX + index * 50,
@@ -323,10 +324,24 @@ export default class ProgressionScene extends Phaser.Scene {
             );
             tileButton.setInteractive();
             tileButton.setScale(0.4);
+
+            const overlay = this.add.sprite(
+                tileButton.x,
+                tileButton.y,
+                sprite + "Select"
+            );
+            overlay.setVisible(true);
+            overlay.setScale(0.4);
+
             tileButton.on("pointerdown", () => {
-                tileButton.setTint(
-                    tileButton.tintTopLeft === 0xffffff ? 0x000000 : 0xffffff
-                );
+                overlay.setVisible(!overlay.visible);
+                if (!overlay.visible) {
+                    const index = this.tileButtonsShown.indexOf(tileButton);
+                    if (index !== -1) {
+                        this.tileButtonsShown.splice(index, 1);
+                    }
+                }
+
                 this.sfx.play("pop-click-1");
             });
             this.tileButtonsShown.push(tileButton);

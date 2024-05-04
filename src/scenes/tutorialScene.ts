@@ -29,6 +29,8 @@ export default class TutorialScene extends baseScene {
 
         this.gameBoard = this.gameData.createBoard(this);
 
+        this.anyValidSolutions = this.gameBoard.isPossibleSolution();
+
         this.gameData.addRandomComplexObjectives(
             this.gameData.objectivesNum,
             1
@@ -42,6 +44,18 @@ export default class TutorialScene extends baseScene {
         this.timerValue = this.gameData.timeLimitSeconds;
         this.livesValue = this.gameData.numLives;
         this.swapsValue = this.gameData.numInitialSwaps;
+
+        this.restartText = this.add.text(
+            950,
+            400,
+            `No more possible solutions,\npress Enter to restart.`,
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                color: "#000000",
+            }
+        );
+        this.restartText.visible = !this.anyValidSolutions;
 
         this.pauseMenu = new PauseMenu(this);
         this.pauseMenu.setVisible(false);

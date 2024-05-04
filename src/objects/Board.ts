@@ -63,7 +63,13 @@ export default class Board {
                 const tileX = boardX + col * this.tileSize;
                 const tileY = boardY + row * this.tileSize;
                 const tileTypeKey = Phaser.Math.RND.pick(this.tileTypes);
-                const tile = new Tile(this.scene, tileX, tileY, tileTypeKey);
+                const tile = new Tile(
+                    this.scene,
+                    tileX,
+                    tileY,
+                    tileTypeKey,
+                    this.tileSize
+                );
                 tile.setInteractive();
                 tile.on("pointerdown", this.selectTile.bind(this, tile));
                 tile.setOrigin(0, 0);
@@ -79,6 +85,7 @@ export default class Board {
         for (let i = 0; i < this.boardSize; i++) {
             for (let j = 0; j < this.boardSize; j++) {
                 this.tiles[i][j].destroy();
+                this.tiles[i][j].hideOverlay();
             }
         }
         this.tiles = this.generateBoard();
@@ -88,10 +95,10 @@ export default class Board {
         this.sfx.play("click-1");
         this.unselectTiles();
         if (this.selectedTile) {
-            this.selectedTile.setTint(0xffffff); // Reset tint of previously selected tile
+            this.selectedTile.hideOverlay();
         }
         this.selectedTile = tile;
-        tile.setTint(0x555555); // Tint the selected tile red
+        tile.showOverlay();
     }
 
     // callback : function to call after the swap is done
@@ -119,7 +126,7 @@ export default class Board {
 
         //create tile1 tween
         this.scene.tweens.add({
-            targets: tile1,
+            targets: [tile1, tile1.overlay],
             x: tile2.x,
             y: tile2.y,
             duration: tweenDuration,
@@ -132,7 +139,7 @@ export default class Board {
         });
         //create tile2 tween
         this.scene.tweens.add({
-            targets: tile2,
+            targets: [tile2, tile2.overlay],
             x: tile1.x,
             y: tile1.y,
             duration: tweenDuration,
@@ -148,20 +155,20 @@ export default class Board {
             for (let tileIndex = 0; tileIndex < this.boardSize; tileIndex++) {
                 const tile = this.tiles[directionIndex][tileIndex];
                 this.selectedTiles.push(tile);
-                tile.setTint(0x555555);
+                tile.showOverlay();
             }
         } else if (direction == DirectionType.COL) {
             for (let tileIndex = 0; tileIndex < this.boardSize; tileIndex++) {
                 const tile = this.tiles[tileIndex][directionIndex];
                 this.selectedTiles.push(tile);
-                tile.setTint(0x555555);
+                tile.showOverlay();
             }
         }
     }
     private unselectTiles() {
         while (this.selectedTiles.length > 0) {
             const tile = this.selectedTiles.shift();
-            tile?.setTint(0xffffff);
+            tile?.hideOverlay();
         }
         this.currentDirection = DirectionType.NONE;
     }
@@ -217,6 +224,7 @@ export default class Board {
             const tile = this.tiles[currentRow][col];
             this.lastRemovedTileTypes.push(tile.tileType);
             tile.destroy();
+            tile.hideOverlay();
         }
 
         // move all the tiles above the current row down
@@ -225,7 +233,7 @@ export default class Board {
                 const tile = this.tiles[row - 1][col];
                 this.tiles[row][col] = tile;
                 this.scene.tweens.add({
-                    targets: tile,
+                    targets: [tile, tile.overlay],
                     y: tile.y + this.tileSize,
                     duration: 300,
                 });
@@ -243,7 +251,8 @@ export default class Board {
                 this.scene,
                 tileX,
                 tileY - this.tileSize,
-                tileTypeKey
+                tileTypeKey,
+                this.tileSize
             );
 
             tile.setInteractive();
@@ -253,7 +262,7 @@ export default class Board {
             this.tiles[0][col] = tile;
 
             this.scene.tweens.add({
-                targets: tile,
+                targets: [tile, tile.overlay],
                 y: tile.y + this.tileSize,
                 duration: 300,
             });
@@ -283,6 +292,7 @@ export default class Board {
             const tile = this.tiles[row][currentCol];
             this.lastRemovedTileTypes.push(tile.tileType);
             tile.destroy();
+            tile.hideOverlay();
         }
         //this.addScore(10);
         this.addTilesCol(currentCol);
@@ -297,7 +307,8 @@ export default class Board {
                 this.scene,
                 tileX,
                 tileY - this.boardSize * this.tileSize,
-                tileTypeKey
+                tileTypeKey,
+                this.tileSize
             );
             tile.setInteractive();
             tile.on("pointerdown", this.selectTile.bind(this, tile));
@@ -306,7 +317,7 @@ export default class Board {
             this.tiles[row][currentCol] = tile;
 
             this.scene.tweens.add({
-                targets: tile,
+                targets: [tile, tile.overlay],
                 y: tile.y + this.tileSize * this.boardSize,
                 duration: 450,
             });
@@ -324,7 +335,7 @@ export default class Board {
             const originalY = tile.y;
 
             this.scene.tweens.add({
-                targets: tile,
+                targets: [tile, tile.overlay],
                 duration: 100, // Duration of each shake segment
                 repeat: 2, // Number of shakes
                 yoyo: true, // Go back and forth
@@ -337,6 +348,8 @@ export default class Board {
                     // Optional: Reset sprite position after shaking, in case of rounding errors
                     tile.x = originalX;
                     tile.y = originalY;
+                    tile.overlay.x = originalX;
+                    tile.overlay.y = originalY;
                     this.isAnimating = false;
                 },
             });
@@ -410,7 +423,13 @@ export default class Board {
                 const tileX = boardX + col * this.tileSize;
                 const tileY = boardY + row * this.tileSize;
                 const tileTypeKey = tileKeys[row][col];
-                const tile = new Tile(this.scene, tileX, tileY, tileTypeKey);
+                const tile = new Tile(
+                    this.scene,
+                    tileX,
+                    tileY,
+                    tileTypeKey,
+                    this.tileSize
+                );
                 tile.setInteractive();
                 tile.on("pointerdown", this.selectTile.bind(this, tile));
                 tile.setOrigin(0, 0);
