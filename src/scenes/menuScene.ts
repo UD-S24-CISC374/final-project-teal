@@ -57,7 +57,7 @@ export default class MenuScene extends Phaser.Scene {
             middleHeight + buttonSpacing * index,
             "Settings",
             () => {
-                console.log("implement settings page here");
+                this.scene.start("SettingsScene");
             }
         );
 

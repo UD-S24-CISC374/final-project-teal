@@ -39,6 +39,18 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("background", "assets/img/looseleaf.jpeg");
         this.load.image("title", "assets/img/title-screen-boolean-bonanza.png");
 
+        this.load.image(
+            "sliderHandle",
+            "assets/img/soundSprites/sliderHandle.png"
+        );
+        this.load.image("soundMute", "assets/img/soundSprites/soundMute.png");
+        this.load.image("soundLow", "assets/img/soundSprites/soundLow.png");
+        this.load.image(
+            "soundMedium",
+            "assets/img/soundSprites/soundMedium.png"
+        );
+        this.load.image("soundHigh", "assets/img/soundSprites/soundHigh.png");
+
         this.load.audio("backgroundMusic", "assets/music/bg-music-1.wav");
 
         this.sfx.preload();
