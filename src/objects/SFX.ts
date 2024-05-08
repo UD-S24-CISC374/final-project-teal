@@ -2,7 +2,7 @@ import Phaser from "phaser";
 
 export default class SFX {
     private static SFXInstance: SFX | undefined;
-    private backgroundMusic: Phaser.Sound.BaseSound | undefined;
+    private backgroundMusic: Phaser.Sound.HTML5AudioSound | undefined;
 
     private scene: Phaser.Scene;
     private sfxAudioKeys = [
@@ -15,7 +15,7 @@ export default class SFX {
         "slide-2",
         "sweep-1",
     ];
-    private sfxAudioMap: Map<string, Phaser.Sound.BaseSound>;
+    private sfxAudioMap: Map<string, Phaser.Sound.HTML5AudioSound>;
 
     private constructor(scene: Phaser.Scene) {
         this.scene = scene;
@@ -30,13 +30,16 @@ export default class SFX {
 
     create() {
         this.sfxAudioKeys.forEach((key) => {
-            this.sfxAudioMap.set(key, this.scene.sound.add(key));
+            this.sfxAudioMap.set(
+                key,
+                this.scene.sound.add(key) as Phaser.Sound.HTML5AudioSound
+            );
         });
         if (!this.backgroundMusic) {
             this.backgroundMusic = this.scene.sound.add("backgroundMusic", {
                 loop: true,
                 volume: 0.4,
-            });
+            }) as Phaser.Sound.HTML5AudioSound;
             this.backgroundMusic.play();
         }
     }
@@ -56,5 +59,19 @@ export default class SFX {
             SFX.SFXInstance = new SFX(scene);
         }
         return SFX.SFXInstance;
+    }
+
+    getMusic(): Phaser.Sound.HTML5AudioSound {
+        return this.backgroundMusic as Phaser.Sound.HTML5AudioSound;
+    }
+
+    getSFX(): Map<string, Phaser.Sound.HTML5AudioSound> {
+        return this.sfxAudioMap;
+    }
+
+    setSFXVolume(volume: number) {
+        this.sfxAudioMap.forEach((sfx) => {
+            sfx.setVolume(volume);
+        });
     }
 }

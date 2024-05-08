@@ -5,6 +5,8 @@ import Button from "../objects/Button";
 
 export default class SettingsScene extends Phaser.Scene {
     private sfx: SFX;
+    private music: Phaser.Sound.HTML5AudioSound;
+    private sfxSounds: Map<string, Phaser.Sound.HTML5AudioSound>;
 
     constructor() {
         super({ key: "SettingsScene" });
@@ -14,35 +16,50 @@ export default class SettingsScene extends Phaser.Scene {
     create() {
         const sliderMinX = 600;
         const sliderStartX = 400;
-
         const sliderMaxX = sliderMinX + sliderStartX;
         const sliderY = (this.game.config.height as number) * 0.3;
         const backgroundImage = Background.getInstance(this, "background");
+
         backgroundImage.create();
-        this.sfx.create();
 
-        const volume = this.sound.volume;
-        const volumeMute = this.add
-            .sprite(sliderMaxX + 50, sliderY, "soundMute")
-            .setScale(0.4);
-        const volumeLow = this.add
-            .sprite(sliderMaxX + 50, sliderY, "soundLow")
-            .setScale(0.4);
-        const volumeMedium = this.add
-            .sprite(sliderMaxX + 50, sliderY, "soundMedium")
-            .setScale(0.4);
-        const volumeHigh = this.add
-            .sprite(sliderMaxX + 50, sliderY, "soundHigh")
-            .setScale(0.4);
+        this.music = this.sfx.getMusic();
+        this.sfxSounds = this.sfx.getSFX();
 
-        volumeMute.setVisible(false);
-        volumeLow.setVisible(false);
-        volumeMedium.setVisible(false);
+        // get current volume
+        const musicVolume = this.music.volume;
+        const sfxVolume = this.sfxSounds.get("pop-click-1")?.volume;
+
+        // create volume sprites
+        const musicVolumeSliders = this.createVolumeSprites(
+            sliderMaxX,
+            sliderY,
+            0
+        );
+        const SFXVolumeSliders = this.createVolumeSprites(
+            sliderMaxX,
+            sliderY,
+            50
+        );
+
+        this.volumeSetVisible(musicVolumeSliders, musicVolume);
+        this.volumeSetVisible(SFXVolumeSliders, sfxVolume || 0);
 
         const volumeText = this.add.text(
             350,
             200,
-            `Volume: ${(volume * 100).toFixed(0)}%`,
+            `Music: ${(musicVolume * 100).toFixed(0)}%`,
+            {
+                fontSize: "32px",
+                fontFamily: "Arial",
+                align: "center",
+                color: "#000",
+            }
+        );
+
+        const SFXText = this.add.text(
+            350,
+            250,
+            `SFX: ${(sfxVolume ? sfxVolume * 100 : 0).toFixed(0)}%`,
             {
                 fontSize: "32px",
                 fontFamily: "Arial",
@@ -64,19 +81,35 @@ export default class SettingsScene extends Phaser.Scene {
         );
         settingsText.setOrigin(0.5);
 
-        const sliderBar = this.add.graphics();
-        sliderBar.fillStyle(0x000000, 1);
-        sliderBar.fillRect(sliderMinX, sliderY, sliderStartX, 5);
+        // create slider bars
+        const sliderBarMusic = this.add.graphics();
+        sliderBarMusic.fillStyle(0x000000, 1);
+        sliderBarMusic.fillRect(sliderMinX, sliderY, sliderStartX, 5);
 
-        const sliderHandle = this.add
+        const sliderBarSFX = this.add.graphics();
+        sliderBarSFX.fillStyle(0x000000, 1);
+        sliderBarSFX.fillRect(sliderMinX, sliderY + 50, sliderStartX, 5);
+
+        // create slider handles
+        const sliderHandleMusic = this.add
             .sprite(sliderMinX, sliderY, "sliderHandle")
             .setInteractive();
-        sliderHandle.setInteractive();
+        sliderHandleMusic.setInteractive();
 
-        const soundVolume = this.sound.volume;
-        sliderHandle.x = sliderMinX + soundVolume * sliderStartX;
+        const sliderHandleSFX = this.add
+            .sprite(sliderMinX, sliderY + 50, "sliderHandle")
+            .setInteractive();
+        sliderHandleSFX.setInteractive();
 
-        this.input.setDraggable(sliderHandle);
+        // set the initial position of the slider handles
+        const soundVolumeMusic = this.music.volume;
+        sliderHandleMusic.x = sliderMinX + soundVolumeMusic * sliderStartX;
+
+        const soundVolumeSFX = this.sfxSounds.get("pop-click-1")?.volume;
+        sliderHandleSFX.x = sliderMinX + (soundVolumeSFX || 0) * sliderStartX;
+
+        this.input.setDraggable(sliderHandleMusic);
+        this.input.setDraggable(sliderHandleSFX);
 
         this.input.on(
             "drag",
@@ -85,19 +118,42 @@ export default class SettingsScene extends Phaser.Scene {
                 gameObject: Phaser.GameObjects.GameObject,
                 dragX: number
             ) => {
-                if (dragX >= sliderMinX && dragX <= sliderMaxX) {
-                    (gameObject as Phaser.GameObjects.Image).x = dragX;
+                if (gameObject === sliderHandleMusic) {
+                    if (dragX >= sliderMinX && dragX <= sliderMaxX) {
+                        (gameObject as Phaser.GameObjects.Image).x = dragX;
 
-                    // Update the volume
-                    const volume = (dragX - sliderMinX) / sliderStartX;
-                    this.sound.volume = volume;
+                        // Update the volume
+                        const volume = (dragX - sliderMinX) / sliderStartX;
+                        this.music.volume = volume;
 
-                    volumeText.setText(`Volume: ${(volume * 100).toFixed(0)}%`);
+                        if (volume < 0.01) {
+                            this.music.volume = 0;
+                        }
 
-                    volumeMute.setVisible(volume < 0.01);
-                    volumeLow.setVisible(volume > 0.01 && volume <= 0.33);
-                    volumeMedium.setVisible(volume > 0.33 && volume <= 0.66);
-                    volumeHigh.setVisible(volume > 0.66);
+                        volumeText.setText(
+                            `Music: ${(volume * 100).toFixed(0)}%`
+                        );
+                        this.volumeSetVisible(musicVolumeSliders, volume);
+                    }
+                } else if (gameObject === sliderHandleSFX) {
+                    if (dragX >= sliderMinX && dragX <= sliderMaxX) {
+                        (gameObject as Phaser.GameObjects.Image).x = dragX;
+
+                        // Update the volume
+                        const volume = (dragX - sliderMinX) / sliderStartX;
+                        this.sfxSounds.forEach((sfx) => {
+                            sfx.volume = volume;
+                        });
+
+                        if (volume < 0.01) {
+                            this.sfxSounds.forEach((sfx) => {
+                                sfx.volume = 0;
+                            });
+                        }
+
+                        SFXText.setText(`SFX: ${(volume * 100).toFixed(0)}%`);
+                        this.volumeSetVisible(SFXVolumeSliders, volume);
+                    }
                 }
             }
         );
@@ -112,5 +168,40 @@ export default class SettingsScene extends Phaser.Scene {
             },
             "24px"
         );
+    }
+
+    // Create the volume sprite
+    createVolumeSprites(
+        sliderMaxX: number,
+        sliderY: number,
+        spriteYOffset: number
+    ) {
+        const spriteNames = [
+            "soundMute",
+            "soundLow",
+            "soundMedium",
+            "soundHigh",
+        ];
+        const volumeSprites: { [key: string]: Phaser.GameObjects.Sprite } = {};
+
+        spriteNames.forEach((volumeName) => {
+            volumeSprites[volumeName] = this.add
+                .sprite(sliderMaxX + 50, sliderY + spriteYOffset, volumeName)
+                .setScale(0.4)
+                .setVisible(false);
+        });
+
+        return volumeSprites;
+    }
+
+    // Set the volume sprites visible based on the volume
+    volumeSetVisible(
+        volumeSprites: { [key: string]: Phaser.GameObjects.Sprite },
+        volume: number
+    ) {
+        volumeSprites.soundMute.setVisible(volume < 0.01);
+        volumeSprites.soundLow.setVisible(volume > 0.01 && volume <= 0.33);
+        volumeSprites.soundMedium.setVisible(volume > 0.33 && volume <= 0.66);
+        volumeSprites.soundHigh.setVisible(volume > 0.66);
     }
 }

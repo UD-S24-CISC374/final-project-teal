@@ -6,6 +6,7 @@ import Sketch from "../objects/Sketch";
 
 export default class MenuScene extends Phaser.Scene {
     private sfx: SFX;
+    private sfxCreated: boolean = false;
 
     constructor() {
         super({ key: "MenuScene" });
@@ -15,7 +16,11 @@ export default class MenuScene extends Phaser.Scene {
     create() {
         const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
-        this.sfx.create();
+
+        if (!this.sfxCreated) {
+            this.sfx.create();
+            this.sfxCreated = true;
+        }
 
         // Add title text
 

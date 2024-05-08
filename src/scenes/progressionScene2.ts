@@ -72,8 +72,8 @@ export default class ProgressionScene2 extends Phaser.Scene {
             (
                 pointer: Phaser.Input.Pointer,
                 deltaX: number,
-                deltaY: number,
-                deltaZ: number
+                deltaY: number
+                // deltaZ: number // Not being used
             ) => {
                 this.levels.forEach((level) => (level.y -= deltaY));
                 this.refreshLines(deltaY);
