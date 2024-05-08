@@ -153,6 +153,7 @@ export default class SettingsScene extends Phaser.Scene {
 
                         SFXText.setText(`SFX: ${(volume * 100).toFixed(0)}%`);
                         this.volumeSetVisible(SFXVolumeSliders, volume);
+                        this.sfx.play("pop-click-1");
                     }
                 }
             }
