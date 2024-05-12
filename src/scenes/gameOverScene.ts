@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import Background from "../objects/Background";
+import Button from "../objects/Button";
 export default class GameOverScene extends Phaser.Scene {
     private lastScene: string;
 
@@ -13,29 +15,16 @@ export default class GameOverScene extends Phaser.Scene {
     }
 
     create() {
+        const backgroundImage = Background.getInstance(
+            this,
+            "crumbleBackground"
+        );
+        backgroundImage.create();
         const width: number = this.game.config.width as number;
         const height: number = this.game.config.height as number;
-        this.add
-            .text(width * 0.5, height * 0.3, `Game Over!\n${this.message}`, {
-                fontSize: "40px",
-                fontFamily: "Arial",
-                color: "#000000",
-            })
-            .setOrigin(0.5);
-        const retryButton = this.add
-            .text(width * 0.5, height * 0.45, "Retry", {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: {
-                    x: 20,
-                    y: 10,
-                },
-            })
-            .setInteractive()
-            .setOrigin(0.5);
-        retryButton.on("pointerdown", () => {
+        this.add.image(width * 0.5, height * 0.3, "gameOver").setOrigin(0.5);
+
+        new Button(this, width * 0.5, height * 0.6, "Retry", () => {
             if (this.lastScene === "MainGameScene") {
                 this.scene.start("MainGameScene");
             } else {
@@ -43,21 +32,13 @@ export default class GameOverScene extends Phaser.Scene {
             }
         });
 
-        const menuButton = this.add
-            .text(width * 0.5, height * 0.55, "Menu", {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: {
-                    x: 20,
-                    y: 10,
-                },
-            })
-            .setInteractive()
-            .setOrigin(0.5);
-        menuButton.on("pointerdown", () => {
+        new Button(this, width * 0.5, height * 0.7, "Menu", () => {
             this.scene.start("MenuScene");
         });
+
+        this.add
+            .image(width * 0.8, height * 0.8, "fail")
+            .setOrigin(0.5)
+            .setScale(2);
     }
 }

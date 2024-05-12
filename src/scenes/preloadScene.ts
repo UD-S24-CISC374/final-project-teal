@@ -53,6 +53,13 @@ export default class PreloadScene extends Phaser.Scene {
 
         this.load.audio("backgroundMusic", "assets/music/bg-music-1.wav");
 
+        this.load.image("gameOver", "assets/img/game-over.png");
+        this.load.image(
+            "crumbleBackground",
+            "assets/img/crumbled-paper-background.png"
+        );
+        this.load.image("fail", "assets/img/fail.png");
+
         this.sfx.preload();
         Sketch.preload(this);
     }

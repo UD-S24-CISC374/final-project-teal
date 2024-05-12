@@ -11,7 +11,6 @@ export default class ProgressionScene extends Phaser.Scene {
     private sfx: SFX;
     private gameButtonsShown: Phaser.GameObjects.Text[] = [];
     private tileButtonsShown: Phaser.GameObjects.Sprite[] = [];
-    private isFreePlayMode = false;
     private tileSprites = [
         "trueTile",
         "falseTile",
@@ -23,6 +22,7 @@ export default class ProgressionScene extends Phaser.Scene {
         "rightParenTile",
     ];
     private overlayArray: Phaser.GameObjects.Sprite[] = [];
+    private tileButtonArray: Phaser.GameObjects.Sprite[] = [];
 
     constructor() {
         super({ key: "ProgressionScene" });
@@ -225,6 +225,9 @@ export default class ProgressionScene extends Phaser.Scene {
                     this.overlayArray.forEach((overlay) =>
                         overlay.setVisible(false)
                     );
+                    this.tileButtonArray.forEach((tile) =>
+                        tile.setVisible(false)
+                    );
                 }
             );
         });
@@ -252,7 +255,10 @@ export default class ProgressionScene extends Phaser.Scene {
     }
 
     openFreeplaySettings() {
+        this.overlayArray.forEach((overlay) => overlay.setVisible(false));
+        this.tileButtonArray.forEach((tile) => tile.setVisible(false));
         this.overlayArray = [];
+        this.tileButtonArray = [];
         this.hideGames();
 
         //this function is in need of refactoring..
@@ -328,24 +334,28 @@ export default class ProgressionScene extends Phaser.Scene {
                 settingsY + settingsSpacing + 40,
                 sprite
             );
-            tileButton.setInteractive();
-            tileButton.setScale(0.4);
+            this.tileButtonArray.push(tileButton);
+            this.tileButtonArray[index].setInteractive();
+            this.tileButtonArray[index].setScale(0.4);
 
             const overlay = this.add.sprite(
-                tileButton.x,
-                tileButton.y,
+                this.tileButtonArray[index].x,
+                this.tileButtonArray[index].y,
                 sprite + "Select"
             );
             this.overlayArray.push(overlay);
 
             overlay.setScale(0.4);
-            tileButton.on("pointerdown", () => {
+            overlay.setVisible(false);
+            this.overlayArray.forEach((overlay) => overlay.setVisible(true));
+            this.tileButtonArray[index].on("pointerdown", () => {
                 if (this.overlayArray[index].visible) {
                     this.overlayArray[index].setVisible(false);
 
                     // Find the index of tileButton in the tileButtonsShown array
-                    const tileButtonIndex =
-                        this.tileButtonsShown.indexOf(tileButton);
+                    const tileButtonIndex = this.tileButtonsShown.indexOf(
+                        this.tileButtonArray[index]
+                    );
 
                     // If tileButton exists in the array, remove it
                     if (tileButtonIndex !== -1) {
@@ -353,12 +363,12 @@ export default class ProgressionScene extends Phaser.Scene {
                     }
                 } else {
                     this.overlayArray[index].setVisible(true);
-                    this.tileButtonsShown.push(tileButton);
+                    this.tileButtonsShown.push(this.tileButtonArray[index]);
                 }
 
                 this.sfx.play("pop-click-1");
             });
-            this.tileButtonsShown.push(tileButton);
+            this.tileButtonsShown.push(this.tileButtonArray[index]);
         });
 
         // Time limit
