@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import SFX from "../objects/SFX";
 import Sketch from "../objects/Sketch";
+import victorySketch from "../objects/victorySketch";
 
 export default class PreloadScene extends Phaser.Scene {
     private sfx: SFX;
@@ -59,9 +60,11 @@ export default class PreloadScene extends Phaser.Scene {
             "assets/img/crumbled-paper-background.png"
         );
         this.load.image("fail", "assets/img/fail.png");
+        this.load.image("complete", "assets/img/level-complete.png");
 
         this.sfx.preload();
         Sketch.preload(this);
+        victorySketch.preload(this);
     }
 
     create() {

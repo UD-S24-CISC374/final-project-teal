@@ -1,4 +1,8 @@
 import Phaser from "phaser";
+import Background from "../objects/Background";
+import victorySketch from "../objects/victorySketch";
+import Button from "../objects/Button";
+
 export default class GameVictoryScene extends Phaser.Scene {
     private lastScene: string;
 
@@ -11,28 +15,37 @@ export default class GameVictoryScene extends Phaser.Scene {
     create() {
         const width: number = this.game.config.width as number;
         const height: number = this.game.config.height as number;
-        this.add
-            .text(width * 0.5, height * 0.3, "Victory!", {
-                fontSize: "40px",
-                fontFamily: "Arial",
-                color: "#000000",
-            })
-            .setOrigin(0.5);
+        const backgroundImage = Background.getInstance(this, "background");
+        backgroundImage.create();
+        this.add.image(width * 0.5, height * 0.2, "complete").setOrigin(0.5);
 
-        const menuButton = this.add
-            .text(width * 0.5, height * 0.55, "Menu", {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: {
-                    x: 20,
-                    y: 10,
-                },
-            })
-            .setInteractive()
-            .setOrigin(0.5);
-        menuButton.on("pointerdown", () => {
+        new victorySketch(
+            this,
+            width * 0.2,
+            height * 0.6,
+            200,
+            1.5,
+            1.5,
+            -15,
+            15
+        );
+
+        new victorySketch(
+            this,
+            width * 0.8,
+            height * 0.6,
+            200,
+            1.5,
+            1.5,
+            -15,
+            15
+        );
+
+        new Button(this, width * 0.5, height * 0.6, "Next Level", () => {
+            this.scene.start("MenuScene");
+        });
+
+        new Button(this, width * 0.5, height * 0.7, "Menu", () => {
             this.scene.start("MenuScene");
         });
     }
