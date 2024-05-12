@@ -11,6 +11,19 @@ export default class ProgressionScene extends Phaser.Scene {
     private sfx: SFX;
     private gameButtonsShown: Phaser.GameObjects.Text[] = [];
     private tileButtonsShown: Phaser.GameObjects.Sprite[] = [];
+    private isFreePlayMode = false;
+    private tileSprites = [
+        "trueTile",
+        "falseTile",
+        "andTile",
+        "orTile",
+        "leftParenTile",
+        "notTile",
+        "xorTile",
+        "rightParenTile",
+    ];
+    private overlayArray: Phaser.GameObjects.Sprite[] = [];
+
     constructor() {
         super({ key: "ProgressionScene" });
         this.sfx = SFX.getInstance(this);
@@ -209,6 +222,9 @@ export default class ProgressionScene extends Phaser.Scene {
                 () => {
                     this.currentStage = stage;
                     this.showGames(stage.games);
+                    this.overlayArray.forEach((overlay) =>
+                        overlay.setVisible(false)
+                    );
                 }
             );
         });
@@ -236,6 +252,7 @@ export default class ProgressionScene extends Phaser.Scene {
     }
 
     openFreeplaySettings() {
+        this.overlayArray = [];
         this.hideGames();
 
         //this function is in need of refactoring..
@@ -305,18 +322,7 @@ export default class ProgressionScene extends Phaser.Scene {
 
         this.gameButtonsShown.push(tileLabel);
 
-        const tileSprites = [
-            "trueTile",
-            "falseTile",
-            "andTile",
-            "orTile",
-            "leftParenTile",
-            "notTile",
-            "xorTile",
-            "rightParenTile",
-        ];
-
-        tileSprites.forEach((sprite, index) => {
+        this.tileSprites.forEach((sprite, index) => {
             const tileButton = this.add.sprite(
                 settingsX + index * 50,
                 settingsY + settingsSpacing + 40,
@@ -330,16 +336,24 @@ export default class ProgressionScene extends Phaser.Scene {
                 tileButton.y,
                 sprite + "Select"
             );
-            overlay.setVisible(true);
-            overlay.setScale(0.4);
+            this.overlayArray.push(overlay);
 
+            overlay.setScale(0.4);
             tileButton.on("pointerdown", () => {
-                overlay.setVisible(!overlay.visible);
-                if (!overlay.visible) {
-                    const index = this.tileButtonsShown.indexOf(tileButton);
-                    if (index !== -1) {
-                        this.tileButtonsShown.splice(index, 1);
+                if (this.overlayArray[index].visible) {
+                    this.overlayArray[index].setVisible(false);
+
+                    // Find the index of tileButton in the tileButtonsShown array
+                    const tileButtonIndex =
+                        this.tileButtonsShown.indexOf(tileButton);
+
+                    // If tileButton exists in the array, remove it
+                    if (tileButtonIndex !== -1) {
+                        this.tileButtonsShown.splice(tileButtonIndex, 1);
                     }
+                } else {
+                    this.overlayArray[index].setVisible(true);
+                    this.tileButtonsShown.push(tileButton);
                 }
 
                 this.sfx.play("pop-click-1");
