@@ -30,7 +30,7 @@ Dive into the exciting world of programming with our interactive puzzle game des
 
 # Screenshot
 
-![Screenshot of gameplay in action](docs\large.png)
+![Screenshot of gameplay in action](docs/large.png)
 
 # Gameplay Video
 
@@ -38,7 +38,7 @@ https://drive.google.com/file/d/1C1m25t_aci_TQ4Rk8dyEPvJn0G0vVa6e/view
 
 # Educational Game Design Document
 
-Link to our [https://ud-s24-cisc374.github.io/final-project-teal/docs/egdd](Educational Game Design Document)
+Link to our [https://ud-s24-cisc374.github.io/final-project-teal/docs/egdd] (Educational Game Design Document)
 
 # Credits
 
