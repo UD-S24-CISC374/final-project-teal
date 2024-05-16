@@ -109,7 +109,7 @@ export default class TutorialScene extends baseScene {
 
         this.counter = 0;
         this.time.addEvent({
-            delay: 100,
+            delay: 50,
             callback: () => {
                 this.instructionText.text +=
                     this.instructionString[this.counter];
@@ -295,7 +295,7 @@ export default class TutorialScene extends baseScene {
 
     private buildTutorialText() {
         this.time.addEvent({
-            delay: 100,
+            delay: 50,
             callback: () => {
                 this.instructionText.text +=
                     this.instructionString[this.counter];

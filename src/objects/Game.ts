@@ -172,7 +172,18 @@ export default class Game {
 
         const objectiveSpacing = 60;
 
-        scene.add.text(10, 220, "Make a statement with:", {
+        scene.add.text(10, 220, "Make a", {
+            fontSize: "25px",
+            color: "#000",
+        });
+
+        scene.add.text(100, 220, " TRUE ", {
+            fontSize: "25px",
+            color: "#006400",
+            fontStyle: "bold",
+        });
+
+        scene.add.text(10, 240, "statement with:", {
             fontSize: "25px",
             color: "#000",
         });
@@ -182,7 +193,7 @@ export default class Game {
             objective.createObjectiveText(
                 scene,
                 10,
-                260 + objectiveSpacing * index
+                270 + objectiveSpacing * index
             );
             index++;
         });
