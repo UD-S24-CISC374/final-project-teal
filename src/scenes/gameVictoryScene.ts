@@ -2,10 +2,12 @@ import Phaser from "phaser";
 import Background from "../objects/Background";
 import victorySketch from "../objects/victorySketch";
 import Button from "../objects/Button";
+import Stage from "../objects/Stages";
+import Game from "../objects/Game";
 
 export default class GameVictoryScene extends Phaser.Scene {
     private lastScene: string;
-
+    private allLevelsCompleted: boolean = false;
     constructor() {
         super({ key: "GameVictoryScene" });
     }
@@ -41,9 +43,59 @@ export default class GameVictoryScene extends Phaser.Scene {
             15
         );
 
-        new Button(this, width * 0.5, height * 0.6, "Next Level", () => {
-            this.scene.start("MenuScene");
-        });
+        this.allLevelsCompleted = false;
+        const stages = this.data.get("stages") as Stage[];
+        let currentStage = this.data.get("currentStage") as string;
+        let currentGame = this.data.get("currentGame") as string;
+
+        // return 0 for stage 1, 1 for stage 2, 2 for stage 3
+        let currentStageIndex = stages.findIndex(
+            (stage) => stage.name === currentStage
+        );
+
+        if (currentStage === "Freeplay") {
+            currentStageIndex = 0;
+        }
+
+        // return 0 for game 1, 1 for game 2, 2 for game 3
+        let currentGameIndex = stages[currentStageIndex].games.findIndex(
+            (game) => game.name === currentGame
+        );
+
+        let nextGame: Game;
+        if (currentGameIndex < stages[currentStageIndex].games.length - 1) {
+            nextGame = stages[currentStageIndex].games[currentGameIndex + 1];
+        } else if (currentStageIndex < stages.length - 1) {
+            currentStageIndex++;
+            currentGameIndex = 0;
+            nextGame = stages[currentStageIndex].games[currentGameIndex];
+        } else {
+            this.allLevelsCompleted = true;
+        }
+
+        if (this.allLevelsCompleted) {
+            this.add
+                .text(width * 0.5, height * 0.5, "All Levels Completed", {
+                    font: "48px Arial",
+                    color: "#000000",
+                    align: "center",
+                })
+                .setOrigin(0.5, 0.5);
+        } else if (currentStage === "Freeplay") {
+            this.add
+                .text(width * 0.5, height * 0.5, "", {
+                    font: "48px Arial",
+                    color: "#000000",
+                    align: "center",
+                })
+                .setOrigin(0.5, 0.5);
+        } else {
+            new Button(this, width * 0.5, height * 0.6, "Next Level", () => {
+                this.data.set("currentGame", nextGame.name);
+                this.data.set("currentStage", stages[currentStageIndex].name);
+                this.scene.start("MainGameScene", nextGame);
+            });
+        }
 
         new Button(this, width * 0.5, height * 0.7, "Menu", () => {
             this.scene.start("MenuScene");

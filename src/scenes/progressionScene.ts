@@ -198,6 +198,8 @@ export default class ProgressionScene extends Phaser.Scene {
             ]),
         ];
 
+        this.scene.get("GameVictoryScene").data.set("stages", stages);
+
         this.stageTitleText = this.add.text(
             screenWidth * 0.5,
             50,
@@ -594,6 +596,9 @@ export default class ProgressionScene extends Phaser.Scene {
                 initialSwaps,
                 valueObjectives
             );
+            this.scene
+                .get("GameVictoryScene")
+                .data.set("currentStage", "Freeplay");
             game.startGame(this);
         });
         this.gameButtonsShown.push(startGameButton);
@@ -676,6 +681,13 @@ export default class ProgressionScene extends Phaser.Scene {
             gameButton.on("pointerdown", () => {
                 this.sfx.play("crumple-paper-1");
                 // Start the selected game scene
+
+                this.scene
+                    .get("GameVictoryScene")
+                    .data.set("currentStage", this.stageTitleText.text);
+                this.scene
+                    .get("GameVictoryScene")
+                    .data.set("currentGame", game.name);
                 if (
                     this.stageTitleText.text === "Beginner" &&
                     game.name === "Tutorial"
