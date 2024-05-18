@@ -19,7 +19,20 @@ export default class GameVictoryScene extends Phaser.Scene {
         const height: number = this.game.config.height as number;
         const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
-        this.add.image(width * 0.5, height * 0.2, "complete").setOrigin(0.5);
+        const completeImage = this.add
+            .image(width * 0.5, height * 0.2, "complete")
+            .setOrigin(0.5);
+
+        this.tweens.add({
+            targets: completeImage,
+            scale: 1.1,
+            duration: 1200,
+            yoyo: true,
+            repeat: -1,
+            ease: "Sine.easeOut",
+        });
+
+        completeImage.setDepth(1);
 
         new victorySketch(
             this,
