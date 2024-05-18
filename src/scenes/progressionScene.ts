@@ -269,7 +269,7 @@ export default class ProgressionScene extends Phaser.Scene {
     }
 
     openFreeplaySettings() {
-        this.hideGames();
+        this.scene.start("FreeplayScene");
     }
 
     hideGames() {
