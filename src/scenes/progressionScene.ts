@@ -5,6 +5,17 @@ import Background from "../objects/Background";
 import SFX from "../objects/SFX";
 import Button from "../objects/Button";
 
+function createButton(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    label: string,
+    callback: () => void,
+    fontSize: string = "24px"
+) {
+    return new Button(scene, x, y, label, callback, fontSize).setOrigin(0.5);
+}
+
 function createNavigationButtons(
     scene: Phaser.Scene,
     screenWidth: number,
@@ -198,17 +209,6 @@ function createText(
     const textObj = scene.add.text(x, y, text, style);
     textObj.setOrigin(0.5);
     return textObj;
-}
-
-function createButton(
-    scene: Phaser.Scene,
-    x: number,
-    y: number,
-    label: string,
-    callback: () => void,
-    fontSize: string = "24px"
-) {
-    return new Button(scene, x, y, label, callback, fontSize).setOrigin(0.5);
 }
 
 export default class ProgressionScene extends Phaser.Scene {
