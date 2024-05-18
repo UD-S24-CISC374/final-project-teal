@@ -331,7 +331,7 @@ export default class FreeplayScene extends Phaser.Scene {
             this.sfx.play("crumple-paper-1");
 
             const game = new Game(
-                0,
+                -1,
                 "Freeplay",
                 this.tileButtonsShown
                     .filter((tile) => tile.overlay.visible)
@@ -342,6 +342,8 @@ export default class FreeplayScene extends Phaser.Scene {
                 initialSwaps,
                 valueObjectives
             );
+            this.registry.set("currentStage", game.name);
+            this.registry.set("currentGame", game.name);
             game.startGame(this);
         });
         startGameButton.on("pointerover", () => {
