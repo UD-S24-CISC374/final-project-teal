@@ -45,9 +45,12 @@ export default class GameVictoryScene extends Phaser.Scene {
 
         this.allLevelsCompleted = false;
         const stages = this.registry.get("stages") as Stage[];
-        console.log(stages);
+        //console.log(stages);
         let currentStage = this.registry.get("currentStage") as string;
         let currentGame = this.registry.get("currentGame") as string;
+
+        let currentLevel = this.registry.get("level") || 0;
+        this.registry.set("level", ++currentLevel);
 
         // return 0 for stage 1, 1 for stage 2, 2 for stage 3
         let currentStageIndex = stages.findIndex(

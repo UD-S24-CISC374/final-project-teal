@@ -16,10 +16,10 @@ export default class ProgressionScene extends Phaser.Scene {
     constructor() {
         super({ key: "ProgressionScene" });
         this.sfx = SFX.getInstance(this);
-        this.stages = this.createStages();
     }
 
     create() {
+        this.stages = this.createStages();
         const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();
         const screenWidth = this.game.config.width as number;
@@ -102,6 +102,10 @@ export default class ProgressionScene extends Phaser.Scene {
     }
 
     createStages(): Stage[] {
+        let currentLevel = this.registry.get("level") || 0;
+        console.log("level: ", currentLevel);
+        //currentLevel = 0;
+        let levelCount = 0;
         return [
             new Stage("Beginner", [
                 new Game(
@@ -112,9 +116,18 @@ export default class ProgressionScene extends Phaser.Scene {
                     99,
                     99,
                     1,
-                    false
+                    currentLevel < levelCount++
                 ),
-                new Game("Game 1", ["trueTile", "andTile"], 3, 100, 3, 99, 1),
+                new Game(
+                    "Game 1",
+                    ["trueTile", "andTile"],
+                    3,
+                    100,
+                    3,
+                    99,
+                    1,
+                    currentLevel < levelCount++
+                ),
                 new Game(
                     "Game 2",
                     ["trueTile", "falseTile", "orTile", "andTile"],
@@ -122,7 +135,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     100,
                     3,
                     99,
-                    2
+                    2,
+                    currentLevel < levelCount++
                 ),
                 new Game(
                     "Game 3",
@@ -131,7 +145,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     100,
                     3,
                     99,
-                    2
+                    2,
+                    currentLevel < levelCount++
                 ),
             ]),
             new Stage("Intermediate", [
@@ -142,7 +157,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     120,
                     2,
                     20,
-                    3
+                    3,
+                    currentLevel < levelCount++
                 ),
                 new Game(
                     "Game 2",
@@ -151,7 +167,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     120,
                     2,
                     20,
-                    3
+                    3,
+                    currentLevel < levelCount++
                 ),
                 new Game(
                     "Game 3",
@@ -160,7 +177,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     120,
                     2,
                     20,
-                    3
+                    3,
+                    currentLevel < levelCount++
                 ),
                 new Game(
                     "Game 4",
@@ -169,7 +187,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     120,
                     2,
                     20,
-                    3
+                    3,
+                    currentLevel < levelCount++
                 ),
                 new Game(
                     "Game 5",
@@ -185,7 +204,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     120,
                     2,
                     20,
-                    3
+                    3,
+                    currentLevel < levelCount++
                 ),
             ]),
             new Stage("Advanced", [
@@ -196,7 +216,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     120,
                     1,
                     30,
-                    3
+                    3,
+                    currentLevel < levelCount++
                 ),
                 new Game(
                     "Game 2",
@@ -212,7 +233,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     120,
                     1,
                     30,
-                    3
+                    3,
+                    currentLevel < levelCount++
                 ),
                 new Game(
                     "Game 3",
@@ -229,7 +251,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     120,
                     1,
                     30,
-                    3
+                    3,
+                    currentLevel < levelCount++
                 ),
                 new Game(
                     "Game 4",
@@ -247,7 +270,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     120,
                     1,
                     30,
-                    3
+                    3,
+                    currentLevel < levelCount++
                 ),
             ]),
         ];
