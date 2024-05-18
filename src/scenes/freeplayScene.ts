@@ -366,7 +366,7 @@ export default class FreeplayScene extends Phaser.Scene {
         this.gameButtonsShown.push(startGameButton);
 
         // Add back button
-        new Button(
+        const backButton = new Button(
             this,
             70,
             70,
@@ -376,6 +376,8 @@ export default class FreeplayScene extends Phaser.Scene {
             },
             "32px"
         );
+        backButton.setDepth(1);
+
         const maxWidth = this.game.config.width as number;
         const maxHeight = this.game.config.height as number;
 

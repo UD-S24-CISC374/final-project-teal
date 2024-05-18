@@ -31,7 +31,7 @@ export default class CreditsScene extends Phaser.Scene {
         );
         creditsText.setOrigin(0.5);
 
-        /*const backButton = */ new Button(
+        const backButton = new Button(
             this,
             70,
             70,
@@ -41,6 +41,7 @@ export default class CreditsScene extends Phaser.Scene {
             },
             "24px"
         );
+        backButton.setDepth(1);
 
         const maxWidth = this.game.config.width as number;
         const maxHeight = this.game.config.height as number;

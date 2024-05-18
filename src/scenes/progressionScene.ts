@@ -26,7 +26,9 @@ function createButton(
     callback: () => void,
     fontSize: string = "24px"
 ) {
-    return new Button(scene, x, y, label, callback, fontSize).setOrigin(0.5);
+    return new Button(scene, x, y, label, callback, fontSize)
+        .setOrigin(0.5)
+        .setDepth(1);
 }
 
 function createNavigationButtons(

@@ -54,7 +54,7 @@ export default class ControlScene extends baseScene {
         controlsText.setOrigin(0.5, 0.5);
 
         // Add a back button
-        /*const backButton = */ new Button(
+        const backButton = new Button(
             this,
             70,
             70,
@@ -64,6 +64,7 @@ export default class ControlScene extends baseScene {
             },
             "24px"
         );
+        backButton.setDepth(1);
 
         const maxWidth = this.game.config.width as number;
         const maxHeight = this.game.config.height as number;

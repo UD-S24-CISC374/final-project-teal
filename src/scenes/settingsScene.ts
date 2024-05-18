@@ -160,7 +160,7 @@ export default class SettingsScene extends Phaser.Scene {
             }
         );
 
-        new Button(
+        const backButton = new Button(
             this,
             70,
             70,
@@ -170,6 +170,8 @@ export default class SettingsScene extends Phaser.Scene {
             },
             "24px"
         );
+        backButton.setDepth(1);
+
         const maxWidth = this.game.config.width as number;
         const maxHeight = this.game.config.height as number;
 
