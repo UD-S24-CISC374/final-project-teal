@@ -44,9 +44,10 @@ export default class GameVictoryScene extends Phaser.Scene {
         );
 
         this.allLevelsCompleted = false;
-        const stages = this.data.get("stages") as Stage[];
-        let currentStage = this.data.get("currentStage") as string;
-        let currentGame = this.data.get("currentGame") as string;
+        const stages = this.registry.get("stages") as Stage[];
+        console.log(stages);
+        let currentStage = this.registry.get("currentStage") as string;
+        let currentGame = this.registry.get("currentGame") as string;
 
         // return 0 for stage 1, 1 for stage 2, 2 for stage 3
         let currentStageIndex = stages.findIndex(
@@ -91,8 +92,11 @@ export default class GameVictoryScene extends Phaser.Scene {
                 .setOrigin(0.5, 0.5);
         } else {
             new Button(this, width * 0.5, height * 0.6, "Next Level", () => {
-                this.data.set("currentGame", nextGame.name);
-                this.data.set("currentStage", stages[currentStageIndex].name);
+                this.registry.set("currentGame", nextGame.name);
+                this.registry.set(
+                    "currentStage",
+                    stages[currentStageIndex].name
+                );
                 this.scene.start("MainGameScene", nextGame);
             });
         }

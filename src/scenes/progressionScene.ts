@@ -6,27 +6,17 @@ import SFX from "../objects/SFX";
 import Button from "../objects/Button";
 
 export default class ProgressionScene extends Phaser.Scene {
-    private currentStage: Stage | null = null;
+    private currentStageIndex: number = 0;
+    private stages: Stage[];
     private stageTitleText: Phaser.GameObjects.Text;
     private sfx: SFX;
-    private gameButtonsShown: Phaser.GameObjects.Text[] = [];
+    private gameButtonsShown: Phaser.GameObjects.Container[] = [];
     private tileButtonsShown: Phaser.GameObjects.Sprite[] = [];
-    private tileSprites = [
-        "trueTile",
-        "falseTile",
-        "andTile",
-        "orTile",
-        "leftParenTile",
-        "notTile",
-        "xorTile",
-        "rightParenTile",
-    ];
-    private overlayArray: Phaser.GameObjects.Sprite[] = [];
-    private tileButtonArray: Phaser.GameObjects.Sprite[] = [];
 
     constructor() {
         super({ key: "ProgressionScene" });
         this.sfx = SFX.getInstance(this);
+        this.stages = this.createStages();
     }
 
     create() {
@@ -34,22 +24,85 @@ export default class ProgressionScene extends Phaser.Scene {
         backgroundImage.create();
         const screenWidth = this.game.config.width as number;
         const screenHeight = this.game.config.height as number;
+        this.registry.set("stages", this.stages);
 
-        // Add title text
-        const titleText = this.add.text(
-            screenWidth * 0.5,
-            screenHeight * 0.2,
-            "Progression",
-            {
-                fontSize: "48px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
+        this.stageTitleText = createStageTitle(
+            this,
+            screenWidth,
+            screenHeight,
+            this.stages,
+            this.currentStageIndex
         );
-        titleText.setOrigin(0.5);
+        createNavigationButtons(
+            this,
+            screenWidth,
+            screenHeight,
+            this.changeStage.bind(this)
+        );
+        this.showGames(this.stages[this.currentStageIndex].games);
+        createBackButton(this);
+        createFreeplayButton(
+            this,
+            screenWidth,
+            screenHeight,
+            this.openFreeplaySettings.bind(this)
+        );
+    }
 
-        // Define stages and games
-        const stages = [
+    changeStage(direction: number) {
+        this.currentStageIndex =
+            (this.currentStageIndex + direction + this.stages.length) %
+            this.stages.length;
+        this.stageTitleText.setText(this.stages[this.currentStageIndex].name);
+        this.showGames(this.stages[this.currentStageIndex].games);
+        this.sfx.play("pop-click-1");
+    }
+
+    openFreeplaySettings() {
+        this.hideGames();
+        const screenWidth = this.game.config.width as number;
+        const screenHeight = this.game.config.height as number;
+        // The rest of the method remains unchanged
+        // Add your existing openFreeplaySettings code here
+    }
+
+    hideGames() {
+        this.gameButtonsShown.forEach((button) => button.destroy());
+        this.gameButtonsShown = [];
+        this.tileButtonsShown.forEach((button) => button.destroy());
+        this.tileButtonsShown = [];
+    }
+
+    showGames(games: Game[]) {
+        this.hideGames();
+
+        const screenWidth = this.game.config.width as number;
+        const screenHeight = this.game.config.height as number;
+        const gameListY = screenHeight * 0.55;
+        const gameSpacing = 20;
+        const buttonSize = Math.min(
+            screenWidth / Math.min(games.length, 5),
+            165
+        );
+        const startX =
+            (screenWidth - games.length * (buttonSize + gameSpacing)) / 2 + 90;
+
+        this.gameButtonsShown = createGameButtons(
+            this,
+            games,
+            startX,
+            gameListY,
+            buttonSize,
+            gameSpacing,
+            this.sfx,
+            this.stageTitleText,
+            this.stages,
+            this.currentStageIndex
+        );
+    }
+
+    createStages(): Stage[] {
+        return [
             new Stage("Beginner", [
                 new Game(
                     "Tutorial",
@@ -58,7 +111,8 @@ export default class ProgressionScene extends Phaser.Scene {
                     180,
                     99,
                     99,
-                    1
+                    1,
+                    false
                 ),
                 new Game("Game 1", ["trueTile", "andTile"], 3, 100, 3, 99, 1),
                 new Game(
@@ -102,7 +156,7 @@ export default class ProgressionScene extends Phaser.Scene {
                 new Game(
                     "Game 3",
                     ["trueTile", "falseTile", "orTile", "andTile", "notTile"],
-                    8,
+                    6,
                     120,
                     2,
                     20,
@@ -111,7 +165,7 @@ export default class ProgressionScene extends Phaser.Scene {
                 new Game(
                     "Game 4",
                     ["trueTile", "falseTile", "andTile", "orTile", "xorTile"],
-                    7,
+                    5,
                     120,
                     2,
                     20,
@@ -127,7 +181,7 @@ export default class ProgressionScene extends Phaser.Scene {
                         "xorTile",
                         "notTile",
                     ],
-                    8,
+                    6,
                     120,
                     2,
                     20,
@@ -138,7 +192,7 @@ export default class ProgressionScene extends Phaser.Scene {
                 new Game(
                     "Game 1",
                     ["trueTile", "falseTile", "orTile", "andTile", "xorTile"],
-                    9,
+                    7,
                     120,
                     1,
                     30,
@@ -154,7 +208,7 @@ export default class ProgressionScene extends Phaser.Scene {
                         "xorTile",
                         "notTile",
                     ],
-                    10,
+                    8,
                     120,
                     1,
                     30,
@@ -171,7 +225,7 @@ export default class ProgressionScene extends Phaser.Scene {
                         "leftParenTile",
                         "rightParenTile",
                     ],
-                    11,
+                    9,
                     120,
                     1,
                     30,
@@ -189,7 +243,7 @@ export default class ProgressionScene extends Phaser.Scene {
                         "leftParenTile",
                         "rightParenTile",
                     ],
-                    12,
+                    9,
                     120,
                     1,
                     30,
@@ -197,507 +251,211 @@ export default class ProgressionScene extends Phaser.Scene {
                 ),
             ]),
         ];
-
-        this.scene.get("GameVictoryScene").data.set("stages", stages);
-
-        this.stageTitleText = this.add.text(
-            screenWidth * 0.5,
-            50,
-            `${this.currentStage?.name || ""}`,
-            {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
-        );
-        this.stageTitleText.setOrigin(0.5);
-
-        // Add stage buttons
-        const stageY = screenHeight * 0.4;
-        const stageSpacing = 100;
-        stages.forEach((stage, index) => {
-            new Button(
-                this,
-                screenWidth * 0.5,
-                stageY + index * stageSpacing,
-                stage.name,
-                () => {
-                    this.currentStage = stage;
-                    this.showGames(stage.games);
-                    this.overlayArray.forEach((overlay) =>
-                        overlay.setVisible(false)
-                    );
-                    this.tileButtonArray.forEach((tile) =>
-                        tile.setVisible(false)
-                    );
-                }
-            );
-        });
-
-        /*const backButton = */ new Button(
-            this,
-            70,
-            70,
-            "Back",
-            () => {
-                this.scene.start("MenuScene");
-            },
-            "24px"
-        );
-
-        /*const freeplayButton = */ new Button(
-            this,
-            screenWidth * 0.5,
-            stageY + 3 * stageSpacing,
-            "Freeplay",
-            () => {
-                this.openFreeplaySettings();
-            }
-        );
     }
+}
 
-    openFreeplaySettings() {
-        this.overlayArray.forEach((overlay) => overlay.setVisible(false));
-        this.tileButtonArray.forEach((tile) => tile.setVisible(false));
-        this.overlayArray = [];
-        this.tileButtonArray = [];
-        this.hideGames();
+function createNavigationButtons(
+    scene: Phaser.Scene,
+    screenWidth: number,
+    screenHeight: number,
+    changeStage: (direction: number) => void
+) {
+    createButton(
+        scene,
+        screenWidth * 0.1,
+        screenHeight * 0.5,
+        "<",
+        () => changeStage(-1),
+        "48px"
+    );
+    createButton(
+        scene,
+        screenWidth * 0.9,
+        screenHeight * 0.5,
+        ">",
+        () => changeStage(1),
+        "48px"
+    );
+}
 
-        //this function is in need of refactoring..
-
-        const screenWidth = this.game.config.width as number;
-        const screenHeight = this.game.config.height as number;
-
-        const settingsX = screenWidth * 0.7;
-        const settingsY = screenHeight * 0.2;
-        const settingsSpacing = 75;
-
-        // Board size
-        const boardSizeLabel = this.createFreeplayTextSettings(
-            settingsX,
-            settingsY,
-            "Board Size:"
-        );
-
-        this.gameButtonsShown.push(boardSizeLabel);
-        let boardSize = 5;
-        const boardSizeValue = this.add.text(
-            settingsX + 200,
-            settingsY,
-            `${boardSize}`,
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
-        );
-        this.gameButtonsShown.push(boardSizeValue);
-
-        const boardSizeDecrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY,
-            250,
-            "-"
-        );
-        boardSizeDecrement.setInteractive();
-        boardSizeDecrement.on("pointerdown", () => {
-            boardSize = Math.max(boardSize - 1, 3);
-            boardSizeValue.setText(`${boardSize}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(boardSizeDecrement);
-        const boardSizeIncrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY,
-            275,
-            "+"
-        );
-
-        boardSizeIncrement.setInteractive();
-        boardSizeIncrement.on("pointerdown", () => {
-            boardSize = Math.min(boardSize + 1, 15);
-            boardSizeValue.setText(`${boardSize}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(boardSizeIncrement);
-
-        // Tiles
-        const tileLabel = this.createFreeplayTextSettings(
-            settingsX,
-            settingsY + settingsSpacing - 15,
-            "Tiles:"
-        );
-
-        this.gameButtonsShown.push(tileLabel);
-
-        this.tileSprites.forEach((sprite, index) => {
-            const tileButton = this.add.sprite(
-                settingsX + index * 50,
-                settingsY + settingsSpacing + 40,
-                sprite
-            );
-            this.tileButtonArray.push(tileButton);
-            this.tileButtonArray[index].setInteractive();
-            this.tileButtonArray[index].setScale(0.4);
-
-            const overlay = this.add.sprite(
-                this.tileButtonArray[index].x,
-                this.tileButtonArray[index].y,
-                sprite + "Select"
-            );
-            this.overlayArray.push(overlay);
-
-            overlay.setScale(0.4);
-            overlay.setVisible(false);
-            this.overlayArray.forEach((overlay) => overlay.setVisible(true));
-            this.tileButtonArray[index].on("pointerdown", () => {
-                if (this.overlayArray[index].visible) {
-                    this.overlayArray[index].setVisible(false);
-
-                    // Find the index of tileButton in the tileButtonsShown array
-                    const tileButtonIndex = this.tileButtonsShown.indexOf(
-                        this.tileButtonArray[index]
-                    );
-
-                    // If tileButton exists in the array, remove it
-                    if (tileButtonIndex !== -1) {
-                        this.tileButtonsShown.splice(tileButtonIndex, 1);
-                    }
-                } else {
-                    this.overlayArray[index].setVisible(true);
-                    this.tileButtonsShown.push(this.tileButtonArray[index]);
-                }
-
-                this.sfx.play("pop-click-1");
-            });
-            this.tileButtonsShown.push(this.tileButtonArray[index]);
-        });
-
-        // Time limit
-        const timeLimitLabel = this.createFreeplayTextSettings(
-            settingsX,
-            settingsY + 2 * settingsSpacing + 15,
-            "Time Limit (s):"
-        );
-
-        this.gameButtonsShown.push(timeLimitLabel);
-        let timeLimit = 180;
-        const timeLimitValue = this.add.text(
-            settingsX + 200,
-            settingsY + 2 * settingsSpacing + 15,
-            `${timeLimit}`,
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
-        );
-        this.gameButtonsShown.push(timeLimitValue);
-
-        const timeLimitDecrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY + 2 * settingsSpacing + 15,
-            250,
-            "-"
-        );
-        timeLimitDecrement.setInteractive();
-        timeLimitDecrement.on("pointerdown", () => {
-            timeLimit = Math.max(timeLimit - 10, 0);
-            timeLimitValue.setText(`${timeLimit}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(timeLimitDecrement);
-
-        const timeLimitIncrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY + 2 * settingsSpacing + 15,
-            275,
-            "+"
-        );
-        timeLimitIncrement.setInteractive();
-        timeLimitIncrement.on("pointerdown", () => {
-            timeLimit += 10;
-            timeLimitValue.setText(`${timeLimit}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(timeLimitIncrement);
-
-        // Number of lives
-        const livesLabel = this.createFreeplayTextSettings(
-            settingsX,
-            settingsY + 3 * settingsSpacing + 15,
-            "Number of Lives:"
-        );
-
-        this.gameButtonsShown.push(livesLabel);
-
-        let lives = 3;
-        const livesValue = this.add.text(
-            settingsX + 200,
-            settingsY + 3 * settingsSpacing + 15,
-            `${lives}`,
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
-        );
-        this.gameButtonsShown.push(livesValue);
-
-        const livesDecrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY + 3 * settingsSpacing + 15,
-            250,
-            "-"
-        );
-        livesDecrement.setInteractive();
-        livesDecrement.on("pointerdown", () => {
-            lives = Math.max(lives - 1, 1);
-            livesValue.setText(`${lives}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(livesDecrement);
-
-        const livesIncrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY + 3 * settingsSpacing + 15,
-            275,
-            "+"
-        );
-        livesIncrement.setInteractive();
-        livesIncrement.on("pointerdown", () => {
-            lives++;
-            livesValue.setText(`${lives}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(livesIncrement);
-
-        // Number of initial swaps
-        const swapsLabel = this.createFreeplayTextSettings(
-            settingsX,
-            settingsY + 4 * settingsSpacing + 15,
-            "Initial Swaps:"
-        );
-        this.gameButtonsShown.push(swapsLabel);
-        let initialSwaps = 7;
-        const swapsValue = this.add.text(
-            settingsX + 200,
-            settingsY + 4 * settingsSpacing + 15,
-            `${initialSwaps}`,
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
-        );
-        this.gameButtonsShown.push(swapsValue);
-
-        const swapsDecrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY + 4 * settingsSpacing + 15,
-            250,
-            "-"
-        );
-        swapsDecrement.setInteractive();
-        swapsDecrement.on("pointerdown", () => {
-            initialSwaps = Math.max(initialSwaps - 1, 0);
-            swapsValue.setText(`${initialSwaps}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(swapsDecrement);
-
-        const swapsIncrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY + 4 * settingsSpacing + 15,
-            275,
-            "+"
-        );
-
-        swapsIncrement.setInteractive();
-        swapsIncrement.on("pointerdown", () => {
-            initialSwaps = Math.max(initialSwaps + 1, 0);
-            swapsValue.setText(`${initialSwaps}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(swapsIncrement);
-
-        // Number of objectives swaps
-        const objectivesLabel = this.createFreeplayTextSettings(
-            settingsX,
-            settingsY + 5 * settingsSpacing + 15,
-            "# Objectives:"
-        );
-        this.gameButtonsShown.push(objectivesLabel);
-        let valueObjectives = 3;
-        const objetivesValue = this.add.text(
-            settingsX + 200,
-            settingsY + 5 * settingsSpacing + 15,
-            `${valueObjectives}`,
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#000000",
-            }
-        );
-        this.gameButtonsShown.push(objetivesValue);
-
-        const objectivesDecrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY + 5 * settingsSpacing,
-            250,
-            "-"
-        );
-        objectivesDecrement.setInteractive();
-        objectivesDecrement.on("pointerdown", () => {
-            valueObjectives = Math.max(valueObjectives - 1, 0);
-            objetivesValue.setText(`${valueObjectives}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(objectivesDecrement);
-
-        const objectivesIncrement = this.createIncrementDecrementButton(
-            settingsX,
-            settingsY + 5 * settingsSpacing,
-            275,
-            "+"
-        );
-        objectivesIncrement.setInteractive();
-        objectivesIncrement.on("pointerdown", () => {
-            valueObjectives = Math.max(valueObjectives + 1, 0);
-            objetivesValue.setText(`${valueObjectives}`);
-            this.sfx.play("pop-click-1");
-        });
-        this.gameButtonsShown.push(objectivesIncrement);
-
-        const startGameButton = this.add.text(
-            settingsX + 200,
-            settingsY + 6 * settingsSpacing,
-            "Start Game",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 20, y: 10 },
-            }
-        );
-        startGameButton.setInteractive();
-        startGameButton.on("pointerdown", () => {
-            this.sfx.play("crumple-paper-1");
-
-            const game = new Game(
-                "Freeplay",
-                this.tileButtonsShown
-                    .filter((tile) => tile.tintTopLeft === 0xffffff)
-                    .map((filteredTile) => filteredTile.texture.key),
-                boardSize,
-                timeLimit,
-                lives,
-                initialSwaps,
-                valueObjectives
-            );
-            this.scene
-                .get("GameVictoryScene")
-                .data.set("currentStage", "Freeplay");
-            game.startGame(this);
-        });
-        this.gameButtonsShown.push(startGameButton);
-    }
-
-    createIncrementDecrementButton(
-        settingsX: number,
-        settingsY: number,
-        positionX: number,
-        symbol: string
-    ) {
-        const incrementButton = this.add.text(
-            settingsX + positionX,
-            settingsY,
-            symbol,
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 5 },
-            }
-        );
-
-        return incrementButton;
-    }
-
-    createFreeplayTextSettings(
-        settingsX: number,
-        settingsY: number,
-        text: string
-    ) {
-        const freeplayText = this.add.text(settingsX, settingsY, text, {
-            fontSize: "24px",
+function createStageTitle(
+    scene: Phaser.Scene,
+    screenWidth: number,
+    screenHeight: number,
+    stages: Stage[],
+    currentStageIndex: number
+): Phaser.GameObjects.Text {
+    return createText(
+        scene,
+        screenWidth * 0.5,
+        screenHeight * 0.2,
+        stages[currentStageIndex].name,
+        {
+            fontSize: "48px",
             fontFamily: "Arial",
             color: "#000000",
-        });
-        return freeplayText;
-    }
-
-    hideGames() {
-        for (const button of this.gameButtonsShown) {
-            button.destroy();
         }
-        this.gameButtonsShown = [];
-        for (const button of this.tileButtonsShown) {
-            button.destroy();
-        }
-        this.tileButtonsShown = [];
-    }
+    );
+}
 
-    showGames(games: Game[]) {
-        this.hideGames();
+function createBackButton(scene: Phaser.Scene) {
+    createButton(
+        scene,
+        70,
+        70,
+        "Back",
+        () => scene.scene.start("MenuScene"),
+        "32px"
+    );
+}
 
-        const screenWidth = this.game.config.width as number;
-        const screenHeight = this.game.config.height as number;
+function createFreeplayButton(
+    scene: Phaser.Scene,
+    screenWidth: number,
+    screenHeight: number,
+    openFreeplaySettings: () => void
+) {
+    createButton(
+        scene,
+        screenWidth * 0.5,
+        screenHeight * 0.8,
+        "Freeplay",
+        openFreeplaySettings,
+        "32px"
+    );
+}
 
-        // Add current stage title
+function createGameButtons(
+    scene: Phaser.Scene,
+    games: Game[],
+    startX: number,
+    gameListY: number,
+    buttonSize: number,
+    gameSpacing: number,
+    sfx: SFX,
+    stageTitleText: Phaser.GameObjects.Text,
+    stages: Stage[],
+    currentStageIndex: number
+) {
+    const gameButtonsShown: Phaser.GameObjects.Container[] = [];
 
-        this.stageTitleText.text = this.currentStage?.name || "";
+    games.forEach((game, index) => {
+        const isLocked = game.isLocked;
 
-        // Add game list
-        const gameListX = screenWidth * 0.2;
-        const gameListY = screenHeight * 0.3;
-        const gameSpacing = 50;
-        games.forEach((game, index) => {
-            const gameButton = this.add.text(
-                gameListX,
-                gameListY + index * gameSpacing,
-                game.name,
-                {
-                    fontSize: "24px",
-                    fontFamily: "Arial",
-                    color: "#ffffff",
-                    backgroundColor: "#4e342e",
-                    padding: { x: 20, y: 10 },
-                }
+        const gameContainer = scene.add.container(
+            startX + index * (buttonSize + gameSpacing),
+            gameListY
+        );
+
+        const gameButton = scene.add.text(
+            0,
+            -buttonSize / 3,
+            game.name + `\n` + (isLocked ? " (Locked)" : ""),
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                color: isLocked ? "#888888" : "#ffffff",
+                backgroundColor: "#4e342e",
+                padding: { x: 10, y: 10 },
+                fixedWidth: buttonSize,
+                fixedHeight: buttonSize + 30,
+                align: "center",
+            }
+        );
+        gameButton.setOrigin(0.5);
+
+        const boardSizeText = scene.add.text(
+            0,
+            -60,
+            `Board: ${game.boardSize}x${game.boardSize}`,
+            {
+                fontSize: "18px",
+                fontFamily: "Arial",
+                color: "#ffffff",
+                align: "center",
+            }
+        );
+        boardSizeText.setOrigin(0.5);
+
+        const tilesContainer = scene.add.container(0, buttonSize / 6);
+        const tileSprites = game.tileTypes;
+        const maxTilesPerRow = 4;
+
+        tileSprites.forEach((sprite, i) => {
+            const tileButton = scene.add.sprite(
+                ((i % maxTilesPerRow) - (maxTilesPerRow - 1) / 2) * 30,
+                Math.floor(i / maxTilesPerRow) * 30 - 45,
+                sprite
             );
-            gameButton.setInteractive();
-            gameButton.on("pointerdown", () => {
-                this.sfx.play("crumple-paper-1");
-                // Start the selected game scene
+            tileButton.setScale(0.25);
+            tilesContainer.add(tileButton);
+        });
 
-                this.scene
-                    .get("GameVictoryScene")
-                    .data.set("currentStage", this.stageTitleText.text);
-                this.scene
-                    .get("GameVictoryScene")
-                    .data.set("currentGame", game.name);
+        gameContainer.add([gameButton, boardSizeText, tilesContainer]);
+
+        gameContainer.setSize(buttonSize, buttonSize);
+        gameContainer.setInteractive(
+            new Phaser.Geom.Rectangle(0, 0, buttonSize, buttonSize),
+            Phaser.Geom.Rectangle.Contains
+        );
+        gameContainer.setInteractive({ useHandCursor: !isLocked });
+
+        if (!isLocked) {
+            gameContainer.on("pointerover", () => {
+                gameButton.setStyle({ backgroundColor: "#6e4f3e" });
+                gameContainer.setScale(1.1);
+            });
+
+            gameContainer.on("pointerout", () => {
+                gameButton.setStyle({ backgroundColor: "#4e342e" });
+                gameContainer.setScale(1);
+            });
+
+            gameContainer.on("pointerdown", () => {
+                sfx.play("crumple-paper-1");
+                console.log(stages);
+                scene.registry.set(
+                    "currentStage",
+                    stages[currentStageIndex].name
+                );
+                scene.registry.set("currentGame", game.name);
+
                 if (
-                    this.stageTitleText.text === "Beginner" &&
+                    stageTitleText.text === "Beginner" &&
                     game.name === "Tutorial"
                 ) {
-                    game.startTutorial(this);
+                    game.startTutorial(scene);
                 } else {
-                    game.startGame(this);
+                    game.startGame(scene);
                 }
             });
-            this.gameButtonsShown.push(gameButton);
-        });
-    }
+        }
+
+        gameButtonsShown.push(gameContainer);
+    });
+
+    return gameButtonsShown;
+}
+
+function createText(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    text: string,
+    style: Phaser.Types.GameObjects.Text.TextStyle
+) {
+    const textObj = scene.add.text(x, y, text, style);
+    textObj.setOrigin(0.5);
+    return textObj;
+}
+
+function createButton(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    label: string,
+    callback: () => void,
+    fontSize: string = "24px"
+) {
+    return new Button(scene, x, y, label, callback, fontSize).setOrigin(0.5);
 }

@@ -22,6 +22,7 @@ export default class TutorialScene extends baseScene {
     }
 
     create() {
+        //console.log(this.data.getAll());
         this.tutorialStep = 0;
         const backgroundImage = Background.getInstance(this, "background");
         backgroundImage.create();

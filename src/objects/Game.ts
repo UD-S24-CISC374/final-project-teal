@@ -12,6 +12,7 @@ export default class Game {
     numLives: number;
     objectives: Objective[] = [];
     objectivesNum: number;
+    isLocked: boolean;
 
     constructor(
         name: string,
@@ -20,7 +21,8 @@ export default class Game {
         timeLimitSeconds?: number,
         numLives?: number,
         numInitialSwaps?: number,
-        objectivesNum?: number
+        objectivesNum?: number,
+        isLocked?: boolean
     ) {
         this.name = name;
         this.tileTypes = tileTypes;
@@ -30,6 +32,7 @@ export default class Game {
         this.numInitialSwaps = numInitialSwaps || 99;
         this.objectives = [];
         this.objectivesNum = objectivesNum || 3;
+        this.isLocked = isLocked !== undefined ? isLocked : true;
     }
 
     startGame(scene: Phaser.Scene) {
