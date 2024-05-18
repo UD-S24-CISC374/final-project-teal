@@ -8,7 +8,6 @@ import CreditsScene from "./scenes/creditsScene";
 import GameOverScene from "./scenes/gameOverScene";
 import TutorialScene from "./scenes/tutorialScene";
 import GameVictoryScene from "./scenes/gameVictoryScene";
-import ProgressionScene2 from "./scenes/progressionScene2";
 import SettingsScene from "./scenes/settingsScene";
 import FreeplayScene from "./scenes/freeplayScene";
 
@@ -37,7 +36,6 @@ export const CONFIG = {
         GameOverScene,
         TutorialScene,
         GameVictoryScene,
-        ProgressionScene2,
         SettingsScene,
         FreeplayScene,
     ],

@@ -4,6 +4,7 @@ import Stage from "../objects/Stages";
 import Background from "../objects/Background";
 import SFX from "../objects/SFX";
 import Button from "../objects/Button";
+import Sketch from "../objects/Sketch";
 
 function createText(
     scene: Phaser.Scene,
@@ -257,6 +258,13 @@ export default class ProgressionScene extends Phaser.Scene {
             screenHeight,
             this.openFreeplaySettings.bind(this)
         );
+        const maxWidth = this.game.config.width as number;
+        const maxHeight = this.game.config.height as number;
+
+        new Sketch(this, 150, 150, 120);
+        new Sketch(this, maxWidth - 150, 120, 120);
+        new Sketch(this, maxWidth - 150, maxHeight - 120, 120);
+        new Sketch(this, 100, maxHeight - 150, 120);
     }
 
     changeStage(direction: number) {

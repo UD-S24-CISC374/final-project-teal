@@ -4,6 +4,7 @@ import SFX from "../objects/SFX";
 import Button from "../objects/Button";
 import Game from "../objects/Game";
 import Tile from "../objects/Tile"; // Import the Tile class
+import Sketch from "../objects/Sketch";
 
 export default class FreeplayScene extends Phaser.Scene {
     private sfx: SFX;
@@ -29,6 +30,14 @@ export default class FreeplayScene extends Phaser.Scene {
         const buttonOffset = 350;
 
         // Board size
+        this.add
+            .text(screenWidth * 0.5, screenHeight * 0.1, "Freeplay", {
+                fontSize: "48px",
+                fontFamily: "Arial",
+                color: "#000000",
+            })
+            .setOrigin(0.5, 0.5);
+
         const boardSizeLabel = this.createFreeplayTextSettings(
             settingsX,
             settingsY,
@@ -367,6 +376,13 @@ export default class FreeplayScene extends Phaser.Scene {
             },
             "32px"
         );
+        const maxWidth = this.game.config.width as number;
+        const maxHeight = this.game.config.height as number;
+
+        new Sketch(this, 90, 90, 90);
+        new Sketch(this, maxWidth - 90, 90, 90);
+        new Sketch(this, maxWidth - 90, maxHeight - 90, 90);
+        new Sketch(this, 90, maxHeight - 90, 90);
     }
 
     createIncrementDecrementButton(
