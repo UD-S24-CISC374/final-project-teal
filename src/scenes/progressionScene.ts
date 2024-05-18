@@ -5,6 +5,18 @@ import Background from "../objects/Background";
 import SFX from "../objects/SFX";
 import Button from "../objects/Button";
 
+function createText(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    text: string,
+    style: Phaser.Types.GameObjects.Text.TextStyle
+) {
+    const textObj = scene.add.text(x, y, text, style);
+    textObj.setOrigin(0.5);
+    return textObj;
+}
+
 function createButton(
     scene: Phaser.Scene,
     x: number,
@@ -203,18 +215,6 @@ function createGameButtons(
     return gameButtonsShown;
 }
 
-function createText(
-    scene: Phaser.Scene,
-    x: number,
-    y: number,
-    text: string,
-    style: Phaser.Types.GameObjects.Text.TextStyle
-) {
-    const textObj = scene.add.text(x, y, text, style);
-    textObj.setOrigin(0.5);
-    return textObj;
-}
-
 export default class ProgressionScene extends Phaser.Scene {
     private currentStageIndex: number = 0;
     private stages: Stage[];
@@ -270,16 +270,16 @@ export default class ProgressionScene extends Phaser.Scene {
 
     openFreeplaySettings() {
         this.hideGames();
-        const screenWidth = this.game.config.width as number;
-        const screenHeight = this.game.config.height as number;
-        // The rest of the method remains unchanged
-        // Add your existing openFreeplaySettings code here
     }
 
     hideGames() {
-        this.gameButtonsShown.forEach((button) => button.destroy());
+        this.gameButtonsShown.forEach((button) => {
+            button.destroy();
+        });
         this.gameButtonsShown = [];
-        this.tileButtonsShown.forEach((button) => button.destroy());
+        this.tileButtonsShown.forEach((button) => {
+            button.destroy();
+        });
         this.tileButtonsShown = [];
     }
 
