@@ -5,6 +5,212 @@ import Background from "../objects/Background";
 import SFX from "../objects/SFX";
 import Button from "../objects/Button";
 
+function createNavigationButtons(
+    scene: Phaser.Scene,
+    screenWidth: number,
+    screenHeight: number,
+    changeStage: (direction: number) => void
+) {
+    createButton(
+        scene,
+        screenWidth * 0.1,
+        screenHeight * 0.5,
+        "<",
+        () => changeStage(-1),
+        "48px"
+    );
+    createButton(
+        scene,
+        screenWidth * 0.9,
+        screenHeight * 0.5,
+        ">",
+        () => changeStage(1),
+        "48px"
+    );
+}
+
+function createStageTitle(
+    scene: Phaser.Scene,
+    screenWidth: number,
+    screenHeight: number,
+    stages: Stage[],
+    currentStageIndex: number
+): Phaser.GameObjects.Text {
+    return createText(
+        scene,
+        screenWidth * 0.5,
+        screenHeight * 0.2,
+        stages[currentStageIndex].name,
+        {
+            fontSize: "48px",
+            fontFamily: "Arial",
+            color: "#000000",
+        }
+    );
+}
+
+function createBackButton(scene: Phaser.Scene) {
+    createButton(
+        scene,
+        70,
+        70,
+        "Back",
+        () => scene.scene.start("MenuScene"),
+        "32px"
+    );
+}
+
+function createFreeplayButton(
+    scene: Phaser.Scene,
+    screenWidth: number,
+    screenHeight: number,
+    openFreeplaySettings: () => void
+) {
+    createButton(
+        scene,
+        screenWidth * 0.5,
+        screenHeight * 0.8,
+        "Freeplay",
+        openFreeplaySettings,
+        "32px"
+    );
+}
+
+function createGameButtons(
+    scene: Phaser.Scene,
+    games: Game[],
+    startX: number,
+    gameListY: number,
+    buttonSize: number,
+    gameSpacing: number,
+    sfx: SFX,
+    stageTitleText: Phaser.GameObjects.Text,
+    stages: Stage[],
+    currentStageIndex: number
+) {
+    const gameButtonsShown: Phaser.GameObjects.Container[] = [];
+
+    games.forEach((game, index) => {
+        const isLocked = game.isLocked;
+
+        const gameContainer = scene.add.container(
+            startX + index * (buttonSize + gameSpacing),
+            gameListY
+        );
+
+        const gameButton = scene.add.text(
+            0,
+            -buttonSize / 3,
+            game.name + `\n` + (isLocked ? " (Locked)" : ""),
+            {
+                fontSize: "24px",
+                fontFamily: "Arial",
+                color: isLocked ? "#888888" : "#ffffff",
+                backgroundColor: "#4e342e",
+                padding: { x: 10, y: 10 },
+                fixedWidth: buttonSize,
+                fixedHeight: buttonSize + 30,
+                align: "center",
+            }
+        );
+        gameButton.setOrigin(0.5);
+
+        const boardSizeText = scene.add.text(
+            0,
+            -60,
+            `Board: ${game.boardSize}x${game.boardSize}`,
+            {
+                fontSize: "18px",
+                fontFamily: "Arial",
+                color: "#ffffff",
+                align: "center",
+            }
+        );
+        boardSizeText.setOrigin(0.5);
+
+        const tilesContainer = scene.add.container(0, buttonSize / 6);
+        const tileSprites = game.tileTypes;
+        const maxTilesPerRow = 4;
+
+        tileSprites.forEach((sprite, i) => {
+            const tileButton = scene.add.sprite(
+                ((i % maxTilesPerRow) - (maxTilesPerRow - 1) / 2) * 30,
+                Math.floor(i / maxTilesPerRow) * 30 - 45,
+                sprite
+            );
+            tileButton.setScale(0.25);
+            tilesContainer.add(tileButton);
+        });
+
+        gameContainer.add([gameButton, boardSizeText, tilesContainer]);
+
+        gameContainer.setSize(buttonSize, buttonSize);
+        gameContainer.setInteractive(
+            new Phaser.Geom.Rectangle(0, 0, buttonSize, buttonSize),
+            Phaser.Geom.Rectangle.Contains
+        );
+        gameContainer.setInteractive({ useHandCursor: !isLocked });
+
+        if (!isLocked) {
+            gameContainer.on("pointerover", () => {
+                gameButton.setStyle({ backgroundColor: "#6e4f3e" });
+                gameContainer.setScale(1.1);
+            });
+
+            gameContainer.on("pointerout", () => {
+                gameButton.setStyle({ backgroundColor: "#4e342e" });
+                gameContainer.setScale(1);
+            });
+
+            gameContainer.on("pointerdown", () => {
+                sfx.play("crumple-paper-1");
+                console.log(stages);
+                scene.registry.set(
+                    "currentStage",
+                    stages[currentStageIndex].name
+                );
+                scene.registry.set("currentGame", game.name);
+
+                if (
+                    stageTitleText.text === "Beginner" &&
+                    game.name === "Tutorial"
+                ) {
+                    game.startTutorial(scene);
+                } else {
+                    game.startGame(scene);
+                }
+            });
+        }
+
+        gameButtonsShown.push(gameContainer);
+    });
+
+    return gameButtonsShown;
+}
+
+function createText(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    text: string,
+    style: Phaser.Types.GameObjects.Text.TextStyle
+) {
+    const textObj = scene.add.text(x, y, text, style);
+    textObj.setOrigin(0.5);
+    return textObj;
+}
+
+function createButton(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    label: string,
+    callback: () => void,
+    fontSize: string = "24px"
+) {
+    return new Button(scene, x, y, label, callback, fontSize).setOrigin(0.5);
+}
+
 export default class ProgressionScene extends Phaser.Scene {
     private currentStageIndex: number = 0;
     private stages: Stage[];
@@ -289,210 +495,4 @@ export default class ProgressionScene extends Phaser.Scene {
             ]),
         ];
     }
-}
-
-function createNavigationButtons(
-    scene: Phaser.Scene,
-    screenWidth: number,
-    screenHeight: number,
-    changeStage: (direction: number) => void
-) {
-    createButton(
-        scene,
-        screenWidth * 0.1,
-        screenHeight * 0.5,
-        "<",
-        () => changeStage(-1),
-        "48px"
-    );
-    createButton(
-        scene,
-        screenWidth * 0.9,
-        screenHeight * 0.5,
-        ">",
-        () => changeStage(1),
-        "48px"
-    );
-}
-
-function createStageTitle(
-    scene: Phaser.Scene,
-    screenWidth: number,
-    screenHeight: number,
-    stages: Stage[],
-    currentStageIndex: number
-): Phaser.GameObjects.Text {
-    return createText(
-        scene,
-        screenWidth * 0.5,
-        screenHeight * 0.2,
-        stages[currentStageIndex].name,
-        {
-            fontSize: "48px",
-            fontFamily: "Arial",
-            color: "#000000",
-        }
-    );
-}
-
-function createBackButton(scene: Phaser.Scene) {
-    createButton(
-        scene,
-        70,
-        70,
-        "Back",
-        () => scene.scene.start("MenuScene"),
-        "32px"
-    );
-}
-
-function createFreeplayButton(
-    scene: Phaser.Scene,
-    screenWidth: number,
-    screenHeight: number,
-    openFreeplaySettings: () => void
-) {
-    createButton(
-        scene,
-        screenWidth * 0.5,
-        screenHeight * 0.8,
-        "Freeplay",
-        openFreeplaySettings,
-        "32px"
-    );
-}
-
-function createGameButtons(
-    scene: Phaser.Scene,
-    games: Game[],
-    startX: number,
-    gameListY: number,
-    buttonSize: number,
-    gameSpacing: number,
-    sfx: SFX,
-    stageTitleText: Phaser.GameObjects.Text,
-    stages: Stage[],
-    currentStageIndex: number
-) {
-    const gameButtonsShown: Phaser.GameObjects.Container[] = [];
-
-    games.forEach((game, index) => {
-        const isLocked = game.isLocked;
-
-        const gameContainer = scene.add.container(
-            startX + index * (buttonSize + gameSpacing),
-            gameListY
-        );
-
-        const gameButton = scene.add.text(
-            0,
-            -buttonSize / 3,
-            game.name + `\n` + (isLocked ? " (Locked)" : ""),
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: isLocked ? "#888888" : "#ffffff",
-                backgroundColor: "#4e342e",
-                padding: { x: 10, y: 10 },
-                fixedWidth: buttonSize,
-                fixedHeight: buttonSize + 30,
-                align: "center",
-            }
-        );
-        gameButton.setOrigin(0.5);
-
-        const boardSizeText = scene.add.text(
-            0,
-            -60,
-            `Board: ${game.boardSize}x${game.boardSize}`,
-            {
-                fontSize: "18px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                align: "center",
-            }
-        );
-        boardSizeText.setOrigin(0.5);
-
-        const tilesContainer = scene.add.container(0, buttonSize / 6);
-        const tileSprites = game.tileTypes;
-        const maxTilesPerRow = 4;
-
-        tileSprites.forEach((sprite, i) => {
-            const tileButton = scene.add.sprite(
-                ((i % maxTilesPerRow) - (maxTilesPerRow - 1) / 2) * 30,
-                Math.floor(i / maxTilesPerRow) * 30 - 45,
-                sprite
-            );
-            tileButton.setScale(0.25);
-            tilesContainer.add(tileButton);
-        });
-
-        gameContainer.add([gameButton, boardSizeText, tilesContainer]);
-
-        gameContainer.setSize(buttonSize, buttonSize);
-        gameContainer.setInteractive(
-            new Phaser.Geom.Rectangle(0, 0, buttonSize, buttonSize),
-            Phaser.Geom.Rectangle.Contains
-        );
-        gameContainer.setInteractive({ useHandCursor: !isLocked });
-
-        if (!isLocked) {
-            gameContainer.on("pointerover", () => {
-                gameButton.setStyle({ backgroundColor: "#6e4f3e" });
-                gameContainer.setScale(1.1);
-            });
-
-            gameContainer.on("pointerout", () => {
-                gameButton.setStyle({ backgroundColor: "#4e342e" });
-                gameContainer.setScale(1);
-            });
-
-            gameContainer.on("pointerdown", () => {
-                sfx.play("crumple-paper-1");
-                console.log(stages);
-                scene.registry.set(
-                    "currentStage",
-                    stages[currentStageIndex].name
-                );
-                scene.registry.set("currentGame", game.name);
-
-                if (
-                    stageTitleText.text === "Beginner" &&
-                    game.name === "Tutorial"
-                ) {
-                    game.startTutorial(scene);
-                } else {
-                    game.startGame(scene);
-                }
-            });
-        }
-
-        gameButtonsShown.push(gameContainer);
-    });
-
-    return gameButtonsShown;
-}
-
-function createText(
-    scene: Phaser.Scene,
-    x: number,
-    y: number,
-    text: string,
-    style: Phaser.Types.GameObjects.Text.TextStyle
-) {
-    const textObj = scene.add.text(x, y, text, style);
-    textObj.setOrigin(0.5);
-    return textObj;
-}
-
-function createButton(
-    scene: Phaser.Scene,
-    x: number,
-    y: number,
-    label: string,
-    callback: () => void,
-    fontSize: string = "24px"
-) {
-    return new Button(scene, x, y, label, callback, fontSize).setOrigin(0.5);
 }
