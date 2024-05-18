@@ -49,9 +49,6 @@ export default class GameVictoryScene extends Phaser.Scene {
         let currentStage = this.registry.get("currentStage") as string;
         let currentGame = this.registry.get("currentGame") as string;
 
-        let currentLevel = this.registry.get("level") || 0;
-        this.registry.set("level", ++currentLevel);
-
         // return 0 for stage 1, 1 for stage 2, 2 for stage 3
         let currentStageIndex = stages.findIndex(
             (stage) => stage.name === currentStage
@@ -59,6 +56,20 @@ export default class GameVictoryScene extends Phaser.Scene {
 
         if (currentStage === "Freeplay") {
             currentStageIndex = 0;
+        } else {
+            //this code is so bad but its ok
+            for (const stage of stages) {
+                for (const game of stage.games) {
+                    if (game.name == currentGame) {
+                        let currentLevel = this.registry.get("level") || 0;
+                        console.log("currentLevel", currentLevel);
+                        if (game.lvl == currentLevel) {
+                            this.registry.set("level", ++currentLevel);
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         // return 0 for game 1, 1 for game 2, 2 for game 3

@@ -3,6 +3,7 @@ import Objective from "./Objective";
 import Board from "./Board";
 
 export default class Game {
+    lvl: number;
     name: string;
     tileTypes: string[];
     tileSize: number;
@@ -15,6 +16,7 @@ export default class Game {
     isLocked: boolean;
 
     constructor(
+        lvl: number,
         name: string,
         tileTypes: string[],
         boardSize: number,
@@ -24,6 +26,7 @@ export default class Game {
         objectivesNum?: number,
         isLocked?: boolean
     ) {
+        this.lvl = lvl;
         this.name = name;
         this.tileTypes = tileTypes;
         this.boardSize = boardSize;

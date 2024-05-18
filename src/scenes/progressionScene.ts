@@ -109,6 +109,7 @@ export default class ProgressionScene extends Phaser.Scene {
         return [
             new Stage("Beginner", [
                 new Game(
+                    levelCount,
                     "Tutorial",
                     ["trueTile", "falseTile", "orTile"],
                     3,
@@ -119,6 +120,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 1",
                     ["trueTile", "andTile"],
                     3,
@@ -129,6 +131,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 2",
                     ["trueTile", "falseTile", "orTile", "andTile"],
                     3,
@@ -139,6 +142,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 3",
                     ["trueTile", "falseTile", "andTile", "orTile", "notTile"],
                     4,
@@ -151,6 +155,7 @@ export default class ProgressionScene extends Phaser.Scene {
             ]),
             new Stage("Intermediate", [
                 new Game(
+                    levelCount,
                     "Game 1",
                     ["trueTile", "falseTile", "andTile", "orTile"],
                     5,
@@ -161,6 +166,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 2",
                     ["trueTile", "falseTile", "andTile", "orTile"],
                     7,
@@ -171,6 +177,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 3",
                     ["trueTile", "falseTile", "orTile", "andTile", "notTile"],
                     6,
@@ -181,6 +188,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 4",
                     ["trueTile", "falseTile", "andTile", "orTile", "xorTile"],
                     5,
@@ -191,6 +199,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 5",
                     [
                         "trueTile",
@@ -210,6 +219,7 @@ export default class ProgressionScene extends Phaser.Scene {
             ]),
             new Stage("Advanced", [
                 new Game(
+                    levelCount,
                     "Game 1",
                     ["trueTile", "falseTile", "orTile", "andTile", "xorTile"],
                     7,
@@ -220,6 +230,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 2",
                     [
                         "trueTile",
@@ -237,6 +248,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 3",
                     [
                         "trueTile",
@@ -255,6 +267,7 @@ export default class ProgressionScene extends Phaser.Scene {
                     currentLevel < levelCount++
                 ),
                 new Game(
+                    levelCount,
                     "Game 4",
                     [
                         "trueTile",
