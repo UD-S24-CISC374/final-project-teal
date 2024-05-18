@@ -27,7 +27,9 @@ function createNavigationButtons(
         screenWidth * 0.1,
         screenHeight * 0.5,
         "<",
-        () => changeStage(-1),
+        () => {
+            changeStage(-1);
+        },
         "48px"
     );
     createButton(
@@ -35,7 +37,9 @@ function createNavigationButtons(
         screenWidth * 0.9,
         screenHeight * 0.5,
         ">",
-        () => changeStage(1),
+        () => {
+            changeStage(1);
+        },
         "48px"
     );
 }
